@@ -1,89 +1,172 @@
-Level & Reward Bible
-Status
-Current source of truth for the PIP Bimodal Exam Prep Application leveling and reward system.
+# PIP — Level Reward Bible
 
-Core Level Rule
-1 Level = 2,000 ค่าประสบการณ์
-Mini Game Reward Rule
-Each Mini Game has exactly 10 questions.
+**Status:** Current Approved Logic / Source of Truth  
+**Date:** 25/05/2026  
+**Scope:** Rewards granted from account start and Level milestones only  
+**Related Documents:** `reward_inventory_logic.md`, `../01_game_flow/mini_game_flow.md`, `../03_vip_and_subscription/vip_subscription_logic.md`
 
-Normal Reward
-Complete 10 questions = 100 ค่าประสบการณ์
-2,000 ÷ 100 = 20 Mini Game rounds
-20 rounds × 10 questions = 200 questions per level
-Watch Ad Reward
-Complete 10 questions + watch ad = 200 ค่าประสบการณ์
-2,000 ÷ 200 = 10 Mini Game rounds
-10 rounds × 10 questions = 100 questions per level
-Passing Rule
-Each Mini Game contains 10 questions.
-User must answer at least 8 out of 10 questions correctly to pass.
-Passing score = 8/10 or higher.
-Failed score = lower than 8/10.
-Result Flow
-Passed
-If the user scores 8/10 or higher:
+---
 
-Show result summary.
-Show correct and wrong answer count.
-Allow user to continue to the next step.
-Ask whether the user wants to watch an ad to receive x2 ค่าประสบการณ์.
-Failed
-If the user scores lower than 8/10:
+## 1. Boundary
 
-Show result summary.
-Show correct and wrong answer count.
-User cannot proceed to the next stage.
-Show button text: กลับหน้าหลัก
-Ad Reward Choice
-After passing the Mini Game:
+This document defines:
+- Initial Level 1 reward grant
+- Rewards granted at Level milestones
+- The function of each Level Reward type
+- Overlap and override rules for milestone rewards
 
-If user watches ad
-User receives 200 ค่าประสบการณ์.
-This is x2 from the normal reward.
-If user skips ad
-User receives 100 ค่าประสบการณ์.
-VIP Reward Rule
-VIP should stay simple.
+This document does not define Mini Game screen flow, advertisement placement, paid subscription monthly allocation, billing behavior, or unapproved reward systems.
 
-VIP Benefits
-No ads.
-Automatic x2 ค่าประสบการณ์ while VIP is active.
-Level Up Reward
-Normal Level Up
-User receives VIP 1 day.
-Every 5 Levels
-User receives VIP 1 day.
-User receives x2 ค่าประสบการณ์ for 2 hours.
-Every 10 Levels
-User receives VIP 3 days.
-This milestone reward overrides the normal VIP 1 day reward.
-UI Terminology
-Use Thai wording in the UI.
+---
 
-Use
-ค่าประสบการณ์
-VIP
-ผ่านเกณฑ์
-กลับหน้าหลัก
-Do Not Use
-EXP
-XP
-Experience Point
-Premium currency
-PIP cosmetics
-Design Rule
-This reward system must follow the visual direction from:
+## 2. Approved Reward Types
 
-Sprint & Mock - Design System.html
-Do
-Keep the reward system simple.
-Keep VIP easy to understand.
-Make the x2 reward feel attractive but not mandatory.
-Use Thai UI wording.
-Don't
-Do not add PIP cosmetics.
-Do not add complex reward systems.
-Do not create extra currencies.
-Do not use EXP/XP in Thai UI.
-Do not change the level requirement from 2,000 ค่าประสบการณ์ unless the Product Bible is updated.
+| Reward Type | Thai UI Name | Function |
+|---|---|---|
+| `x2_experience_ticket` | `บัตรค่าประสบการณ์ x2` | Receive 200 ค่าประสบการณ์ after a Mini Game Attempt without watching an ad; does **not** unlock Insight |
+| `x2_insight_ticket` | `บัตร x2 + ปลดล็อก Insight` | Receive 200 ค่าประสบการณ์ and permanently unlock Insight for that Attempt without watching an ad |
+| `vip_reward_1_day` | `VIP 1 Day` | Activate 24 hours of VIP Reward access; Insight opens immediately while active; no automatic x2 reward |
+
+---
+
+## 3. Reward Schedule
+
+### 3.1 Initial Account Reward at Level 1
+
+When a new user starts at Level 1 for the first time:
+
+| Trigger | Reward |
+|---|---|
+| Initial account start at Level 1 | `บัตร x2 + ปลดล็อก Insight` ×3 |
+
+Rules:
+- Grant once per account only.
+- Treat this as the Level 1 reward.
+- Do not grant a duplicate reward from the “Level ends in 1” rule at Level 1.
+
+### 3.2 Levels Ending in 1 After Level 1
+
+| Trigger Examples | Reward |
+|---|---|
+| Level 11, 21, 31, 41, 51, 61, ... | `บัตร x2 + ปลดล็อก Insight` ×3 |
+
+### 3.3 Every 5 Levels Except Every 15 Levels
+
+| Trigger Examples | Reward |
+|---|---|
+| Level 5, 10, 20, 25, 35, 40, 50, 55, ... | `บัตรค่าประสบการณ์ x2` ×2 |
+
+### 3.4 Every 15 Levels
+
+| Trigger Examples | Reward |
+|---|---|
+| Level 15, 30, 45, 60, 75, ... | `VIP 1 Day` ×1 + `บัตรค่าประสบการณ์ x2` ×1 |
+
+Override Rule:
+- Every Level divisible by 15 is also divisible by 5.
+- At those Levels, grant only 1 plain x2 ticket together with VIP 1 Day.
+- Do not also grant the ordinary every-5-Level reward of 2 tickets.
+
+---
+
+## 4. Example Reward Path
+
+| Level / Trigger | Reward Granted |
+|---:|---|
+| Start account at Level 1 | `บัตร x2 + ปลดล็อก Insight` ×3 |
+| 5 | `บัตรค่าประสบการณ์ x2` ×2 |
+| 10 | `บัตรค่าประสบการณ์ x2` ×2 |
+| 11 | `บัตร x2 + ปลดล็อก Insight` ×3 |
+| 15 | `VIP 1 Day` ×1 + `บัตรค่าประสบการณ์ x2` ×1 |
+| 20 | `บัตรค่าประสบการณ์ x2` ×2 |
+| 21 | `บัตร x2 + ปลดล็อก Insight` ×3 |
+| 25 | `บัตรค่าประสบการณ์ x2` ×2 |
+| 30 | `VIP 1 Day` ×1 + `บัตรค่าประสบการณ์ x2` ×1 |
+| 31 | `บัตร x2 + ปลดล็อก Insight` ×3 |
+| 45 | `VIP 1 Day` ×1 + `บัตรค่าประสบการณ์ x2` ×1 |
+| 50 | `บัตรค่าประสบการณ์ x2` ×2 |
+| 51 | `บัตร x2 + ปลดล็อก Insight` ×3 |
+| 60 | `VIP 1 Day` ×1 + `บัตรค่าประสบการณ์ x2` ×1 |
+
+---
+
+## 5. Reward Function Rules
+
+### 5.1 บัตรค่าประสบการณ์ x2
+
+| Rule | Value |
+|---|---|
+| Use Timing | Immediately after completing a Mini Game Attempt, before final reward confirmation |
+| Outcome | 100 → 200 ค่าประสบการณ์ |
+| Advertisement Required | No |
+| Insight Unlock | No |
+| Retroactive Use | Not allowed |
+
+### 5.2 บัตร x2 + ปลดล็อก Insight
+
+| Rule | Value |
+|---|---|
+| Use Timing | Immediately after completing a Mini Game Attempt, before final reward confirmation |
+| Outcome | 100 → 200 ค่าประสบการณ์ |
+| Advertisement Required | No |
+| Insight Unlock | Yes, permanently for that Attempt |
+| Answer Explanations | Available after Insight unlock |
+| Retroactive Use | Not allowed |
+
+### 5.3 VIP 1 Day
+
+| Rule | Value |
+|---|---|
+| Activation | Stored in Reward Inventory; user manually activates it |
+| Duration | 24 hours after activation confirmation |
+| Insight While Active | Opens immediately without unlock ad |
+| Previously Locked Attempt While Active | May be opened and permanently unlocked |
+| Automatic x2 ค่าประสบการณ์ | No |
+| Tickets Granted by Activating VIP | 0 |
+
+Important:
+- At every 15-Level milestone, the VIP item and the 1 plain x2 ticket are separate Level rewards.
+- The ticket is not generated by activating VIP 1 Day.
+
+---
+
+## 6. Storage and Expiration
+
+### Level-Earned Ticket Rewards
+
+| Rule | Approved Decision |
+|---|---|
+| Expiration | No expiration |
+| Maximum Stored Quantity | Unlimited |
+| Can Be Saved for Later Use | Yes |
+
+Applies to:
+- `x2_experience_ticket`
+- `x2_insight_ticket`
+
+### VIP 1 Day Reward
+
+The pre-activation expiration policy and maximum stored quantity for unused VIP 1 Day items are not yet approved.
+
+---
+
+## 7. Removed or Not Approved Rewards
+
+| Reward Idea | Status |
+|---|---|
+| VIP Subscription Discount Coupon | Removed |
+| Cosmetic Reward | Removed |
+| EXP Protection | Removed |
+| Continue Ticket | Not included in current approved logic |
+
+---
+
+## 8. Locked Decisions
+
+- Level 1 initial account start grants `บัตร x2 + ปลดล็อก Insight ×3` once.
+- Levels ending in 1 after Level 1 grant `บัตร x2 + ปลดล็อก Insight ×3`.
+- Every 5 Levels not divisible by 15 grant `บัตรค่าประสบการณ์ x2 ×2`.
+- Every 15 Levels grant `VIP 1 Day ×1 + บัตรค่าประสบการณ์ x2 ×1`.
+- The every-15-Level reward overrides the ordinary every-5-Level ticket quantity.
+- Level-earned tickets have no expiration and no storage cap.
+- VIP 1 Day does not automatically grant x2 ค่าประสบการณ์ or any Ticket when activated.
