@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PIP Development Guild - Visual System Entry</title>
+<style>
+  :root {
+    --paper:#f6efe5;
+    --paper-2:#fffaf2;
+    --ink:#2f241d;
+    --muted:#6f5a4f;
+    --line:#d8c7b3;
+    --shadow:0 18px 44px rgba(56, 40, 24, .12);
+    --lead:#315b8f;
+    --build:#557a45;
+    --quality:#a94336;
+    --modes:#72539b;
+    --money:#b97d25;
+  }
+  * { box-sizing:border-box; }
+  html, body { margin:0; min-height:100%; }
+  body {
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 8% 0%, rgba(81, 124, 74, .11), transparent 25%),
+      radial-gradient(circle at 92% 14%, rgba(49, 91, 143, .12), transparent 23%),
+      linear-gradient(180deg, #fbf5ee 0%, #f1e4d5 100%);
+  }
+  body::before {
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+      linear-gradient(90deg, rgba(255,255,255,.18) 0 1px, transparent 1px 100%),
+      linear-gradient(180deg, rgba(255,255,255,.16) 0 1px, transparent 1px 100%);
+    background-size:38px 38px;
+    opacity:.16;
+    pointer-events:none;
+    mix-blend-mode:screen;
+  }
+  .wrap {
+    width:min(1480px, calc(100vw - 32px));
+    margin:0 auto;
+    padding:28px 0 34px;
+  }
+  .hero, .section, .card {
+    background:rgba(255,250,244,.95);
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+  }
+  .hero {
+    border-radius:30px;
+    padding:30px;
+    margin-bottom:18px;
+    background:
+      linear-gradient(135deg, rgba(255,251,246,.98), rgba(255,247,239,.94)),
+      radial-gradient(circle at top right, rgba(122,83,155,.06), transparent 32%);
+  }
+  .eyebrow {
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 12px;
+    border-radius:999px;
+    background:#f0e7ff;
+    border:1px solid #dfd1f5;
+    color:#5b4387;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  h1 {
+    margin:14px 0 8px;
+    font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif;
+    font-size:46px;
+    line-height:1;
+    letter-spacing:-.05em;
+  }
+  .subtitle {
+    margin:0 0 10px;
+    font-size:18px;
+    font-weight:900;
+    color:#5b4387;
+    letter-spacing:-.02em;
+  }
+  p, li {
+    color:var(--muted);
+    line-height:1.58;
+  }
+  .hero p {
+    margin:0;
+    max-width:1040px;
+    font-size:16px;
+  }
+  .hero-actions {
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:18px;
+  }
+  .button {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:42px;
+    padding:10px 14px;
+    border-radius:999px;
+    border:1px solid #c9d8ef;
+    background:#edf4ff;
+    color:#2d568f;
+    font-size:13px;
+    font-weight:900;
+    text-decoration:none;
+  }
+  .button.secondary {
+    border-color:#dccbb8;
+    background:#fffaf4;
+    color:var(--ink);
+  }
+  .section {
+    border-radius:26px;
+    padding:18px;
+    margin-bottom:18px;
+  }
+  .section-head {
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:14px;
+    margin-bottom:14px;
+  }
+  h2 {
+    margin:0;
+    font-size:24px;
+    letter-spacing:-.03em;
+    line-height:1.05;
+  }
+  .section-head p {
+    margin:5px 0 0;
+    font-size:13px;
+  }
+  .pill {
+    align-self:flex-start;
+    padding:8px 11px;
+    border-radius:999px;
+    color:#fff;
+    background:var(--lead);
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    white-space:nowrap;
+  }
+  .grid-2 { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:14px; }
+  .grid-3 { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:14px; }
+  .grid-4 { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:14px; }
+  .card {
+    position:relative;
+    border-radius:22px;
+    overflow:hidden;
+    background:linear-gradient(180deg, rgba(255,255,255,.98), rgba(251,245,239,.98));
+    box-shadow:0 10px 20px rgba(56,40,24,.06);
+  }
+  .card-inner {
+    position:relative;
+    z-index:1;
+    padding:16px;
+  }
+  .card::after {
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.20), transparent 28%),
+      radial-gradient(circle at top right, rgba(255,255,255,.45), transparent 24%);
+    pointer-events:none;
+  }
+  .card h3 {
+    margin:0 0 7px;
+    font-size:18px;
+    line-height:1.08;
+    letter-spacing:-.02em;
+  }
+  .card p {
+    margin:0 0 12px;
+    font-size:13px;
+  }
+  .link-card {
+    display:block;
+    min-height:150px;
+    color:inherit;
+    text-decoration:none;
+  }
+  .file {
+    display:inline-block;
+    max-width:100%;
+    padding:6px 8px;
+    border-radius:10px;
+    background:#f2e6da;
+    border:1px solid #e1cfbd;
+    color:#5b3e32;
+    font-size:12px;
+    font-weight:800;
+    word-break:break-word;
+  }
+  .status-row {
+    display:grid;
+    grid-template-columns:repeat(3, minmax(0, 1fr));
+    gap:12px;
+    margin-top:18px;
+  }
+  .status {
+    padding:12px 14px;
+    border-radius:18px;
+    background:#fbf5ef;
+    border:1px solid #eadac8;
+  }
+  .status span {
+    display:block;
+    margin-bottom:6px;
+    color:#95796c;
+    font-size:11px;
+    font-weight:900;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  .status strong {
+    display:block;
+    font-size:14px;
+    line-height:1.35;
+  }
+  .image-card img {
+    display:block;
+    width:100%;
+    height:auto;
+    border-radius:16px;
+    border:1px solid #ead7cf;
+    background:#fff;
+  }
+  .image-card .card-inner {
+    padding:14px;
+  }
+  .image-card h3 {
+    margin-bottom:10px;
+  }
+  ul {
+    margin:0;
+    padding-left:20px;
+  }
+  li {
+    margin:7px 0;
+  }
+  code {
+    background:#f2e6da;
+    border:1px solid #e1cfbd;
+    padding:2px 6px;
+    border-radius:8px;
+    color:#5b3e32;
+  }
+  @media (max-width:1100px) {
+    .grid-4, .grid-3, .status-row { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width:760px) {
+    .wrap { width:min(100% - 22px, 1480px); padding-top:14px; }
+    .grid-4, .grid-3, .grid-2, .status-row { grid-template-columns:1fr; }
+    .section-head { flex-direction:column; }
+    h1 { font-size:36px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <span class="eyebrow">Visual System Entry</span>
+    <h1>PIP Development Guild</h1>
+    <p class="subtitle">Status: Visual System v1 Complete</p>
+    <p>This entry page is the main menu for the PIP Development Guild visual canon. Start with the dashboard for overview, then use the Bible, Layout, Composition, Index Sheet, and Animation Index pages for source-of-truth details.</p>
+    <div class="hero-actions">
+      <a class="button" href="guild_dashboard.html">Open Guild Dashboard First</a>
+      <a class="button secondary" href="agent_dashboard.html">Open Agent Control Dashboard</a>
+      <a class="button secondary" href="index_sheet/01_agent_index_sheet_v2.html">Open Agent Index Sheet</a>
+      <a class="button secondary" href="animations/animation_index.html">Open Animation Index</a>
+    </div>
+    <div class="status-row">
+      <div class="status"><span>Canon</span><strong>11 approved role-mapped agents</strong></div>
+      <div class="status"><span>Guild Hall</span><strong>Approved reference starts from v11</strong></div>
+      <div class="status"><span>Sprites</span><strong>Use transparent front cutouts only</strong></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Archive Notice</h2>
+        <p>Old drafts and superseded outputs are stored in archive/. Current canon files remain linked from this README and should be used for future work.</p>
+      </div>
+      <span class="pill">Archive</span>
+    </div>
+    <div class="card">
+      <div class="card-inner">
+        <h3>Safe Cleanup Structure</h3>
+        <p>Archived drafts are preserved for traceability without changing the active v11 Guild Hall canon, v2 Agent Index Sheet, approved sprites, or source background.</p>
+        <span class="file">archive/ARCHIVE_INDEX.html</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Quick Start</h2>
+        <p>Open the dashboard first when orienting Codex, Claude Design, designers, or future visual work.</p>
+      </div>
+      <span class="pill">Start Here</span>
+    </div>
+    <div class="grid-3">
+      <a class="card link-card" href="guild_dashboard.html">
+        <div class="card-inner">
+          <h3>Guild Dashboard</h3>
+          <p>Main overview of canon files, approved visuals, role summary, and future work rules.</p>
+          <span class="file">guild_dashboard.html</span>
+        </div>
+      </a>
+      <a class="card link-card" href="agent_dashboard.html">
+        <div class="card-inner">
+          <h3>Agent Control Dashboard</h3>
+          <p>Interactive RPG-style control room for filtering agents and inspecting role details.</p>
+          <span class="file">agent_dashboard.html</span>
+        </div>
+      </a>
+      <a class="card link-card" href="guild_layout.html">
+        <div class="card-inner">
+          <h3>Guild Hall Layout</h3>
+          <p>Placement source of truth for Guild Hall composites. Future position edits start from v11.</p>
+          <span class="file">guild_layout.html</span>
+        </div>
+      </a>
+      <a class="card link-card" href="composition_bible.html">
+        <div class="card-inner">
+          <h3>Composition Bible</h3>
+          <p>Role integrity source of truth. Use this to avoid role drift in visuals and docs.</p>
+          <span class="file">composition_bible.html</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Canon HTML Files</h2>
+        <p>These files define the approved visual system and agent-role documentation.</p>
+      </div>
+      <span class="pill">Canon</span>
+    </div>
+    <div class="grid-3">
+      <a class="card link-card" href="guild_dashboard.html"><div class="card-inner"><h3>Dashboard</h3><p>Overview and active visual reference hub.</p><span class="file">guild_dashboard.html</span></div></a>
+      <a class="card link-card" href="guild_bible.html"><div class="card-inner"><h3>Guild Bible</h3><p>Character identity, role mapping, and character sheet reference.</p><span class="file">guild_bible.html</span></div></a>
+      <a class="card link-card" href="guild_layout.html"><div class="card-inner"><h3>Guild Layout</h3><p>Guild Hall placement canon based on v11.</p><span class="file">guild_layout.html</span></div></a>
+      <a class="card link-card" href="composition_bible.html"><div class="card-inner"><h3>Composition Bible</h3><p>Role integrity and composition rules.</p><span class="file">composition_bible.html</span></div></a>
+      <a class="card link-card" href="index_sheet/01_agent_index_sheet_v2.html"><div class="card-inner"><h3>Agent Index Sheet</h3><p>Roster, role accordion, and Thai/English role explanations.</p><span class="file">index_sheet/01_agent_index_sheet_v2.html</span></div></a>
+      <a class="card link-card" href="animations/animation_index.html"><div class="card-inner"><h3>Animation Index</h3><p>CSS-only idle prototype dashboard for all 11 agents.</p><span class="file">animations/animation_index.html</span></div></a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Approved Visual Outputs</h2>
+        <p>These PNGs are approved references. Do not modify them unless explicitly requested.</p>
+      </div>
+      <span class="pill">Approved</span>
+    </div>
+    <div class="grid-2">
+      <div class="card image-card">
+        <div class="card-inner">
+          <h3>Guild Hall Composite v11</h3>
+          <img src="poster/01_guild_hall_composite_v11.png" alt="Approved Guild Hall Composite v11 clean">
+          <p><span class="file">poster/01_guild_hall_composite_v11.png</span></p>
+        </div>
+      </div>
+      <div class="card image-card">
+        <div class="card-inner">
+          <h3>Guild Hall Composite v11 Labeled</h3>
+          <img src="poster/01_guild_hall_composite_v11_labeled.png" alt="Approved Guild Hall Composite v11 labeled">
+          <p><span class="file">poster/01_guild_hall_composite_v11_labeled.png</span></p>
+        </div>
+      </div>
+      <div class="card image-card">
+        <div class="card-inner">
+          <h3>Agent Index Sheet v2</h3>
+          <img src="index_sheet/01_agent_index_sheet_v2.png" alt="Approved Agent Index Sheet v2 clean">
+          <p><span class="file">index_sheet/01_agent_index_sheet_v2.png</span></p>
+        </div>
+      </div>
+      <div class="card image-card">
+        <div class="card-inner">
+          <h3>Agent Index Sheet v2 Labeled</h3>
+          <img src="index_sheet/01_agent_index_sheet_v2_labeled.png" alt="Approved Agent Index Sheet v2 labeled">
+          <p><span class="file">index_sheet/01_agent_index_sheet_v2_labeled.png</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Asset Folders</h2>
+        <p>Use these folders for approved visual work. Avoid old full character sheet panels in composites.</p>
+      </div>
+      <span class="pill">Assets</span>
+    </div>
+    <div class="grid-3">
+      <div class="card"><div class="card-inner"><h3>Backgrounds</h3><p>Approved Guild Hall background source.</p><span class="file">backgrounds/</span></div></div>
+      <div class="card"><div class="card-inner"><h3>Front Cutouts</h3><p>Transparent approved character sprites for composites.</p><span class="file">cropped_sprites/front_cutouts/</span></div></div>
+      <div class="card"><div class="card-inner"><h3>Character Sheets</h3><p>Character identity reference assets, not composite panels.</p><span class="file">canon_character_sheets/</span></div></div>
+      <div class="card"><div class="card-inner"><h3>Poster Outputs</h3><p>Approved Guild Hall composite outputs.</p><span class="file">poster/</span></div></div>
+      <div class="card"><div class="card-inner"><h3>Index Sheet Outputs</h3><p>Agent roster HTML and approved PNG exports.</p><span class="file">index_sheet/</span></div></div>
+      <div class="card"><div class="card-inner"><h3>Animation Prototypes</h3><p>CSS-only idle prototype pages.</p><span class="file">animations/</span></div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Future Work Rules</h2>
+        <p>Follow these rules before creating or editing any future PIP Development Guild visual.</p>
+      </div>
+      <span class="pill">Rules</span>
+    </div>
+    <div class="card">
+      <div class="card-inner">
+        <ul>
+          <li>Start from <code>guild_dashboard.html</code> for overview.</li>
+          <li>Use <code>guild_layout.html</code> for Guild Hall placement.</li>
+          <li>Use <code>composition_bible.html</code> for role integrity.</li>
+          <li>Use <code>guild_bible.html</code> for character identity.</li>
+          <li>Use <code>cropped_sprites/front_cutouts/</code> for composites.</li>
+          <li>Do not redraw approved characters.</li>
+          <li>Do not use old full character sheet panels.</li>
+          <li>Do not modify approved PNGs unless explicitly requested.</li>
+          <li>Position edits must be micro patches only.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+</body>
+</html>

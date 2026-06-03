@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>04 Sage - CSS Idle Prototype</title>
+<style>
+  :root {
+    --paper:#f6efe5;
+    --paper-2:#fffaf2;
+    --ink:#2f241d;
+    --muted:#6f5a4f;
+    --line:#d8c7b3;
+    --shadow:0 18px 44px rgba(56, 40, 24, .12);
+    --lead:#315b8f;
+  }
+  * { box-sizing:border-box; }
+  html, body { margin:0; min-height:100%; }
+  body {
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 8% 0%, rgba(81, 124, 74, .10), transparent 25%),
+      radial-gradient(circle at 92% 14%, rgba(49, 91, 143, .10), transparent 23%),
+      linear-gradient(180deg, #fbf5ee 0%, #f1e4d5 100%);
+  }
+  body::before {
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+      linear-gradient(90deg, rgba(255,255,255,.16) 0 1px, transparent 1px 100%),
+      linear-gradient(180deg, rgba(255,255,255,.14) 0 1px, transparent 1px 100%);
+    background-size:38px 38px;
+    opacity:.16;
+    pointer-events:none;
+    mix-blend-mode:screen;
+  }
+  .wrap {
+    width:min(1280px, calc(100vw - 32px));
+    margin:0 auto;
+    padding:24px 0 30px;
+  }
+  .hero {
+    padding:24px 26px 20px;
+    margin-bottom:18px;
+    background:
+      linear-gradient(135deg, rgba(255,251,246,.98), rgba(255,247,239,.94)),
+      radial-gradient(circle at top right, rgba(122,83,155,.06), transparent 32%);
+    border:1px solid var(--line);
+    border-radius:28px;
+    box-shadow:var(--shadow);
+  }
+  .eyebrow {
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 12px;
+    border-radius:999px;
+    background:#f0e7ff;
+    border:1px solid #dfd1f5;
+    color:#5b4387;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  h1 {
+    margin:14px 0 8px;
+    font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif;
+    font-size:42px;
+    line-height:1;
+    letter-spacing:-.05em;
+  }
+  .hero p {
+    margin:0;
+    max-width:1040px;
+    color:var(--muted);
+    line-height:1.58;
+    font-size:16px;
+  }
+  .layout {
+    display:grid;
+    grid-template-columns:minmax(0, 1.45fr) minmax(300px, .75fr);
+    gap:18px;
+  }
+  .panel {
+    background:rgba(255,250,244,.95);
+    border:1px solid var(--line);
+    border-radius:26px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  .stage {
+    position:relative;
+    min-height:760px;
+    padding:18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+      radial-gradient(circle at 50% 35%, rgba(255,255,255,.65), transparent 42%),
+      linear-gradient(180deg, rgba(255,252,248,.98), rgba(248,239,225,.98));
+  }
+  .stage-frame {
+    position:relative;
+    width:min(100%, 760px);
+    height:700px;
+    border-radius:24px;
+    border:1px solid #ead8c8;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.78), rgba(249,241,231,.96));
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.35);
+    overflow:hidden;
+  }
+  .stage-frame::before {
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      radial-gradient(circle at 50% 32%, rgba(49,91,143,.05), transparent 22%),
+      radial-gradient(circle at 50% 70%, rgba(85,122,69,.05), transparent 26%);
+    pointer-events:none;
+  }
+  .anchor-line {
+    position:absolute;
+    left:50%;
+    bottom:118px;
+    width:220px;
+    height:2px;
+    transform:translateX(-50%);
+    background:linear-gradient(90deg, transparent, rgba(60,48,39,.38), transparent);
+    box-shadow:0 0 0 1px rgba(255,255,255,.22);
+    opacity:1;
+    transition:opacity .2s ease;
+  }
+  .sprite-wrap {
+    position:absolute;
+    left:50%;
+    bottom:95px;
+    width:210px;
+    height:342px;
+    transform:translateX(-50%);
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    transform-origin:center bottom;
+    animation:sageIdle 1.5s ease-in-out infinite;
+    will-change:transform;
+  }
+  .sprite-wrap::after {
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:6px;
+    width:128px;
+    height:18px;
+    transform:translateX(-50%);
+    border-radius:999px;
+    background:radial-gradient(ellipse at center, rgba(72,56,43,.20), rgba(72,56,43,.07) 58%, transparent 72%);
+    filter:blur(2px);
+    opacity:.72;
+    animation:shadowBreath 1.5s ease-in-out infinite;
+    pointer-events:none;
+  }
+  .sprite-wrap img {
+    position:relative;
+    z-index:1;
+    width:auto;
+    height:332px;
+    max-width:100%;
+    image-rendering:pixelated;
+    filter:drop-shadow(0 16px 18px rgba(49, 34, 22, .18));
+    transform-origin:center bottom;
+  }
+  @keyframes sageIdle {
+    0%, 100% { transform:translateX(-50%) translateY(0) scale(1); }
+    50% { transform:translateX(-50%) translateY(-1.5px) scale(1.008); }
+  }
+  @keyframes shadowBreath {
+    0%, 100% { transform:translateX(-50%) scale(1); opacity:.68; box-shadow:0 0 0 0 rgba(113,85,155,.00); }
+    50% { transform:translateX(-50%) scale(.955); opacity:.84; box-shadow:0 0 18px 2px rgba(113,85,155,.10); }
+  }
+  .panel-body { padding:18px; }
+  .section {
+    padding:16px;
+    border-radius:20px;
+    border:1px solid #e8d9ca;
+    background:linear-gradient(180deg, rgba(255,255,255,.98), rgba(251,245,239,.98));
+    margin-bottom:14px;
+  }
+  .section h2 {
+    margin:0 0 10px;
+    font-size:18px;
+    letter-spacing:-.02em;
+  }
+  .control-row {
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .toggle, .speed {
+    position:absolute;
+    opacity:0;
+    pointer-events:none;
+  }
+  .chip {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:9px 11px;
+    border-radius:999px;
+    border:1px solid #dccbb8;
+    background:#fffaf4;
+    color:var(--ink);
+    font-size:12px;
+    font-weight:800;
+    cursor:pointer;
+    user-select:none;
+    transition:transform .15s ease, background .15s ease, border-color .15s ease, color .15s ease;
+  }
+  .chip:hover { transform:translateY(-1px); }
+  #pause:checked ~ .layout .stage-frame .sprite-wrap,
+  #pause:checked ~ .layout .stage-frame .sprite-wrap::after {
+    animation-play-state:paused;
+  }
+  #speed-075:checked ~ .layout .stage-frame .sprite-wrap,
+  #speed-075:checked ~ .layout .stage-frame .sprite-wrap::after { animation-duration:2s; }
+  #speed-100:checked ~ .layout .stage-frame .sprite-wrap,
+  #speed-100:checked ~ .layout .stage-frame .sprite-wrap::after { animation-duration:1.5s; }
+  #speed-125:checked ~ .layout .stage-frame .sprite-wrap,
+  #speed-125:checked ~ .layout .stage-frame .sprite-wrap::after { animation-duration:1.2s; }
+  #hide-anchor:checked ~ .layout .stage-frame .anchor-line { opacity:0; }
+  #pause:checked ~ .layout .panel-body label[for="pause"] { background:#f3ecff; border-color:#d8cff5; color:#664ea0; }
+  #speed-075:checked ~ .layout .panel-body label[for="speed-075"],
+  #speed-100:checked ~ .layout .panel-body label[for="speed-100"],
+  #speed-125:checked ~ .layout .panel-body label[for="speed-125"] {
+    background:#edf4ff;
+    border-color:#c9d8ef;
+    color:#2d568f;
+  }
+  #hide-anchor:checked ~ .layout .panel-body label[for="hide-anchor"] {
+    background:#fff1ee;
+    border-color:#ebc4bb;
+    color:#9c4439;
+  }
+  .info-grid { display:grid; gap:10px; }
+  .info {
+    padding:12px 13px;
+    border-radius:16px;
+    border:1px solid #e8d9ca;
+    background:#fbf6f0;
+  }
+  .info span {
+    display:block;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:#95776b;
+    margin-bottom:5px;
+    font-weight:800;
+  }
+  .info strong {
+    display:block;
+    font-size:14px;
+    line-height:1.45;
+    color:var(--ink);
+    word-break:break-word;
+  }
+  .note {
+    margin-top:10px;
+    padding:12px 13px;
+    border-radius:16px;
+    border-left:5px solid var(--lead);
+    background:#fff4eb;
+    color:#5d4538;
+    line-height:1.55;
+    font-size:13px;
+  }
+  @media (max-width: 1080px) {
+    .layout { grid-template-columns:1fr; }
+    .stage { min-height:620px; }
+    .stage-frame { width:100%; height:560px; }
+  }
+  @media (max-width: 720px) {
+    .wrap { width:auto; margin:0; padding:14px; }
+    h1 { font-size:30px; }
+    .stage-frame { height:500px; }
+    .sprite-wrap img { height:280px; }
+    .sprite-wrap { width:180px; height:290px; }
+    .anchor-line { bottom:92px; width:180px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero panel">
+    <span class="eyebrow">PIP DEVELOPMENT GUILD</span>
+    <h1>04 Sage</h1>
+    <p>CSS-only idle motion prototype for the Design Auditor. The motion is subtle and precise, with a measured pulse that suggests close visual inspection without turning the character into an action caster.</p>
+  </section>
+
+  <input class="toggle" type="checkbox" id="pause" aria-label="Pause animation">
+  <input class="speed" type="radio" name="speed" id="speed-075">
+  <input class="speed" type="radio" name="speed" id="speed-100" checked>
+  <input class="speed" type="radio" name="speed" id="speed-125">
+  <input class="toggle" type="checkbox" id="hide-anchor" aria-label="Hide anchor line">
+
+  <div class="layout">
+    <section class="panel stage">
+      <div class="stage-frame">
+        <div class="anchor-line"></div>
+        <div class="sprite-wrap">
+          <img src="../cropped_sprites/front_cutouts/04_sage_front.png" alt="04 Sage static sprite">
+        </div>
+      </div>
+    </section>
+
+    <aside class="panel panel-body">
+      <div class="section">
+        <h2>Controls</h2>
+        <div class="control-row">
+          <label class="chip" for="pause">Play / Pause</label>
+          <label class="chip" for="speed-075">0.75x</label>
+          <label class="chip" for="speed-100">1x</label>
+          <label class="chip" for="speed-125">1.25x</label>
+          <label class="chip" for="hide-anchor">Show / Hide Anchor</label>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Info</h2>
+        <div class="info-grid">
+          <div class="info"><span>Character</span><strong>04 Sage</strong></div>
+          <div class="info"><span>Role</span><strong>Design Auditor</strong></div>
+          <div class="info"><span>Animation type</span><strong>CSS-only idle prototype</strong></div>
+          <div class="info"><span>Source sprite</span><strong>cropped_sprites/front_cutouts/04_sage_front.png</strong></div>
+          <div class="info"><span>Personality</span><strong>Observant, precise, thoughtful, UI-focused</strong></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Motion Notes</h2>
+        <div class="note">
+          Subtle idle loop only: about 1-2 px vertical breathing motion, a tiny scale change capped at 1.008, and a very soft focus pulse through shadow/glow only. No walking, no rotation, and feet remain anchored.
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    html, body { margin: 0; width: 100%; height: 100%; background: #000; }
+    .canvas {
+      position: relative;
+      width: 1448px;
+      height: 1086px;
+      overflow: hidden;
+      background: url('file:///Users/Pae/Developer/PIP/pip_development_guild/backgrounds/01_guild_hall_ro_style_clean.png') no-repeat center center;
+      background-size: 1448px 1086px;
+      font-family: Inter, Arial, sans-serif;
+    }
+    .sprite {
+      position: absolute;
+      pointer-events: none;
+      image-rendering: auto;
+      filter: drop-shadow(0 8px 13px rgba(0,0,0,0.22));
+    }
+    .label {
+      position: absolute;
+      transform: translate(-50%, -100%);
+      min-width: 118px;
+      padding: 6px 9px 7px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.78);
+      background: rgba(17, 25, 43, 0.94);
+      color: #fffaf2;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.22);
+      line-height: 1.05;
+      white-space: nowrap;
+    }
+    .label strong { display: block; font-size: 14px; }
+    .label span { display: block; margin-top: 2px; font-size: 11px; color: #d9e7ff; }
+    .label::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -7px;
+      transform: translateX(-50%);
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-top: 7px solid rgba(17, 25, 43, 0.94);
+    }
+  </style>
+</head>
+<body>
+  <div class="canvas">
+    <img class="sprite" style="left: 755px; top: 204px; height: 168px;" src="file:///Users/Pae/Developer/PIP/pip_development_guild/cropped_sprites/front_cutouts/01_guild_master_front.png">
+    <div class="label" style="left: 790px; top: 198px;"><strong>01. Guild Master</strong><span>Center Stage</span></div>
+
+    <img class="sprite" style="left: 215px; top: 360px; height: 166px;" src="file:///Users/Pae/Developer/PIP/pip_development_guild/cropped_sprites/front_cutouts/02_high_priest_front.png">
+    <div class="label" style="left: 276px; top: 354px;"><strong>02. High Priest</strong><span>Left Library / Quest Area</span></div>
+
+    <img class="sprite" style="left: 672px; top: 514px; height: 154px;" src="file:///Users/Pae/Developer/PIP/pip_development_guild/cropped_sprites/front_cutouts/03_novice_pip_front.png">
+    <div class="label" style="left: 716px; top: 508px;"><strong>03. Novice (Pip)</strong><span>Center Floor</span></div>
+
+    <img class="sprite" style="left: 468px; top: 344px; height: 155px;" src="file:///Users/Pae/Developer/PIP/pip_development_guild/cropped_sprites/front_cutouts/04_sage_front.png">
+    <div class="label" style="left: 512px; top: 338px;"><strong>04. Sage</strong><span>Left-Middle Research Zone</span></div>
+
+    <img class="sprite" style="left: 96px; top: 620px; height: 158px;" src="file:///Users/Pae/Developer/PIP/pip_development_guild/cropped_sprites/front_cutouts/05_blacksmith_front.png">
+    <div class="label" style="left: 136px; top: 614px;"><strong>05. Blacksmith</strong><span>Lower-Left Workshop</span></div>
+
+    <img class="sprite" style="left: 742px; top: 705px; height: 178px;" src="file:///Users/Pae/Developer/PIP/pip_development_guild/cropped_sprites/front_cutouts/06_crusader_front.png">
+    <div class="label" style="left: 798px; top: 699px;"><strong>06. Crusader</strong><span>Front Entrance</span></div>
+
+    <img class="sprite" style="left: 962px; top: 344px; height: 170px;" src="file:///Users/Pae/Developer/PIP/pip_development_guild/cropped_sprites/front_cutouts/07_knight_front.png">
+    <div class="label" style="left: 1010px; top: 338px;"><strong>07. Knight</strong><span>Right of Stage</span></div>
+
+    <img class="sprite" style="left: 350px; top: 772px; height: 154px;" src="file:///Users/Pae/Developer/PIP/pip_development_guild/cropped_sprites/front_cutouts/08_assassin_cross_front.png">
+    <div class="label" style="left: 399px; top: 766px;"><strong>08. Assassin Cross</strong><span>Lower-Left Inspection Area</span></div>
+
+    <img class="sprite" style="left: 292px; top: 62px; height: 146px;" src="file:///Users/Pae/Developer/PIP/pip_development_guild/cropped_sprites/front_cutouts/09_sniper_front.png">
+    <div class="label" style="left: 323px; top: 56px;"><strong>09. Sniper</strong><span>Upper-Left Balcony</span></div>
+
+    <img class="sprite" style="left: 1085px; top: 455px; height: 156px;" src="file:///Users/Pae/Developer/PIP/pip_development_guild/cropped_sprites/front_cutouts/10_professor_front.png">
+    <div class="label" style="left: 1127px; top: 449px;"><strong>10. Professor</strong><span>Right-Middle Desk Area</span></div>
+
+    <img class="sprite" style="left: 1260px; top: 274px; height: 166px;" src="file:///Users/Pae/Developer/PIP/pip_development_guild/cropped_sprites/front_cutouts/11_gunslinger_front.png">
+    <div class="label" style="left: 1305px; top: 268px;"><strong>11. Gunslinger</strong><span>Right-Side Bar</span></div>
+  </div>
+</body>
+</html>

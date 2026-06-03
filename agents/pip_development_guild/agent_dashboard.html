@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ห้องกิลด์ PIP</title>
+<style>
+  :root {
+    --gold:#f0c66b;
+    --gold-soft:#ffe7a6;
+    --ink:#fff2d7;
+    --window:#151d27;
+    --shadow:0 22px 60px rgba(0, 0, 0, .48);
+  }
+  * { box-sizing:border-box; }
+  html,
+  body {
+    width:100%;
+    height:100%;
+    margin:0;
+    overflow:hidden;
+    background:#050504;
+    color:var(--ink);
+    font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  }
+  body { user-select:none; }
+  button,
+  a { font:inherit; }
+  .world {
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 50% 48%, rgba(96, 70, 36, .25), transparent 42%),
+      linear-gradient(180deg, #050504 0%, #11100d 100%);
+  }
+  .scene {
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:min(100vw, calc(100vh * 1931 / 1086));
+    height:min(100vh, calc(100vw * 1086 / 1931));
+    transform:translate(-50%, -50%);
+    overflow:hidden;
+    box-shadow:0 0 0 1px rgba(244, 213, 151, .16), 0 22px 70px rgba(0, 0, 0, .55);
+  }
+  .scene-scale {
+    position:absolute;
+    left:0;
+    top:0;
+    width:1931px;
+    height:1086px;
+    transform-origin:top left;
+  }
+  .background {
+    position:absolute;
+    inset:0;
+    width:1931px;
+    height:1086px;
+    pointer-events:none;
+  }
+  .vignette {
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background:
+      linear-gradient(180deg, rgba(0,0,0,.18), transparent 15%, transparent 80%, rgba(0,0,0,.32)),
+      radial-gradient(circle at center, transparent 61%, rgba(0,0,0,.30));
+  }
+  .tip {
+    position:fixed;
+    left:50%;
+    bottom:18px;
+    z-index:14;
+    transform:translateX(-50%);
+    padding:7px 12px;
+    border:1px solid rgba(239, 198, 106, .34);
+    border-radius:999px;
+    background:rgba(18, 24, 32, .58);
+    color:#fff5dd;
+    box-shadow:0 10px 28px rgba(0,0,0,.26);
+    font-size:12px;
+    font-weight:900;
+    backdrop-filter:blur(6px);
+    transition:opacity .18s ease, transform .18s ease;
+  }
+  .tip.hidden {
+    opacity:0;
+    transform:translate(-50%, 8px);
+    pointer-events:none;
+  }
+  .agent {
+    position:absolute;
+    left:var(--x);
+    top:var(--y);
+    width:var(--w);
+    height:var(--h);
+    pointer-events:none;
+  }
+  .sprite-motion {
+    position:absolute;
+    inset:0;
+    transform-origin:center bottom;
+    animation:idleBreath var(--duration) ease-in-out infinite;
+    will-change:transform;
+  }
+  .sprite-motion.lively { animation-name:idleLively; }
+  .sprite-motion.steady { animation-name:idleSteady; }
+  .agent-sprite {
+    position:absolute;
+    left:0;
+    bottom:0;
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    image-rendering:auto;
+    pointer-events:none;
+  }
+  .hitbox {
+    position:absolute;
+    left:calc(var(--x) + (var(--w) - var(--hit-w)) / 2);
+    top:calc(var(--y) + var(--h) - var(--hit-h));
+    width:var(--hit-w);
+    height:var(--hit-h);
+    border:0;
+    border-radius:999px;
+    padding:0;
+    background:transparent;
+    cursor:pointer;
+    z-index:80;
+  }
+  .highlight {
+    position:absolute;
+    left:calc(var(--x) + (var(--w) - var(--ring-w)) / 2);
+    top:calc(var(--y) + var(--h) - var(--ring-h));
+    width:var(--ring-w);
+    height:var(--ring-h);
+    border:2px solid rgba(255, 226, 147, .90);
+    border-radius:999px;
+    background:radial-gradient(circle, rgba(255, 237, 175, .18), rgba(255, 237, 175, .02) 58%, transparent 72%);
+    box-shadow:0 0 0 4px rgba(255, 210, 112, .12), 0 0 24px rgba(255, 211, 112, .38);
+    opacity:0;
+    pointer-events:none;
+    z-index:75;
+    transition:opacity .14s ease, transform .14s ease;
+  }
+  .agent-label {
+    position:absolute;
+    left:calc(var(--x) + var(--label-x));
+    top:calc(var(--y) + var(--label-y));
+    min-width:max-content;
+    transform:translate(-50%, -100%);
+    padding:5px 8px;
+    border:1px solid rgba(255, 225, 157, .62);
+    border-radius:8px;
+    color:#fff6df;
+    background:rgba(13, 18, 25, .88);
+    box-shadow:0 8px 18px rgba(0,0,0,.32);
+    font-size:12px;
+    font-weight:900;
+    white-space:nowrap;
+    opacity:0;
+    pointer-events:none;
+    z-index:90;
+    transition:opacity .14s ease, transform .14s ease;
+  }
+  .agent-node.hovered .highlight,
+  .agent-node.selected .highlight {
+    opacity:1;
+    transform:scale(1.04);
+  }
+  .agent-node.hovered .agent-label {
+    opacity:1;
+    transform:translate(-50%, -112%);
+  }
+  .hitbox:focus-visible {
+    outline:none;
+  }
+  .dialogue {
+    position:fixed;
+    left:50%;
+    bottom:24px;
+    z-index:120;
+    width:min(880px, calc(100vw - 28px));
+    max-height:min(54vh, 540px);
+    transform:translateX(-50%);
+    border:2px solid rgba(239, 198, 106, .88);
+    border-radius:18px;
+    background:
+      linear-gradient(180deg, rgba(32, 43, 57, .98), rgba(17, 24, 34, .98)),
+      var(--window);
+    box-shadow:var(--shadow), inset 0 0 0 1px rgba(255,255,255,.08);
+    overflow:hidden;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .16s ease, transform .16s ease;
+  }
+  .dialogue.expanded {
+    left:18px;
+    top:18px;
+    bottom:18px;
+    width:min(50vw, 820px);
+    max-height:calc(100vh - 36px);
+    transform:translateX(-10px);
+  }
+  .dialogue.open {
+    opacity:1;
+    pointer-events:auto;
+    transform:translate(-50%, -4px);
+  }
+  .dialogue.expanded.open {
+    transform:translateX(0);
+  }
+  .dialogue::before {
+    content:"";
+    position:absolute;
+    inset:7px;
+    border:1px solid rgba(255, 232, 177, .20);
+    border-radius:12px;
+    pointer-events:none;
+  }
+  .dialogue-head {
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:14px;
+    padding:16px 18px 11px;
+    border-bottom:1px solid rgba(239, 198, 106, .28);
+    background:linear-gradient(180deg, rgba(255,255,255,.06), transparent);
+  }
+  .dialogue-kicker {
+    margin:0 0 4px;
+    color:var(--gold-soft);
+    font-size:12px;
+    font-weight:900;
+  }
+  .dialogue-title {
+    margin:0;
+    color:#fff8e8;
+    font-family:"Iowan Old Style", "Palatino Linotype", Georgia, serif;
+    font-size:26px;
+    line-height:1.05;
+    letter-spacing:0;
+  }
+  .dialogue-meta {
+    display:grid;
+    gap:2px;
+    margin-top:8px;
+  }
+  .dialogue-meta-line {
+    margin:0;
+    color:#f0dcc4;
+    font-size:13px;
+    font-weight:800;
+    line-height:1.35;
+  }
+  .dialogue-controls {
+    display:flex;
+    align-items:flex-start;
+    gap:8px;
+  }
+  .icon {
+    width:18px;
+    height:18px;
+    flex:0 0 auto;
+    stroke:currentColor;
+    stroke-width:2;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    fill:none;
+  }
+  .icon-btn {
+    display:inline-grid;
+    place-items:center;
+    padding:0;
+    appearance:none;
+    color:#fff8e8;
+    background:rgba(0,0,0,.18);
+    cursor:pointer;
+  }
+  .icon-btn svg {
+    width:18px;
+    height:18px;
+  }
+  .expand-toggle {
+    width:34px;
+    height:34px;
+    border:1px solid rgba(255, 226, 165, .42);
+    border-radius:10px;
+  }
+  .expand-toggle .icon-collapse {
+    display:none;
+  }
+  .expand-toggle[data-expanded="true"] .icon-expand {
+    display:none;
+  }
+  .expand-toggle[data-expanded="true"] .icon-collapse {
+    display:block;
+  }
+  .expand-toggle:hover,
+  .expand-toggle:focus-visible {
+    outline:none;
+    border-color:rgba(255, 226, 165, .90);
+    background:rgba(255,255,255,.08);
+  }
+  .close {
+    width:34px;
+    height:34px;
+    flex:0 0 auto;
+    border:1px solid rgba(255, 226, 165, .42);
+    border-radius:10px;
+  }
+  .close .icon {
+    width:18px;
+    height:18px;
+  }
+  .close:hover,
+  .close:focus-visible {
+    outline:none;
+    border-color:rgba(255, 226, 165, .90);
+    background:rgba(255,255,255,.08);
+  }
+  .dialogue-body {
+    padding:15px 18px 24px;
+    overflow:auto;
+    max-height:calc(min(54vh, 540px) - 92px);
+  }
+  .dialogue.expanded .dialogue-body {
+    max-height:calc(100vh - 132px);
+    padding-bottom:30px;
+  }
+  .dialogue-panel[hidden] {
+    display:none;
+  }
+  .workflow-grid {
+    display:grid;
+    grid-template-columns:minmax(0, 1fr) minmax(0, 1fr);
+    gap:14px;
+    align-items:start;
+  }
+  .workflow-grid > * {
+    min-height:auto;
+  }
+  .speech {
+    border:1px solid rgba(255, 226, 165, .20);
+    border-radius:14px;
+    background:rgba(247, 234, 212, .08);
+    padding:13px;
+  }
+  .role-notes {
+    margin:0;
+    overflow-wrap:anywhere;
+  }
+  .speech p {
+    margin:0;
+    color:#f3ddc1;
+    line-height:1.56;
+    font-size:14px;
+  }
+  .speech strong,
+  .note-row dt {
+    color:#fff4cf;
+  }
+  .note-row { margin:0 0 13px; }
+  .note-row:last-child { margin-bottom:0; }
+  .note-row dt {
+    margin:0 0 4px;
+    font-size:12px;
+    font-weight:900;
+  }
+  .note-row dd {
+    margin:0;
+    color:#f0dcc4;
+    line-height:1.46;
+    font-size:13px;
+    overflow-wrap:anywhere;
+  }
+  .npc-greeting {
+    margin:0 0 14px;
+    color:#f3ddc1;
+    line-height:1.56;
+    font-size:14px;
+  }
+  .choice-list {
+    display:grid;
+    gap:7px;
+  }
+  .back-actions {
+    display:flex;
+    flex-wrap:wrap;
+    gap:9px;
+  }
+  .back-actions {
+    margin-top:12px;
+  }
+  .choice-button {
+    display:inline-flex;
+    align-items:center;
+    min-height:38px;
+    border:1px solid rgba(255, 226, 165, .42);
+    border-radius:12px;
+    padding:9px 12px;
+    color:#fff8e8;
+    background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.03));
+    cursor:pointer;
+    font-size:13px;
+    font-weight:900;
+    box-shadow:0 8px 16px rgba(0,0,0,.16);
+  }
+  .menu-choice {
+    justify-content:flex-start;
+    width:100%;
+    border-color:rgba(255, 226, 165, .20);
+    border-radius:0;
+    border-left:0;
+    border-right:0;
+    padding:10px 4px;
+    background:transparent;
+    box-shadow:none;
+    text-align:left;
+  }
+  .menu-choice::before {
+    content:">";
+    display:inline-block;
+    width:18px;
+    color:var(--gold-soft);
+  }
+  .choice-button:hover,
+  .choice-button:focus-visible {
+    outline:none;
+    border-color:rgba(255, 226, 165, .90);
+    background:rgba(255, 232, 177, .12);
+  }
+  .back-button {
+    min-height:32px;
+    margin:0 0 12px;
+    border:0;
+    border-radius:8px;
+    padding:6px 0;
+    color:var(--gold-soft);
+    background:transparent;
+    cursor:pointer;
+    font-size:13px;
+    font-weight:900;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+  }
+  .back-button:hover,
+  .back-button:focus-visible {
+    outline:none;
+    color:#fff5dd;
+  }
+  .panel-title {
+    margin:0 0 4px;
+    color:#fff8e8;
+    font-size:18px;
+    font-weight:1000;
+  }
+  .panel-subtitle {
+    margin:0 0 14px;
+    color:#f0dcc4;
+    font-size:13px;
+    font-weight:800;
+  }
+  .simple-content {
+    color:#f0dcc4;
+    padding-bottom:6px;
+  }
+  .simple-section {
+    margin:0 0 14px;
+  }
+  .simple-section:last-child {
+    margin-bottom:0;
+  }
+  .simple-section h3 {
+    margin:0 0 5px;
+    color:#fff4cf;
+    font-size:13px;
+    line-height:1.25;
+  }
+  .simple-section p {
+    margin:0;
+    color:#f0dcc4;
+    line-height:1.55;
+    font-size:14px;
+  }
+  .prompt-box {
+    width:100%;
+    min-height:240px;
+    border:1px solid rgba(255, 226, 165, .24);
+    border-radius:12px;
+    padding:12px;
+    resize:vertical;
+    color:#f7e6c9;
+    background:rgba(0,0,0,.28);
+    font:12px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    overflow:auto;
+    flex:1 1 auto;
+  }
+  .dialogue.expanded .prompt-box {
+    min-height:300px;
+  }
+  .prompt-card {
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    min-height:auto;
+    align-self:flex-start;
+    justify-self:stretch;
+  }
+  .dialogue.expanded .prompt-card {
+    margin-top:0;
+  }
+  .prompt-card-head {
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:10px;
+  }
+  .prompt-card-title {
+    margin:0;
+    color:#fff4cf;
+    font-size:13px;
+    line-height:1.4;
+    font-weight:900;
+  }
+  .copy-icon {
+    width:34px;
+    height:34px;
+    flex:0 0 auto;
+    border:1px solid rgba(255, 226, 165, .34);
+    border-radius:10px;
+    background:rgba(0,0,0,.18);
+    cursor:pointer;
+  }
+  .copy-icon:hover,
+  .copy-icon:focus-visible {
+    outline:none;
+    border-color:rgba(255, 226, 165, .90);
+    background:rgba(255,255,255,.08);
+  }
+  .copy-state {
+    min-height:18px;
+    color:var(--gold-soft);
+    font-size:12px;
+    font-weight:900;
+  }
+  .workflow-list {
+    margin:0;
+    padding-left:18px;
+    color:#f0dcc4;
+    line-height:1.48;
+    font-size:13px;
+    overflow-wrap:anywhere;
+  }
+  .workflow-list li {
+    margin:0 0 5px;
+    overflow-wrap:anywhere;
+  }
+  @keyframes idleBreath {
+    0%, 100% { transform:scale(1); }
+    50% { transform:scale(var(--scale)); }
+  }
+  @keyframes idleSteady {
+    0%, 100% { transform:scale(1); }
+    50% { transform:scale(var(--scale)); }
+  }
+  @keyframes idleLively {
+    0%, 100% { transform:translateX(0) scale(1); }
+    25% { transform:translateX(-1px) scale(1.004); }
+    50% { transform:translateX(0) scale(var(--scale)); }
+    75% { transform:translateX(1px) scale(1.004); }
+  }
+  @media (max-width:760px) {
+    .dialogue {
+      bottom:10px;
+      width:calc(100vw - 16px);
+      max-height:60vh;
+      border-radius:15px;
+    }
+    .dialogue.expanded {
+      left:8px;
+      top:8px;
+      bottom:8px;
+      width:calc(100vw - 16px);
+      max-height:calc(100vh - 16px);
+    }
+    .dialogue-head { padding:14px 14px 9px; }
+    .dialogue-title { font-size:22px; }
+    .dialogue-body {
+      padding:12px 14px 20px;
+      max-height:calc(60vh - 90px);
+    }
+    .dialogue.expanded .dialogue-body {
+      max-height:calc(100vh - 122px);
+    }
+    .workflow-grid {
+      grid-template-columns:1fr;
+    }
+    .tip {
+      bottom:14px;
+      font-size:12px;
+    }
+  }
+</style>
+</head>
+<body>
+<svg aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
+  <symbol id="icon-close" viewBox="0 0 24 24">
+    <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6 6 18" />
+  </symbol>
+  <symbol id="icon-back" viewBox="0 0 24 24">
+    <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14 6 8 12l6 6" />
+    <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M20 12H8" />
+  </symbol>
+  <symbol id="icon-expand" viewBox="0 0 24 24">
+    <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 3H3v6M15 3h6v6M9 21H3v-6M15 21h6v-6" />
+  </symbol>
+  <symbol id="icon-collapse" viewBox="0 0 24 24">
+    <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 9h6V3M15 3v6h6M3 15h6v6M15 15v6h6" />
+  </symbol>
+  <symbol id="icon-copy" viewBox="0 0 24 24">
+    <rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="2" />
+    <rect x="4" y="4" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="2" />
+  </symbol>
+  <symbol id="icon-check" viewBox="0 0 24 24">
+    <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m5 12 4 4 10-10" />
+  </symbol>
+  <symbol id="icon-info" viewBox="0 0 24 24">
+    <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 17v-5" />
+    <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 8h.01" />
+    <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2" />
+  </symbol>
+  <symbol id="icon-workflow" viewBox="0 0 24 24">
+    <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 7h10" />
+    <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 12h6" />
+    <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 17h10" />
+    <circle cx="5" cy="7" r="1" fill="none" stroke="currentColor" stroke-width="2" />
+    <circle cx="13" cy="12" r="1" fill="none" stroke="currentColor" stroke-width="2" />
+    <circle cx="15" cy="17" r="1" fill="none" stroke="currentColor" stroke-width="2" />
+  </symbol>
+</svg>
+<main class="world" aria-label="ห้องกิลด์แบบโต้ตอบ">
+  <div class="scene" id="scene">
+    <div class="scene-scale" id="sceneScale">
+      <img class="background" src="backgrounds/01_guild_hall_ro_style_clean.png" alt="พื้นหลังห้องกิลด์ PIP ที่อนุมัติแล้ว">
+      <div id="agentLayer"></div>
+    </div>
+  </div>
+  <div class="vignette" aria-hidden="true"></div>
+  <div class="tip" id="tip">คลิกตัวละครเพื่อพูดคุย</div>
+
+  <section class="dialogue" id="dialogue" aria-live="polite" aria-hidden="true">
+    <div class="dialogue-head">
+      <div>
+        <p class="dialogue-kicker">สนทนากับเอเจนต์</p>
+        <h1 class="dialogue-title" id="agentTitle">ชื่อตัวละคร</h1>
+        <div class="dialogue-meta">
+          <p class="dialogue-meta-line" id="agentRole">บทบาท</p>
+          <p class="dialogue-meta-line" id="agentZone">พื้นที่</p>
+        </div>
+      </div>
+      <div class="dialogue-controls">
+        <button class="expand-toggle icon-btn" type="button" id="expandDialogue" title="ขยาย" aria-label="ขยาย">
+          <svg class="icon icon-expand" aria-hidden="true"><use href="#icon-expand"></use></svg>
+          <svg class="icon icon-collapse" aria-hidden="true"><use href="#icon-collapse"></use></svg>
+        </button>
+        <button class="close icon-btn" type="button" id="closeDialogue" title="ปิดกล่องสนทนา" aria-label="ปิดกล่องสนทนา">
+          <svg class="icon" aria-hidden="true"><use href="#icon-close"></use></svg>
+        </button>
+      </div>
+    </div>
+    <div class="dialogue-body">
+      <div class="dialogue-panel" id="menuPanel">
+        <p class="npc-greeting" id="agentGreeting"></p>
+        <div class="choice-list">
+          <button class="choice-button menu-choice" type="button" id="showRoleButton">ดูหน้าที่ของเอเจนต์นี้</button>
+          <button class="choice-button menu-choice" type="button" id="showWorkflowButton">สั่งงานเอเจนต์นี้</button>
+        </div>
+      </div>
+
+      <div class="dialogue-panel" id="rolePanel" hidden>
+        <button class="back-button" type="button" id="roleBackToMenuButton">
+          <svg class="icon" aria-hidden="true"><use href="#icon-back"></use></svg>
+          <span>ย้อนกลับ</span>
+        </button>
+        <h2 class="panel-title" id="roleDetailTitle"></h2>
+        <p class="panel-subtitle" id="roleDetailRole"></p>
+        <div class="simple-content">
+          <div class="simple-section">
+            <h3>รายละเอียดบทบาท</h3>
+            <p id="thaiText"></p>
+          </div>
+          <div class="simple-section">
+            <h3>หน้าที่หลัก</h3>
+            <p id="responsibility"></p>
+          </div>
+          <div class="simple-section">
+            <h3>แนวทางการใช้งาน</h3>
+            <p id="usage"></p>
+          </div>
+          <div class="simple-section">
+            <h3>ข้อควรทำ / ข้อไม่ควรทำ</h3>
+            <p id="rule"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="dialogue-panel" id="workflowPanel" hidden>
+        <button class="back-button" type="button" id="workflowBackToMenuButton">
+          <svg class="icon" aria-hidden="true"><use href="#icon-back"></use></svg>
+          <span>ย้อนกลับ</span>
+        </button>
+        <div class="workflow-grid">
+          <dl class="role-notes">
+            <div class="note-row">
+              <dt>ชื่อเวิร์กโฟลว์</dt>
+              <dd id="workflowPanelTitle"></dd>
+            </div>
+            <div class="note-row">
+              <dt>เอเจนต์ที่รับผิดชอบ</dt>
+              <dd id="workflowPanelRole"></dd>
+            </div>
+            <div class="note-row">
+              <dt>เหมาะสำหรับงานประเภทไหน</dt>
+              <dd><ul class="workflow-list" id="workflowUseFor"></ul></dd>
+            </div>
+            <div class="note-row">
+              <dt>รายการตรวจสอบก่อนสั่งงาน</dt>
+              <dd><ul class="workflow-list" id="workflowChecklist"></ul></dd>
+            </div>
+          </dl>
+          <div class="speech prompt-card">
+            <div class="prompt-card-head">
+              <p class="prompt-card-title">แม่แบบคำสั่งภาษาอังกฤษสำหรับสั่งโค้เด็กซ์</p>
+              <button class="copy-icon icon-btn" type="button" id="copyPromptButton" title="คัดลอก Prompt" aria-label="คัดลอก Prompt">
+                <svg class="icon" aria-hidden="true"><use href="#icon-copy"></use></svg>
+              </button>
+            </div>
+            <textarea class="prompt-box" id="workflowPrompt" readonly></textarea>
+            <div class="copy-state" id="copyState" aria-live="polite"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+const agents = [
+  {
+    id:"01", number:"01", name:"Guild Master", role:"หัวหน้าทีมโค้ด", group:"ภาวะผู้นำและการกำกับดูแล",
+    zone:"เวทีกลาง", spritePath:"cropped_sprites/front_cutouts/01_guild_master_front.png", idlePrototypePath:"animations/01_guild_master_idle_css_prototype.html",
+    x:972, y:240, width:87.4, height:168, labelOffsetX:43.7, labelOffsetY:-8, hitboxWidth:92, hitboxHeight:150, highlightWidth:98, highlightHeight:156,
+    duration:"1.4s", scale:1.01, motion:"steady",
+    thaiName:"หัวหน้ากิลด์",
+    thaiRole:"หัวหน้าควบคุมงานโค้เด็กซ์",
+    thaiGroup:"ภาวะผู้นำและการกำกับดูแล",
+    thaiDescription:"หัวหน้ากิลด์คือผู้นำภาพรวมของทีม ทำหน้าที่กำหนดทิศทาง วางแผน ตัดสินใจขั้นสุดท้าย และประสานงานระหว่างทุกบทบาทเพื่อให้ลำดับงานเดินต่อได้อย่างมั่นคงและไม่หลุดเป้าหมายหลักของโปรเจกต์",
+    thaiResponsibility:"ควบคุมแผนงาน ประสานงานขั้นสุดท้าย และกำหนดทิศทางงาน",
+    thaiUsage:"ใช้เป็นผู้นำภาพรวม หรือจุดอำนาจหลักของฉาก",
+    thaiRule:"ควรแสดงบทผู้นำ ห้ามลดบทให้เป็นแค่มาสคอตหรือนักรบทั่วไป"
+  },
+  {
+    id:"02", number:"02", name:"High Priest", role:"ผู้พิทักษ์คัมภีร์ผลิตภัณฑ์", group:"ภาวะผู้นำและการกำกับดูแล",
+    zone:"ห้องสมุดซ้าย / พื้นที่เควสต์", spritePath:"cropped_sprites/front_cutouts/02_high_priest_front.png", idlePrototypePath:"animations/02_high_priest_idle_css_prototype.html",
+    x:592, y:458, width:79.1, height:166, labelOffsetX:39.5, labelOffsetY:-8, hitboxWidth:84, hitboxHeight:150, highlightWidth:90, highlightHeight:156,
+    duration:"1.6s", scale:1.008, motion:"steady",
+    thaiName:"ไฮพรีสต์",
+    thaiRole:"ผู้พิทักษ์คัมภีร์ผลิตภัณฑ์",
+    thaiGroup:"ภาวะผู้นำและการกำกับดูแล",
+    thaiDescription:"ไฮพรีสต์คือผู้พิทักษ์คัมภีร์ผลิตภัณฑ์และแหล่งความจริงหลักของโปรเจกต์ ทำหน้าที่คุมกฎหลัก ตรวจไม่ให้ตรรกะหลุด และช่วยป้องกันการเปลี่ยนแปลงที่ขัดกับคัมภีร์หรือระบบที่ล็อกไว้แล้ว",
+    thaiResponsibility:"ดูแลคัมภีร์ผลิตภัณฑ์ แหล่งความจริงหลัก และปกป้องกฎตรรกะหลัก",
+    thaiUsage:"วางใกล้หนังสือ เอกสาร กฎ หรือพื้นที่แหล่งความจริงหลัก",
+    thaiRule:"ควรแสดงเป็นผู้คุมกฎ ห้ามเปลี่ยนเป็นสายรายได้ นักออกแบบ หรือผู้ทดสอบ"
+  },
+  {
+    id:"03", number:"03", name:"Novice (Pip)", role:"ผู้ดูแลเอกสาร / มาสคอต", group:"งานออกแบบและสร้างระบบ",
+    zone:"ลานกลาง", spritePath:"cropped_sprites/front_cutouts/03_novice_pip_front.png", idlePrototypePath:"animations/03_novice_pip_idle_css_prototype.html",
+    x:914, y:514, width:90.1, height:154, labelOffsetX:45.1, labelOffsetY:-8, hitboxWidth:96, hitboxHeight:140, highlightWidth:102, highlightHeight:146,
+    duration:"1.32s", scale:1.012, motion:"lively",
+    thaiName:"โนวิซ (พิป)",
+    thaiRole:"ผู้ช่วยเอกสาร / มาสคอต",
+    thaiGroup:"ออกแบบและพัฒนา",
+    thaiDescription:"โนวิซ หรือ พิป คือมาสคอตและผู้ช่วยประจำกิลด์ ทำหน้าที่จดบันทึก สรุปงาน ส่งต่อข้อมูล และเป็นตัวแทนผู้ใช้หรือไกด์ผู้ชมที่ช่วยให้คนเข้าใจระบบทั้งหมดได้ง่ายขึ้น",
+    thaiResponsibility:"จดบันทึกงาน สรุปลำดับงาน และส่งต่อข้อมูลระหว่างขั้นตอน",
+    thaiUsage:"ใช้เป็นมาสคอต ไกด์ผู้ชม หรือจุดยึดสายตากลางฉาก",
+    thaiRule:"ควรให้พิปมองเห็นชัด ห้ามซ่อนพิปหรือเปลี่ยนให้เป็นหัวหน้าหลัก"
+  },
+  {
+    id:"04", number:"04", name:"Sage", role:"ผู้ตรวจระบบออกแบบ", group:"งานออกแบบและสร้างระบบ",
+    zone:"โซนวิจัยซ้ายกลาง", spritePath:"cropped_sprites/front_cutouts/04_sage_front.png", idlePrototypePath:"animations/04_sage_idle_css_prototype.html",
+    x:710, y:344, width:88.3, height:155, labelOffsetX:44.2, labelOffsetY:-8, hitboxWidth:94, hitboxHeight:140, highlightWidth:100, highlightHeight:146,
+    duration:"1.5s", scale:1.008, motion:"steady",
+    thaiName:"เซจ",
+    thaiRole:"ผู้ตรวจระบบออกแบบ",
+    thaiGroup:"ออกแบบและพัฒนา",
+    thaiDescription:"เซจคือผู้ตรวจระบบออกแบบของกิลด์ ทำหน้าที่เช็กตัวอักษร ระยะห่าง ไอคอน องค์ประกอบ พื้นผิวกระจก ความสม่ำเสมอทางภาพ และความถูกต้องของหน้าจอให้ตรงกับมาตรฐานการออกแบบ",
+    thaiResponsibility:"ตรวจมาตรฐานการออกแบบ ความแม่นยำของหน้าจอ และความสม่ำเสมอทางภาพ",
+    thaiUsage:"วางใกล้บอร์ดออกแบบ หนังสือ เอกสารรีวิว หรือพื้นที่ตรวจงาน",
+    thaiRule:"ควรแสดงเป็นผู้ตรวจงานออกแบบ ห้ามเปลี่ยนเป็นผู้เขียนแอปหรือผู้ดูแลรางวัล"
+  },
+  {
+    id:"05", number:"05", name:"Blacksmith", role:"ผู้สร้างแอป", group:"งานออกแบบและสร้างระบบ",
+    zone:"เวิร์กช็อปล่างซ้าย", spritePath:"cropped_sprites/front_cutouts/05_blacksmith_front.png", idlePrototypePath:"animations/05_blacksmith_idle_css_prototype.html",
+    x:338, y:620, width:81.5, height:158, labelOffsetX:40.8, labelOffsetY:-8, hitboxWidth:88, hitboxHeight:144, highlightWidth:94, highlightHeight:150,
+    duration:"1.45s", scale:1.01, motion:"steady",
+    thaiName:"แบล็กสมิธ",
+    thaiRole:"ผู้พัฒนาเฟรมเวิร์กฟลัตเตอร์",
+    thaiGroup:"ออกแบบและพัฒนา",
+    thaiDescription:"แบล็กสมิธคือผู้สร้างระบบจริง ทำหน้าที่ลงมือสร้างแอป สร้างชิ้นส่วนหน้าจอ ปรับโครงสร้างองค์ประกอบ และทำให้สิ่งที่ออกแบบไว้กลายเป็นงานที่ใช้งานได้จริง",
+    thaiResponsibility:"สร้างแอป สร้างหน้าจอ สร้างองค์ประกอบ และปรับโครงสร้างงาน",
+    thaiUsage:"วางในเวิร์กช็อป สถานีสร้างงาน หรือพื้นที่ที่มีเครื่องมือ",
+    thaiRule:"ควรแสดงเป็นผู้สร้างงาน ห้ามเปลี่ยนเป็นผู้คุมคัมภีร์ผลิตภัณฑ์หรือผู้ตรวจทานเท่านั้น"
+  },
+  {
+    id:"06", number:"06", name:"Crusader", role:"ผู้ดูแลความปลอดภัย", group:"ความปลอดภัยและคุณภาพ",
+    zone:"ทางเข้าด้านหน้า", spritePath:"cropped_sprites/front_cutouts/06_crusader_front.png", idlePrototypePath:"animations/06_crusader_idle_css_prototype.html",
+    x:984, y:705, width:112.9, height:178, labelOffsetX:56.4, labelOffsetY:-8, hitboxWidth:118, hitboxHeight:160, highlightWidth:124, highlightHeight:166,
+    duration:"1.72s", scale:1.006, motion:"steady",
+    thaiName:"ครูเซเดอร์",
+    thaiRole:"ผู้ดูแลความปลอดภัยระบบ",
+    thaiGroup:"ความปลอดภัยและคุณภาพ",
+    thaiDescription:"ครูเซเดอร์คือผู้พิทักษ์ความปลอดภัยและความถูกต้องของระบบ ทำหน้าที่ป้องกันรางวัลซ้ำ ความไว้ใจฝั่งผู้ใช้เกินจำเป็น ช่องโหว่ การแก้ตรรกะผิดทาง และคุมให้อำนาจฝั่งเซิร์ฟเวอร์เป็นหลักในจุดสำคัญ",
+    thaiResponsibility:"ดูแลความปลอดภัย ความสมบูรณ์ของระบบ การกันรางวัลซ้ำ และอำนาจฝั่งเซิร์ฟเวอร์",
+    thaiUsage:"วางที่ประตู ทางเข้า หรือพื้นที่ป้องกันระบบ",
+    thaiRule:"ควรแสดงเป็นผู้พิทักษ์ ห้ามเปลี่ยนเป็นผู้ดูแลมินิเกมหรือผู้ดูแลรางวัล"
+  },
+  {
+    id:"07", number:"07", name:"Knight", role:"ผู้ดูแลมินิเกม", group:"โหมดสินค้า",
+    zone:"ขวาของเวที", spritePath:"cropped_sprites/front_cutouts/07_knight_front.png", idlePrototypePath:"animations/07_knight_idle_css_prototype.html",
+    x:1204, y:344, width:132.4, height:170, labelOffsetX:66.2, labelOffsetY:-8, hitboxWidth:136, hitboxHeight:154, highlightWidth:142, highlightHeight:160,
+    duration:"1.45s", scale:1.01, motion:"steady",
+    thaiName:"ไนท์",
+    thaiRole:"ผู้ดูแลมินิเกม",
+    thaiGroup:"โหมดการใช้งาน",
+    thaiDescription:"ไนท์คือผู้ดูแลลำดับการเล่นมินิเกม ทำหน้าที่คุมด่าน การผ่านหรือไม่ผ่าน ความคืบหน้า เส้นทางด่าน สรุปและอินไซต์ และประสบการณ์การเล่นแบบภารกิจ",
+    thaiResponsibility:"ดูแลลำดับการเล่นมินิเกม ความคืบหน้าของด่าน การผ่านหรือไม่ผ่าน และสรุปผล",
+    thaiUsage:"วางใกล้พื้นที่ภารกิจ เวที หรือเส้นทางความคืบหน้า",
+    thaiRule:"ควรแสดงเป็นผู้คุมด่านภารกิจ ห้ามเปลี่ยนเป็นผู้ดูแลโหมดฝึกหรือเจ้าของระบบรายได้"
+  },
+  {
+    id:"08", number:"08", name:"Assassin Cross", role:"ผู้ตรวจคุณภาพ", group:"ความปลอดภัยและคุณภาพ",
+    zone:"พื้นที่ตรวจสอบล่างซ้าย", spritePath:"cropped_sprites/front_cutouts/08_assassin_cross_front.png", idlePrototypePath:"animations/08_assassin_cross_idle_css_prototype.html",
+    x:630, y:808, width:98.9, height:154, labelOffsetX:49.4, labelOffsetY:-8, hitboxWidth:104, hitboxHeight:138, highlightWidth:110, highlightHeight:144,
+    duration:"1.54s", scale:1.006, motion:"lively",
+    thaiName:"แอสซาซินครอส",
+    thaiRole:"ผู้ทดสอบและล่าบั๊ก",
+    thaiGroup:"ความปลอดภัยและคุณภาพ",
+    thaiDescription:"แอสซาซินครอสคือผู้ล่าบั๊กและตรวจการถดถอย ทำหน้าที่จับปัญหาที่ซ่อนอยู่ ตรวจประตูคุณภาพ วิเคราะห์และทดสอบระบบ และช่วยยืนยันว่าการแก้ไขไม่ทำให้ระบบส่วนอื่นพัง",
+    thaiResponsibility:"ล่าบั๊ก ตรวจการถดถอย ตรวจประตูคุณภาพ วิเคราะห์ระบบ และทดสอบระบบ",
+    thaiUsage:"วางในพื้นที่ตรวจสอบ มุมเงา หรือโซนตรวจคุณภาพ",
+    thaiRule:"ควรแสดงเป็นผู้ทดสอบและผู้ล่าบั๊ก ห้ามเปลี่ยนเป็นเจ้าของความปลอดภัยหรือผู้พิทักษ์คัมภีร์ผลิตภัณฑ์"
+  },
+  {
+    id:"09", number:"09", name:"Sniper", role:"ผู้ดูแลโหมดฝึก", group:"โหมดสินค้า",
+    zone:"ระเบียงซ้ายบน", spritePath:"cropped_sprites/front_cutouts/09_sniper_front.png", idlePrototypePath:"animations/09_sniper_idle_css_prototype.html",
+    x:534, y:62, width:71.9, height:146, labelOffsetX:36, labelOffsetY:-8, hitboxWidth:78, hitboxHeight:132, highlightWidth:84, highlightHeight:138,
+    duration:"1.6s", scale:1.006, motion:"lively",
+    thaiName:"สไนเปอร์",
+    thaiRole:"ผู้ดูแลโหมดฝึก",
+    thaiGroup:"โหมดการใช้งาน",
+    thaiDescription:"สไนเปอร์คือผู้ดูแลโหมดฝึกและความแม่นยำ ทำหน้าที่คุมลำดับการฝึกทำข้อสอบ โหมด 100 ข้อ การสอบจำลอง การวัดความแม่นยำ และการทบทวนผลการฝึก",
+    thaiResponsibility:"ดูแลโหมดฝึก การสอบจำลอง ลำดับ 100 ข้อ และการทบทวนความแม่นยำ",
+    thaiUsage:"วางบนจุดมองการณ์ ระเบียง หรือพื้นที่ที่สื่อถึงความแม่นยำ",
+    thaiRule:"ควรแสดงเป็นสายฝึกและความแม่นยำ ห้ามเปลี่ยนเป็นผู้ดูแลรางวัลหรือวีไอพี"
+  },
+  {
+    id:"10", number:"10", name:"Professor", role:"ผู้ตรวจทาน", group:"ภาวะผู้นำและการกำกับดูแล",
+    zone:"โต๊ะรีวิวขวากลาง", spritePath:"cropped_sprites/front_cutouts/10_professor_front.png", idlePrototypePath:"animations/10_professor_idle_css_prototype.html",
+    x:1337, y:515, width:72.2, height:156, labelOffsetX:36.1, labelOffsetY:-8, hitboxWidth:78, hitboxHeight:142, highlightWidth:84, highlightHeight:148,
+    duration:"1.72s", scale:1.006, motion:"steady",
+    thaiName:"โปรเฟสเซอร์",
+    thaiRole:"ผู้ตรวจทานระบบ",
+    thaiGroup:"ภาวะผู้นำและการกำกับดูแล",
+    thaiDescription:"โปรเฟสเซอร์คือผู้ตรวจทานเชิงลึก ทำหน้าที่ตรวจโค้ด โครงสร้างระบบ และคุณภาพการตัดสินใจ ช่วยให้การตัดสินใจของทีมมีเหตุผลและไม่ขัดกับโครงสร้างระบบระยะยาว",
+    thaiResponsibility:"ตรวจโค้ด โครงสร้างระบบ และคุณภาพการตัดสินใจ",
+    thaiUsage:"วางใกล้โต๊ะ เอกสารวิจัย บันทึก หรือพื้นที่ตรวจทาน",
+    thaiRule:"ควรแสดงเป็นผู้ตรวจทาน ห้ามเปลี่ยนเป็นหัวหน้าหลักหรือนักออกแบบภาพเท่านั้น"
+  },
+  {
+    id:"11", number:"11", name:"Gunslinger", role:"ผู้ดูแลรางวัล / วีไอพี", group:"รางวัลและรายได้",
+    zone:"บาร์ด้านขวา", spritePath:"cropped_sprites/front_cutouts/11_gunslinger_front.png", idlePrototypePath:"animations/11_gunslinger_idle_css_prototype.html",
+    x:1470, y:315, width:108.1, height:166, labelOffsetX:54.1, labelOffsetY:-8, hitboxWidth:114, hitboxHeight:150, highlightWidth:120, highlightHeight:156,
+    duration:"1.5s", scale:1.008, motion:"steady",
+    thaiName:"กันสลิงเกอร์",
+    thaiRole:"ผู้ดูแลรางวัล / วีไอพี",
+    thaiGroup:"รางวัลและรายได้",
+    thaiDescription:"กันสลิงเกอร์คือผู้ดูแลรางวัลและวีไอพี และตรรกะรายได้ ทำหน้าที่คุมรางวัล บัตรคูณสอง โฆษณาแลกรางวัล ลำดับวีไอพี และความสมดุลของระบบรายได้โดยไม่ทำลายประสบการณ์ผู้ใช้",
+    thaiResponsibility:"ดูแลรางวัลและวีไอพี ระบบรายได้ บัตรคูณสอง และโฆษณาแลกรางวัล",
+    thaiUsage:"วางใกล้บาร์ เคาน์เตอร์รางวัล พื้นที่ร้านค้า หรือจุดแลกเปลี่ยนมูลค่า",
+    thaiRule:"ควรแสดงเป็นผู้ดูแลรางวัลและวีไอพี ห้ามเปลี่ยนเป็นผู้ดูแลโหมดฝึกหรือผู้พิทักษ์คัมภีร์ผลิตภัณฑ์"
+  }
+];
+
+const workflowTemplates = {
+  "01": {
+    name:"วางแผนงาน / คุมทิศทาง",
+    useFor:[
+      "แตกงานใหญ่เป็นงานย่อย",
+      "ตรวจลำดับการทำงาน",
+      "ตัดสินใจว่าใครควรทำอะไรต่อ"
+    ],
+    checklist:[
+      "ระบุเป้าหมายของงาน",
+      "ระบุไฟล์ที่เกี่ยวข้อง",
+      "ระบุข้อห้าม",
+      "ระบุผลลัพธ์ที่ต้องการ"
+    ],
+    prompt:"Act as the Guild Master / Codex Lead. Read the current project canon first. Break the requested work into a safe implementation plan, identify which files should be read or modified, list risks, and propose the next steps before making changes. Do not modify files until the plan is approved."
+  },
+  "02": {
+    name:"ตรวจคัมภีร์ผลิตภัณฑ์ / แหล่งความจริง",
+    useFor:[
+      "ตรวจว่าตรรกะหลุดคัมภีร์ไหม",
+      "ตรวจว่าข้อมูลขัดกันไหม",
+      "ตรวจบทบาท กฎ และคานอน"
+    ],
+    checklist:[
+      "ระบุคัมภีร์หรือไฟล์คานอนที่ต้องอ่าน",
+      "ระบุกฎที่ต้องตรวจ",
+      "ระบุสิ่งที่ห้ามเปลี่ยน"
+    ],
+    prompt:"Act as the High Priest / Product Bible Guardian. Audit the requested change against the current source-of-truth files. Identify conflicts, outdated rules, missing rules, and unsafe assumptions. Do not implement changes. Report pass/fail and exact mismatches."
+  },
+  "03": {
+    name:"สรุปงาน / ทำเอกสารส่งต่อ",
+    useFor:[
+      "สรุปสิ่งที่ทำไปแล้ว",
+      "ทำคำสั่งส่งต่อ",
+      "ทำบันทึกการเปลี่ยนแปลง"
+    ],
+    checklist:[
+      "ระบุช่วงงานที่ต้องสรุป",
+      "ระบุไฟล์ที่เกี่ยวข้อง",
+      "ระบุผู้รับต่อ เช่น โค้เด็กซ์ คลอด หรือดีไซเนอร์"
+    ],
+    prompt:"Act as Novice (Pip), the Documentation Agent. Summarize the current work clearly, list changed files, approved decisions, open issues, next steps, and guardrails. Produce a concise handoff that another agent can continue from safely."
+  },
+  "04": {
+    name:"ตรวจระบบออกแบบ",
+    useFor:[
+      "ตรวจหน้าจอ ระยะห่าง ตัวอักษร ไอคอน และองค์ประกอบ",
+      "ตรวจว่าเลย์เอาต์ตรงระบบออกแบบไหม"
+    ],
+    checklist:[
+      "ระบุหน้าหรือองค์ประกอบที่ต้องตรวจ",
+      "ระบุแหล่งอ้างอิงระบบออกแบบ",
+      "ระบุภาพหน้าจอหรือพฤติกรรมที่คาดหวัง"
+    ],
+    prompt:"Act as the Sage / Design Auditor. Inspect the target UI against the approved design system. Check typography, spacing, color, icon style, button hierarchy, glass surfaces, layout consistency, and accessibility. Do not redesign unless explicitly requested. Report mismatches and recommended fixes."
+  },
+  "05": {
+    name:"ทำงานพัฒนาฟลัตเตอร์",
+    useFor:[
+      "เขียนวิดเจ็ตหรือหน้าจอ",
+      "ปรับโครงสร้างองค์ประกอบ",
+      "แก้บั๊กในฟลัตเตอร์"
+    ],
+    checklist:[
+      "ระบุพาธโปรเจกต์",
+      "ระบุไฟล์ที่ต้องแก้",
+      "ระบุหน้าจอหรือพฤติกรรมที่คาดหวัง",
+      "ระบุคำสั่งทดสอบหรือคำสั่งรัน"
+    ],
+    prompt:"Act as the Blacksmith / Flutter Implementation Agent. Implement the requested Flutter change using existing project structure and design system components. Avoid creating duplicate components. Preserve current behavior unless explicitly changed. After implementation, report files changed, risks, and verification steps."
+  },
+  "06": {
+    name:"ตรวจความปลอดภัย / ความสมบูรณ์ของระบบ",
+    useFor:[
+      "ตรวจความไว้ใจฝั่งผู้ใช้",
+      "ตรวจรางวัลซ้ำ",
+      "ตรวจความเสี่ยงจากช่องโหว่หรือการแก้ตรรกะ"
+    ],
+    checklist:[
+      "ระบุลำดับงานที่เกี่ยวข้อง",
+      "ระบุข้อมูลสำคัญที่ห้ามไว้ใจฝั่งผู้ใช้",
+      "ระบุอำนาจฝั่งเซิร์ฟเวอร์ที่ต้องมี"
+    ],
+    prompt:"Act as the Crusader / Security Agent. Audit the requested flow for security and system integrity risks. Check client trust, duplicate actions, reward duplication, tampering, validation, auth, rate limits, and server authority. Do not implement. Report risks and required safeguards."
+  },
+  "07": {
+    name:"ลำดับงานมินิเกม",
+    useFor:[
+      "ลำดับด่าน",
+      "กฎผ่านหรือไม่ผ่าน",
+      "สรุปและอินไซต์",
+      "ความคืบหน้าของผู้เล่น"
+    ],
+    checklist:[
+      "ระบุลำดับด่านหรือรอบการเล่น",
+      "ระบุกฎผ่านหรือไม่ผ่าน",
+      "ระบุการเชื่อมกับรางวัลหรืออินไซต์ที่เกี่ยวข้อง"
+    ],
+    prompt:"Act as the Knight / Mini Game Agent. Review or implement the Mini Game flow while preserving the approved game rules. Check stage progression, pass/fail behavior, Summary & Insight states, revisit behavior, and navigation. Do not mix reward/subscription rules unless required by the task."
+  },
+  "08": {
+    name:"ตรวจคุณภาพ / ทดสอบการถดถอย",
+    useFor:[
+      "ตรวจบั๊ก",
+      "เขียนรายการทดสอบ",
+      "ตรวจว่าแก้แล้วไม่พังจุดอื่น"
+    ],
+    checklist:[
+      "ระบุสิ่งที่เพิ่งแก้",
+      "ระบุผลลัพธ์ที่คาดหวัง",
+      "ระบุจุดเสี่ยงการถดถอย"
+    ],
+    prompt:"Act as the Assassin Cross / QA Tester. Create and run a focused QA checklist for the requested change. Verify expected behavior, edge cases, visual regressions, broken links, and related flows. Report pass/fail with evidence and do not modify files unless explicitly asked."
+  },
+  "09": {
+    name:"โหมดฝึก / ตรวจความแม่นยำ",
+    useFor:[
+      "ลำดับโหมดฝึก",
+      "การสอบจำลอง",
+      "โหมด 100 ข้อ",
+      "การติดตามความแม่นยำ"
+    ],
+    checklist:[
+      "ระบุโหมดฝึกที่เกี่ยวข้อง",
+      "ระบุข้อมูลผลลัพธ์ที่ต้องวัด",
+      "ระบุพฤติกรรมการทบทวนหรือความแม่นยำ"
+    ],
+    prompt:"Act as the Sniper / Practice Mode Agent. Review or plan the Practice Mode flow with focus on accuracy, mock exam behavior, question sessions, progress feedback, and result review. Keep Practice separate from Mini Game unless explicitly requested."
+  },
+  "10": {
+    name:"ตรวจโค้ด / โครงสร้างระบบ",
+    useFor:[
+      "ตรวจโค้ด",
+      "ตรวจโครงสร้างระบบ",
+      "ตรวจความดูแลรักษาระยะยาว"
+    ],
+    checklist:[
+      "ระบุไฟล์ที่ต้องตรวจทาน",
+      "ระบุประเด็นกังวลหลัก",
+      "ระบุว่าต้องการตรวจอย่างเดียวหรือให้แก้ด้วย"
+    ],
+    prompt:"Act as the Professor / Reviewer. Review the target code or architecture for maintainability, clarity, duplication, coupling, naming, scalability, and long-term structure. Do not rewrite unless explicitly requested. Report findings by severity and recommend safe improvements."
+  },
+  "11": {
+    name:"รางวัล / วีไอพี / รายได้",
+    useFor:[
+      "ตรรกะรางวัล",
+      "ลำดับงานวีไอพี",
+      "บัตรคูณสอง",
+      "โฆษณาแลกรางวัล"
+    ],
+    checklist:[
+      "ระบุลำดับงานรางวัล",
+      "ระบุสถานะผู้ใช้ เช่น ฟรี วีไอพี หรือมีบัตร",
+      "ระบุสิ่งที่ต้องบันทึกคงอยู่",
+      "ระบุความเสี่ยงรางวัลซ้ำ"
+    ],
+    prompt:"Act as the Gunslinger / Reward and VIP Agent. Review or plan the reward, VIP, monetization, x2 ticket, and rewarded ad logic. Preserve approved product rules, prevent duplicate rewards, and clearly separate Free, VIP, ticket, and ad-based flows."
+  }
+};
+
+const agentLayer = document.getElementById("agentLayer");
+const scene = document.getElementById("scene");
+const sceneScale = document.getElementById("sceneScale");
+const dialogue = document.getElementById("dialogue");
+const tip = document.getElementById("tip");
+const expandDialogueButton = document.getElementById("expandDialogue");
+const menuPanel = document.getElementById("menuPanel");
+const rolePanel = document.getElementById("rolePanel");
+const workflowPanel = document.getElementById("workflowPanel");
+const agentGreeting = document.getElementById("agentGreeting");
+const roleDetailTitle = document.getElementById("roleDetailTitle");
+const roleDetailRole = document.getElementById("roleDetailRole");
+const workflowPanelTitle = document.getElementById("workflowPanelTitle");
+const workflowPanelRole = document.getElementById("workflowPanelRole");
+const workflowUseFor = document.getElementById("workflowUseFor");
+const workflowChecklist = document.getElementById("workflowChecklist");
+const workflowPrompt = document.getElementById("workflowPrompt");
+const copyState = document.getElementById("copyState");
+let selectedNode = null;
+let selectedAgent = null;
+let dialogueExpanded = false;
+
+function setSceneScale() {
+  const rect = scene.getBoundingClientRect();
+  sceneScale.style.transform = `scale(${rect.width / 1931})`;
+}
+
+function setDialoguePanel(panelName) {
+  menuPanel.hidden = panelName !== "menu";
+  rolePanel.hidden = panelName !== "role";
+  workflowPanel.hidden = panelName !== "workflow";
+  copyState.textContent = "";
+}
+
+function setDialogueExpanded(expanded) {
+  dialogueExpanded = expanded;
+  dialogue.classList.toggle("expanded", dialogueExpanded);
+  expandDialogueButton.dataset.expanded = dialogueExpanded ? "true" : "false";
+  expandDialogueButton.title = dialogueExpanded ? "ย่อกลับ" : "ขยาย";
+  expandDialogueButton.setAttribute("aria-label", dialogueExpanded ? "ย่อกลับ" : "ขยาย");
+}
+
+function renderList(listNode, items) {
+  listNode.innerHTML = "";
+  items.forEach((item) => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    listNode.appendChild(li);
+  });
+}
+
+function renderWorkflow(agent) {
+  const workflow = workflowTemplates[agent.id];
+  workflowPanelTitle.textContent = workflow.name;
+  workflowPanelRole.textContent = `${agent.number} ${agent.thaiName}`;
+  renderList(workflowUseFor, workflow.useFor);
+  renderList(workflowChecklist, workflow.checklist);
+  workflowPrompt.value = workflow.prompt;
+}
+
+async function copyWorkflowPrompt() {
+  const promptText = workflowPrompt.value;
+  try {
+    await navigator.clipboard.writeText(promptText);
+  } catch (error) {
+    workflowPrompt.focus();
+    workflowPrompt.select();
+    document.execCommand("copy");
+  }
+  copyState.textContent = "คัดลอก Prompt แล้ว";
+}
+
+function renderAgents() {
+  agentLayer.innerHTML = "";
+  agents
+    .slice()
+    .sort((a, b) => (a.y + a.height) - (b.y + b.height))
+    .forEach((agent, index) => {
+      const node = document.createElement("div");
+      node.className = "agent-node";
+      node.dataset.agentId = agent.id;
+      node.style.setProperty("--x", `${agent.x}px`);
+      node.style.setProperty("--y", `${agent.y}px`);
+      node.style.setProperty("--w", `${agent.width}px`);
+      node.style.setProperty("--h", `${agent.height}px`);
+      node.style.setProperty("--label-x", `${agent.labelOffsetX}px`);
+      node.style.setProperty("--label-y", `${agent.labelOffsetY}px`);
+      node.style.setProperty("--hit-w", `${agent.hitboxWidth}px`);
+      node.style.setProperty("--hit-h", `${agent.hitboxHeight}px`);
+      node.style.setProperty("--ring-w", `${agent.highlightWidth}px`);
+      node.style.setProperty("--ring-h", `${agent.highlightHeight}px`);
+      node.style.setProperty("--duration", agent.duration);
+      node.style.setProperty("--scale", agent.scale);
+
+      const z = 20 + index;
+      node.innerHTML = `
+        <div class="agent" style="z-index:${z};">
+          <div class="sprite-motion ${agent.motion}">
+            <img class="agent-sprite" src="${agent.spritePath}" alt="${agent.number} ${agent.name}">
+          </div>
+        </div>
+        <div class="highlight"></div>
+        <div class="agent-label">${agent.number} ${agent.name}</div>
+        <button class="hitbox" type="button" aria-label="${agent.number} ${agent.name}"></button>
+      `;
+      const hitbox = node.querySelector(".hitbox");
+      hitbox.addEventListener("mouseenter", () => node.classList.add("hovered"));
+      hitbox.addEventListener("mouseleave", () => node.classList.remove("hovered"));
+      hitbox.addEventListener("focus", () => node.classList.add("hovered"));
+      hitbox.addEventListener("blur", () => node.classList.remove("hovered"));
+      hitbox.addEventListener("click", (event) => {
+        event.stopPropagation();
+        openDialogue(agent, node);
+      });
+      agentLayer.appendChild(node);
+    });
+}
+
+function openDialogue(agent, node) {
+  if (selectedNode) selectedNode.classList.remove("selected");
+  selectedNode = node;
+  selectedAgent = agent;
+  selectedNode.classList.add("selected");
+  document.getElementById("agentTitle").textContent = `${agent.number} ${agent.thaiName}`;
+  document.getElementById("agentRole").textContent = `บทบาท: ${agent.thaiRole}`;
+  document.getElementById("agentZone").textContent = `พื้นที่: ${agent.zone}`;
+  roleDetailTitle.textContent = `${agent.number} ${agent.thaiName}`;
+  roleDetailRole.textContent = `บทบาท: ${agent.thaiRole}`;
+  agentGreeting.textContent = `${agent.thaiName} พร้อมช่วยงาน เลือกหัวข้อที่ต้องการคุยได้เลย`;
+  document.getElementById("thaiText").textContent = agent.thaiDescription;
+  document.getElementById("responsibility").textContent = agent.thaiResponsibility;
+  document.getElementById("usage").textContent = agent.thaiUsage;
+  document.getElementById("rule").textContent = agent.thaiRule;
+  renderWorkflow(agent);
+  setDialoguePanel("menu");
+  setDialogueExpanded(false);
+  dialogue.classList.add("open");
+  dialogue.setAttribute("aria-hidden", "false");
+  tip.classList.add("hidden");
+}
+
+function closeDialogue() {
+  dialogue.classList.remove("open");
+  dialogue.setAttribute("aria-hidden", "true");
+  if (selectedNode) {
+    selectedNode.classList.remove("selected");
+    selectedNode = null;
+  }
+  selectedAgent = null;
+  setDialoguePanel("menu");
+  setDialogueExpanded(false);
+  tip.classList.remove("hidden");
+}
+
+document.getElementById("showRoleButton").addEventListener("click", (event) => {
+  event.stopPropagation();
+  setDialoguePanel("role");
+});
+
+document.getElementById("showWorkflowButton").addEventListener("click", (event) => {
+  event.stopPropagation();
+  setDialoguePanel("workflow");
+});
+
+document.getElementById("roleBackToMenuButton").addEventListener("click", (event) => {
+  event.stopPropagation();
+  setDialoguePanel("menu");
+});
+
+document.getElementById("workflowBackToMenuButton").addEventListener("click", (event) => {
+  event.stopPropagation();
+  setDialoguePanel("menu");
+});
+
+document.getElementById("copyPromptButton").addEventListener("click", (event) => {
+  event.stopPropagation();
+  copyWorkflowPrompt();
+});
+
+expandDialogueButton.addEventListener("click", (event) => {
+  event.stopPropagation();
+  setDialogueExpanded(!dialogueExpanded);
+});
+
+document.getElementById("closeDialogue").addEventListener("click", (event) => {
+  event.stopPropagation();
+  closeDialogue();
+});
+
+document.addEventListener("click", (event) => {
+  if (!dialogue.classList.contains("open")) return;
+  if (dialogue.contains(event.target)) return;
+  if (event.target.closest(".hitbox")) return;
+  closeDialogue();
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") closeDialogue();
+});
+
+window.addEventListener("resize", setSceneScale);
+renderAgents();
+setSceneScale();
+</script>
+</body>
+</html>

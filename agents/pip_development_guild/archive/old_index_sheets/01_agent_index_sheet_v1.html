@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PIP Development Guild - Agent Index Sheet v2</title>
+<style>
+  :root {
+    --paper:#f6efe5;
+    --paper-2:#fffaf2;
+    --ink:#2f241d;
+    --muted:#6f5a4f;
+    --line:#d8c7b3;
+    --shadow:0 18px 44px rgba(56, 40, 24, .12);
+    --lead:#315b8f;
+    --build:#557a45;
+    --quality:#a94336;
+    --modes:#72539b;
+    --money:#b97d25;
+  }
+  * { box-sizing:border-box; }
+  html, body { margin:0; min-height:100%; }
+  body {
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 8% 0%, rgba(81, 124, 74, .11), transparent 25%),
+      radial-gradient(circle at 92% 14%, rgba(49, 91, 143, .12), transparent 23%),
+      linear-gradient(180deg, #fbf5ee 0%, #f1e4d5 100%);
+  }
+  body::before {
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+      linear-gradient(90deg, rgba(255,255,255,.18) 0 1px, transparent 1px 100%),
+      linear-gradient(180deg, rgba(255,255,255,.16) 0 1px, transparent 1px 100%);
+    background-size: 38px 38px;
+    opacity:.16;
+    pointer-events:none;
+    mix-blend-mode:screen;
+  }
+  .sheet {
+    position:relative;
+    width:1448px;
+    min-height:1820px;
+    margin:0 auto;
+    padding:28px 28px 30px;
+  }
+  .panel {
+    position:relative;
+    background:rgba(255,250,244,.93);
+    border:1px solid var(--line);
+    border-radius:28px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  .hero {
+    padding:26px 28px 22px;
+    margin-bottom:20px;
+    background:
+      linear-gradient(135deg, rgba(255,251,246,.98), rgba(255,247,239,.94)),
+      radial-gradient(circle at top right, rgba(122,83,155,.06), transparent 32%);
+  }
+  .eyebrow {
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 12px;
+    border-radius:999px;
+    background:#f0e7ff;
+    border:1px solid #dfd1f5;
+    color:#5b4387;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  .hero h1 {
+    margin:14px 0 8px;
+    font-family:"Iowan Old Style", "Palatino Linotype", Georgia, serif;
+    font-size:44px;
+    line-height:1;
+    letter-spacing:-.05em;
+  }
+  .hero p {
+    margin:0;
+    max-width:980px;
+    color:var(--muted);
+    line-height:1.55;
+    font-size:16px;
+  }
+  .hero-grid {
+    display:grid;
+    grid-template-columns:repeat(4, minmax(0, 1fr));
+    gap:12px;
+    margin-top:18px;
+  }
+  .stat {
+    padding:12px 14px;
+    border-radius:18px;
+    background:#fbf5ef;
+    border:1px solid #eadac8;
+    min-height:72px;
+  }
+  .stat span {
+    display:block;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:#95796c;
+    margin-bottom:6px;
+    font-weight:800;
+  }
+  .stat strong {
+    display:block;
+    font-size:14px;
+    line-height:1.35;
+  }
+  .section {
+    margin-bottom:18px;
+    padding:18px;
+    border-radius:24px;
+    border:1px solid var(--line);
+    background:rgba(255,250,244,.94);
+    box-shadow:0 10px 26px rgba(56,40,24,.07);
+  }
+  .section-header {
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:14px;
+    margin-bottom:14px;
+  }
+  .section-title {
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+  }
+  .section-title h2 {
+    margin:0;
+    font-size:24px;
+    letter-spacing:-.03em;
+    line-height:1.05;
+  }
+  .section-title p {
+    margin:0;
+    color:var(--muted);
+    font-size:13px;
+  }
+  .section-pill {
+    align-self:flex-start;
+    padding:9px 11px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    color:#fff;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);
+  }
+  .cards {
+    display:grid;
+    gap:14px;
+  }
+  .cards.cols-3 { grid-template-columns:repeat(3, minmax(0, 1fr)); }
+  .cards.cols-2 { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+  .cards.cols-1 { grid-template-columns:1fr; }
+  .agent-card {
+    position:relative;
+    min-height:220px;
+    padding:16px 16px 14px;
+    border-radius:22px;
+    border:1px solid #e7d7c9;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.98), rgba(251,245,239,.98));
+    box-shadow:0 10px 20px rgba(56,40,24,.06);
+    overflow:hidden;
+  }
+  .agent-card::after {
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.22), transparent 28%),
+      radial-gradient(circle at top right, rgba(255,255,255,.5), transparent 24%);
+    pointer-events:none;
+  }
+  .agent-card.leadership { border-top:7px solid var(--lead); }
+  .agent-card.design { border-top:7px solid var(--build); }
+  .agent-card.quality { border-top:7px solid var(--quality); }
+  .agent-card.modes { border-top:7px solid var(--modes); }
+  .agent-card.money { border-top:7px solid var(--money); }
+  .card-top {
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:12px;
+    align-items:start;
+  }
+  .identity {
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+  }
+  .badge {
+    width:44px;
+    height:44px;
+    flex:0 0 44px;
+    border-radius:15px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-weight:900;
+    font-size:16px;
+    letter-spacing:.02em;
+    background:linear-gradient(180deg, rgba(40,62,92,.95), rgba(24,39,64,.98));
+    box-shadow:0 8px 16px rgba(24,39,64,.18);
+  }
+  .agent-card.design .badge { background:linear-gradient(180deg, rgba(70,106,57,.95), rgba(45,74,35,.98)); }
+  .agent-card.quality .badge { background:linear-gradient(180deg, rgba(170,67,54,.95), rgba(126,45,39,.98)); }
+  .agent-card.modes .badge { background:linear-gradient(180deg, rgba(117,87,164,.95), rgba(84,61,126,.98)); }
+  .agent-card.money .badge { background:linear-gradient(180deg, rgba(186,125,37,.95), rgba(148,93,16,.98)); }
+  .agent-name {
+    margin:0;
+    font-size:18px;
+    line-height:1.05;
+    letter-spacing:-.02em;
+  }
+  .agent-role {
+    margin:5px 0 0;
+    font-size:13px;
+    font-weight:800;
+    color:var(--muted);
+  }
+  .agent-group {
+    margin:6px 0 0;
+    font-size:12px;
+    font-weight:900;
+    color:#5c4637;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+  }
+  .pill {
+    display:inline-flex;
+    padding:7px 10px;
+    border-radius:999px;
+    font-size:11px;
+    font-weight:900;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    border:1px solid;
+    white-space:nowrap;
+    align-self:start;
+  }
+  .pill.leadership { background:#edf4ff; color:#2d568f; border-color:#c9d8ef; }
+  .pill.design { background:#eef8e7; color:#4e6f3a; border-color:#cfe1bf; }
+  .pill.quality { background:#fff1ee; color:#9c4439; border-color:#ebc4bb; }
+  .pill.modes { background:#f2ecff; color:#664ea0; border-color:#d8cff5; }
+  .pill.money { background:#fff4dc; color:#8a6514; border-color:#ebd58f; }
+  .sprite-shell {
+    position:relative;
+    height:144px;
+    margin:12px 0 10px;
+    border-radius:18px;
+    background:
+      linear-gradient(180deg, rgba(248,242,233,.95), rgba(255,255,255,.95));
+    border:1px solid #ecdccf;
+    overflow:hidden;
+  }
+  .sprite-shell::before {
+    content:"";
+    position:absolute;
+    inset:auto 12px 12px 12px;
+    height:20px;
+    border-radius:999px;
+    background:radial-gradient(ellipse at center, rgba(72,56,43,.20), rgba(72,56,43,.06) 62%, transparent 70%);
+    filter:blur(2px);
+    opacity:.9;
+  }
+  .sprite-shell img {
+    position:absolute;
+    left:50%;
+    bottom:4px;
+    transform:translateX(-50%);
+    max-height:140px;
+    width:auto;
+    max-width:100%;
+    object-fit:contain;
+    filter: drop-shadow(0 10px 12px rgba(48, 34, 22, .18));
+  }
+  .meaning {
+    margin:0;
+    min-height:40px;
+    font-size:12px;
+    line-height:1.45;
+    color:var(--muted);
+  }
+  .accordion-section {
+    margin-top:18px;
+    padding:18px;
+  }
+  .accordion {
+    display:grid;
+    gap:12px;
+  }
+  .accordion-item {
+    border:1px solid #d9c8b7;
+    border-radius:18px;
+    background:linear-gradient(180deg, rgba(255,252,248,.98), rgba(249,241,232,.98));
+    box-shadow:0 8px 18px rgba(56,40,24,.05);
+    overflow:hidden;
+  }
+  .accordion-trigger {
+    width:100%;
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    gap:12px;
+    align-items:center;
+    padding:14px 16px;
+    border:0;
+    background:transparent;
+    color:inherit;
+    text-align:left;
+    cursor:pointer;
+    font:inherit;
+  }
+  .accordion-trigger:focus-visible {
+    outline:2px solid rgba(49,91,143,.35);
+    outline-offset:-2px;
+  }
+  .accordion-badge {
+    width:42px;
+    height:42px;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-weight:900;
+    font-size:16px;
+    background:linear-gradient(180deg, rgba(40,62,92,.95), rgba(24,39,64,.98));
+    box-shadow:0 8px 16px rgba(24,39,64,.18);
+  }
+  .accordion-title {
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+  }
+  .accordion-title strong {
+    display:block;
+    font-size:16px;
+    line-height:1.15;
+    letter-spacing:-.02em;
+  }
+  .accordion-title span {
+    display:block;
+    font-size:12px;
+    color:var(--muted);
+    line-height:1.3;
+  }
+  .accordion-meta {
+    display:flex;
+    gap:8px;
+    align-items:center;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+    text-align:right;
+  }
+  .accordion-role, .accordion-group {
+    display:inline-flex;
+    align-items:center;
+    padding:6px 10px;
+    border-radius:999px;
+    font-size:11px;
+    font-weight:900;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    border:1px solid transparent;
+    white-space:nowrap;
+  }
+  .accordion-role { background:#eef4ff; color:#335d8f; border-color:#d1ddf1; }
+  .accordion-group { background:#f6efe8; color:#6a5346; border-color:#e6d6c7; }
+  .accordion-item.leadership .accordion-role { background:#eef4ff; color:#335d8f; border-color:#d1ddf1; }
+  .accordion-item.design .accordion-role { background:#eef8e7; color:#4e6f3a; border-color:#cfe1bf; }
+  .accordion-item.quality .accordion-role { background:#fff1ee; color:#9c4439; border-color:#ebc4bb; }
+  .accordion-item.modes .accordion-role { background:#f2ecff; color:#664ea0; border-color:#d8cff5; }
+  .accordion-item.money .accordion-role { background:#fff4dc; color:#8a6514; border-color:#ebd58f; }
+  .accordion-chevron {
+    width:34px;
+    height:34px;
+    flex:0 0 34px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#6e5a4f;
+    background:#faf4ec;
+    border:1px solid #e5d7c8;
+    transition: transform .25s ease, background .25s ease;
+  }
+  .accordion-item.open .accordion-chevron {
+    transform:rotate(180deg);
+    background:#f3ecff;
+  }
+  .accordion-panel {
+    display:grid;
+    grid-template-rows:0fr;
+    transition:grid-template-rows .28s ease;
+  }
+  .accordion-item.open .accordion-panel { grid-template-rows:1fr; }
+  .accordion-panel-inner {
+    overflow:hidden;
+    padding:0 16px 16px 16px;
+  }
+  .accordion-inner {
+    border-radius:16px;
+    border:1px solid #ead9c9;
+    background:linear-gradient(180deg, rgba(255,255,255,.98), rgba(250,244,237,.98));
+    padding:14px 14px 12px;
+  }
+  .accordion-grid {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px 12px;
+  }
+  .accordion-block {
+    padding:10px 12px;
+    border-radius:14px;
+    background:#fbf6f0;
+    border:1px solid #ead8c9;
+  }
+  .accordion-block span {
+    display:block;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:#95776b;
+    margin-bottom:5px;
+    font-weight:800;
+  }
+  .accordion-block strong, .accordion-block p {
+    margin:0;
+    font-size:13px;
+    line-height:1.5;
+    color:var(--ink);
+  }
+  .accordion-block p { color:var(--muted); }
+  .accordion-list {
+    display:grid;
+    grid-template-columns:1fr;
+    gap:8px;
+  }
+  .accordion-rule {
+    padding:10px 12px;
+    border-radius:14px;
+    border:1px solid #e7d9cb;
+    background:#fffdf9;
+  }
+  .accordion-rule strong {
+    display:block;
+    font-size:12px;
+    margin-bottom:4px;
+  }
+  .accordion-rule p {
+    margin:0;
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.48;
+  }
+  .accordion-note {
+    margin-top:10px;
+    font-size:12px;
+    color:var(--muted);
+  }
+  .mode-clean .hero-grid { grid-template-columns:repeat(3, minmax(0, 1fr)); }
+  .mode-clean .pill { display:none; }
+  .mode-clean .sheet { min-height:1680px; }
+  @media (max-width: 1500px) {
+    .sheet { width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <section class="panel hero">
+    <span class="eyebrow">PIP DEVELOPMENT GUILD</span>
+    <h1>Agent Index Sheet</h1>
+    <p>Approved cutout roster for the 11 Guild Hall agents. Roles follow <code>composition_bible.html</code>, placement canon follows <code>guild_layout.html</code>, and sprites come only from <code>cropped_sprites/front_cutouts/</code>.</p>
+    <div class="hero-grid">
+      <div class="stat"><span>Roster</span><strong>11 approved agents</strong></div>
+      <div class="stat"><span>Role groups</span><strong>5 canon group bands</strong></div>
+      <div class="stat"><span>Sprite rule</span><strong>Transparent cutouts only</strong></div>
+      <div class="stat"><span>Edition</span><strong>Index Sheet v2</strong></div>
+    </div>
+  </section>
+
+  <main id="sections"></main>
+
+  <section class="accordion-section panel">
+    <div class="section-header" style="margin-bottom:12px;">
+      <div class="section-title">
+        <h2>Accordion Role Map</h2>
+        <p>Expanded items carry bilingual role detail. Only one role is open at a time, with Pip open by default.</p>
+      </div>
+      <span class="section-pill" style="background:var(--lead)">11 roles</span>
+    </div>
+    <div class="accordion" id="role-accordion"></div>
+  </section>
+</div>
+
+<script>
+  const mode = new URLSearchParams(location.search).get('mode') || 'labeled';
+  document.body.classList.add(mode === 'clean' ? 'mode-clean' : 'mode-labeled');
+
+  const groups = [
+    {
+      key: 'leadership',
+      title: 'Leadership & Governance',
+      blurb: 'Command, truth, and review',
+      pill: 'leadership',
+      accent: 'var(--lead)',
+      cols: 3,
+      members: ['01','02','10']
+    },
+    {
+      key: 'design',
+      title: 'Design & Build',
+      blurb: 'Spacing, implementation, and documentation',
+      pill: 'design',
+      accent: 'var(--build)',
+      cols: 3,
+      members: ['04','05','03']
+    },
+    {
+      key: 'quality',
+      title: 'Security & Quality',
+      blurb: 'Protection, testing, and regression gates',
+      pill: 'quality',
+      accent: 'var(--quality)',
+      cols: 2,
+      members: ['06','08']
+    },
+    {
+      key: 'modes',
+      title: 'Product Modes',
+      blurb: 'Mini Game flow and Practice Mode',
+      pill: 'modes',
+      accent: 'var(--modes)',
+      cols: 2,
+      members: ['07','09']
+    },
+    {
+      key: 'money',
+      title: 'Reward & Monetization',
+      blurb: 'VIP, rewards, ads, and ticket logic',
+      pill: 'money',
+      accent: 'var(--money)',
+      cols: 1,
+      members: ['11']
+    }
+  ];
+
+  const agents = {
+    '01': {
+      name: 'Guild Master',
+      role: 'Codex Lead',
+      group: 'Leadership & Governance',
+      meaning: 'Lead agent, planning control, final coordination.',
+      sprite: '../cropped_sprites/front_cutouts/01_guild_master_front.png',
+      accent: 'leadership'
+    },
+    '02': {
+      name: 'High Priest',
+      role: 'Product Bible Guardian',
+      group: 'Leadership & Governance',
+      meaning: 'Truth keeper, source-of-truth rules, product logic protection.',
+      sprite: '../cropped_sprites/front_cutouts/02_high_priest_front.png',
+      accent: 'leadership'
+    },
+    '03': {
+      name: 'Novice (Pip)',
+      role: 'Documentation Agent',
+      group: 'Design & Build',
+      meaning: 'Mascot, viewer guide, documentation runner.',
+      sprite: '../cropped_sprites/front_cutouts/03_novice_pip_front.png',
+      accent: 'design'
+    },
+    '04': {
+      name: 'Sage',
+      role: 'Design Auditor',
+      group: 'Design & Build',
+      meaning: 'Design System, spacing, typography, UI precision.',
+      sprite: '../cropped_sprites/front_cutouts/04_sage_front.png',
+      accent: 'design'
+    },
+    '05': {
+      name: 'Blacksmith',
+      role: 'Flutter Implementation Agent',
+      group: 'Design & Build',
+      meaning: 'Builder, implementation, widgets, screens, refactor.',
+      sprite: '../cropped_sprites/front_cutouts/05_blacksmith_front.png',
+      accent: 'design'
+    },
+    '06': {
+      name: 'Crusader',
+      role: 'Security Agent',
+      group: 'Security & Quality',
+      meaning: 'Security, system integrity, anti-exploit, server authority.',
+      sprite: '../cropped_sprites/front_cutouts/06_crusader_front.png',
+      accent: 'quality'
+    },
+    '07': {
+      name: 'Knight',
+      role: 'Mini Game Agent',
+      group: 'Product Modes',
+      meaning: 'Stage progression, mission flow, Summary & Insight.',
+      sprite: '../cropped_sprites/front_cutouts/07_knight_front.png',
+      accent: 'modes'
+    },
+    '08': {
+      name: 'Assassin Cross',
+      role: 'QA / Tester',
+      group: 'Security & Quality',
+      meaning: 'Bug hunter, regression testing, analyze/test gate.',
+      sprite: '../cropped_sprites/front_cutouts/08_assassin_cross_front.png',
+      accent: 'quality'
+    },
+    '09': {
+      name: 'Sniper',
+      role: 'Practice Mode Agent',
+      group: 'Product Modes',
+      meaning: 'Practice mode, 100-question flow, mock exam, accuracy.',
+      sprite: '../cropped_sprites/front_cutouts/09_sniper_front.png',
+      accent: 'modes'
+    },
+    '10': {
+      name: 'Professor',
+      role: 'Reviewer',
+      group: 'Leadership & Governance',
+      meaning: 'Code review, architecture review, decision review.',
+      sprite: '../cropped_sprites/front_cutouts/10_professor_front.png',
+      accent: 'leadership'
+    },
+    '11': {
+      name: 'Gunslinger',
+      role: 'Reward / VIP Agent',
+      group: 'Reward & Monetization',
+      meaning: 'Reward, VIP, monetization, x2 ticket, rewarded ads.',
+      sprite: '../cropped_sprites/front_cutouts/11_gunslinger_front.png',
+      accent: 'money'
+    }
+  };
+
+  const sectionEl = document.getElementById('sections');
+  const accordionEl = document.getElementById('role-accordion');
+
+  function cardHTML(id) {
+    const a = agents[id];
+    return `
+      <article class="agent-card ${a.accent}">
+        <div class="card-top">
+          <div class="identity">
+            <div class="badge">${id}</div>
+            <div>
+              <h3 class="agent-name">${a.name}</h3>
+              <p class="agent-role">${a.role}</p>
+              <p class="agent-group">${a.group}</p>
+            </div>
+          </div>
+          <span class="pill ${a.accent}">${a.accent === 'money' ? 'Monetization' : a.group}</span>
+        </div>
+        <div class="sprite-shell">
+          <img src="${a.sprite}" alt="${a.name} sprite">
+        </div>
+        <p class="meaning">${a.meaning}</p>
+      </article>
+    `;
+  }
+
+  function sectionHTML(group) {
+    return `
+      <section class="section panel">
+        <div class="section-header">
+          <div class="section-title">
+            <h2>${group.title}</h2>
+            <p>${group.blurb}</p>
+          </div>
+          <span class="section-pill" style="background:${group.accent}">${group.members.length} agents</span>
+        </div>
+        <div class="cards cols-${group.cols}">
+          ${group.members.map(cardHTML).join('')}
+        </div>
+      </section>
+    `;
+  }
+
+  const roleMap = [
+    {
+      id: '01',
+      name: 'Guild Master',
+      role: 'Codex Lead',
+      group: 'Leadership & Governance',
+      accent: 'leadership',
+      thai: 'Guild Master คือหัวหน้ากิลด์และผู้คุมภาพรวมของทีม ทำหน้าที่กำหนดทิศทาง วางแผน ตัดสินใจขั้นสุดท้าย และประสานงานระหว่าง Agent ทุกสาย เพื่อให้ pipeline เดินต่อได้โดยไม่หลุดเป้าหมายหลักของโปรเจกต์',
+      english: 'The Guild Master is the command lead of the guild. This role oversees direction, planning, final coordination, and cross-agent alignment so the full pipeline stays focused and consistent.',
+      responsibility: 'Planning control, final coordination, task direction.',
+      composition: 'Use as the command authority or visual leader.',
+      rule: 'Do show as leader. Do not turn into mascot-only or random warrior.'
+    },
+    {
+      id: '02',
+      name: 'High Priest',
+      role: 'Product Bible Guardian',
+      group: 'Leadership & Governance',
+      accent: 'leadership',
+      thai: 'High Priest คือผู้พิทักษ์ Product Bible และ source of truth ของโปรเจกต์ ทำหน้าที่คุมกฎหลัก ตรวจไม่ให้ logic หลุด และช่วยป้องกันการเปลี่ยนแปลงที่ขัดกับ Bible หรือระบบที่ล็อกไว้แล้ว',
+      english: 'The High Priest guards the Product Bible and source-of-truth rules. This role protects product logic, prevents rule drift, and ensures implementation does not contradict approved canon.',
+      responsibility: 'Product Bible, source-of-truth rules, logic protection.',
+      composition: 'Place near books, documents, rules, or source-of-truth areas.',
+      rule: 'Do show as rule keeper. Do not turn into monetization, designer, or tester role.'
+    },
+    {
+      id: '03',
+      name: 'Novice (Pip)',
+      role: 'Documentation Agent / Mascot',
+      group: 'Design & Build',
+      accent: 'design',
+      thai: 'Novice หรือ Pip คือมาสคอตและผู้ช่วยประจำกิลด์ ทำหน้าที่จดบันทึก สรุปงาน ส่งต่อข้อมูล และเป็นตัวแทนผู้ใช้หรือ viewer guide ที่ช่วยให้คนเข้าใจระบบทั้งหมดได้ง่ายขึ้น',
+      english: 'Novice, also known as Pip, is the guild mascot and documentation runner. This role records decisions, summarizes work, supports handoffs, and acts as the viewer guide for the whole system.',
+      responsibility: 'Documentation, pipeline notes, handoff summaries.',
+      composition: 'Use as mascot, guide, or center visual anchor.',
+      rule: 'Do keep Pip visible. Do not hide Pip or turn Pip into the main commander.'
+    },
+    {
+      id: '04',
+      name: 'Sage',
+      role: 'Design Auditor',
+      group: 'Design & Build',
+      accent: 'design',
+      thai: 'Sage คือผู้ตรวจ Design System ของกิลด์ ทำหน้าที่เช็ก typography, spacing, icon, component, glass surface, visual consistency และความถูกต้องของ UI ให้ตรงกับ design system',
+      english: 'The Sage is the Design System auditor. This role checks typography, spacing, icons, components, glass surfaces, UI consistency, and visual correctness against the design system.',
+      responsibility: 'Design system audit, UI precision, visual consistency.',
+      composition: 'Place near design notes, boards, books, or review materials.',
+      rule: 'Do show as design auditor. Do not turn into Flutter coder or reward agent.'
+    },
+    {
+      id: '05',
+      name: 'Blacksmith',
+      role: 'Flutter Implementation Agent',
+      group: 'Design & Build',
+      accent: 'design',
+      thai: 'Blacksmith คือผู้สร้างระบบจริง ทำหน้าที่ลงมือ implement Flutter, สร้าง widget, screen, refactor component และทำให้สิ่งที่ออกแบบไว้กลายเป็นงานที่ใช้งานได้จริง',
+      english: 'The Blacksmith is the implementation builder. This role turns design and product decisions into Flutter widgets, screens, components, and working application code.',
+      responsibility: 'Flutter implementation, widgets, screens, refactor.',
+      composition: 'Place in workshop, build station, or tool-heavy area.',
+      rule: 'Do show as builder. Do not turn into Product Bible keeper or reviewer-only role.'
+    },
+    {
+      id: '06',
+      name: 'Crusader',
+      role: 'Security Agent',
+      group: 'Security & Quality',
+      accent: 'quality',
+      thai: 'Crusader คือผู้พิทักษ์ความปลอดภัยและความถูกต้องของระบบ ทำหน้าที่ป้องกัน duplicate reward, client-side trust, exploit, logic tampering และคุมให้ server authority เป็นหลักในจุดสำคัญ',
+      english: 'The Crusader is the security and integrity guardian. This role protects against duplicate rewards, unsafe client trust, exploits, tampering, and ensures server authority for critical systems.',
+      responsibility: 'Security, system integrity, anti-duplicate reward, server authority.',
+      composition: 'Place at gates, entrances, or protection zones.',
+      rule: 'Do show as guardian. Do not turn into Mini Game or Reward agent.'
+    },
+    {
+      id: '07',
+      name: 'Knight',
+      role: 'Mini Game Agent',
+      group: 'Product Modes',
+      accent: 'modes',
+      thai: 'Knight คือผู้ดูแล Mini Game flow ทำหน้าที่คุมด่าน การผ่าน/ไม่ผ่าน progression, stage path, Summary & Insight และประสบการณ์การเล่นแบบภารกิจ',
+      english: 'The Knight owns the Mini Game experience. This role manages stages, pass/fail rules, progression, stage paths, Summary & Insight, and mission-style gameplay flow.',
+      responsibility: 'Mini Game flow, stages, progression, Summary & Insight.',
+      composition: 'Place near mission area, stage, or progression route.',
+      rule: 'Do show as stage commander. Do not turn into Practice Mode or monetization owner.'
+    },
+    {
+      id: '08',
+      name: 'Assassin Cross',
+      role: 'QA / Tester',
+      group: 'Security & Quality',
+      accent: 'quality',
+      thai: 'Assassin Cross คือผู้ล่าบั๊กและตรวจ regression ทำหน้าที่จับปัญหาที่ซ่อนอยู่ ตรวจ quality gate, run analyze/test และช่วยยืนยันว่าการแก้ไขไม่ทำให้ระบบส่วนอื่นพัง',
+      english: 'The Assassin Cross is the bug hunter and regression tester. This role catches hidden issues, checks quality gates, runs analyze/test flows, and verifies that fixes do not break other parts.',
+      responsibility: 'Bug hunting, regression testing, flutter analyze, flutter test.',
+      composition: 'Place in inspection zones, shadow corners, or QA areas.',
+      rule: 'Do show as tester / bug hunter. Do not turn into Security owner or Product Bible guardian.'
+    },
+    {
+      id: '09',
+      name: 'Sniper',
+      role: 'Practice Mode Agent',
+      group: 'Product Modes',
+      accent: 'modes',
+      thai: 'Sniper คือผู้ดูแล Practice Mode และความแม่นยำ ทำหน้าที่คุม flow การฝึกทำข้อสอบ โหมด 100 ข้อ mock exam การวัด accuracy และการ review ผลการฝึก',
+      english: 'The Sniper owns Practice Mode and precision. This role manages practice flows, 100-question sessions, mock exams, accuracy tracking, and practice review.',
+      responsibility: 'Practice Mode, 100-question flow, mock exam, accuracy review.',
+      composition: 'Place on lookout, balcony, or precision-focused position.',
+      rule: 'Do show as practice / accuracy role. Do not turn into Reward or VIP agent.'
+    },
+    {
+      id: '10',
+      name: 'Professor',
+      role: 'Reviewer',
+      group: 'Leadership & Governance',
+      accent: 'leadership',
+      thai: 'Professor คือผู้ตรวจทานเชิงลึก ทำหน้าที่ review code, architecture, decision quality และช่วยให้การตัดสินใจของทีมมีเหตุผล ไม่ขัดกับโครงสร้างระบบระยะยาว',
+      english: 'The Professor is the review authority. This role reviews code, architecture, and decision quality to ensure the team’s choices are logical, maintainable, and aligned with long-term structure.',
+      responsibility: 'Code review, architecture review, decision review.',
+      composition: 'Place near desk, notes, research table, or review area.',
+      rule: 'Do show as reviewer. Do not turn into main commander or visual designer-only role.'
+    },
+    {
+      id: '11',
+      name: 'Gunslinger',
+      role: 'Reward / VIP Agent',
+      group: 'Reward & Monetization',
+      accent: 'money',
+      thai: 'Gunslinger คือผู้ดูแล Reward, VIP และ monetization logic ทำหน้าที่คุมรางวัล บัตร x2, rewarded ads, VIP flow และความสมดุลของระบบรายได้โดยไม่ทำลายประสบการณ์ผู้ใช้',
+      english: 'The Gunslinger owns Reward, VIP, and monetization logic. This role manages rewards, x2 tickets, rewarded ads, VIP flows, and revenue balance without harming user experience.',
+      responsibility: 'Reward, VIP, monetization, x2 ticket, rewarded ads.',
+      composition: 'Place near bar, reward counter, shop-like area, or value exchange zone.',
+      rule: 'Do show as Reward/VIP agent. Do not turn into Practice Mode or Product Bible guardian.'
+    }
+  ];
+
+  const roleById = Object.fromEntries(roleMap.map((r) => [r.id, r]));
+  const accordionGroups = {
+    leadership: 'Leadership & Governance',
+    design: 'Design & Build',
+    quality: 'Security & Quality',
+    modes: 'Product Modes',
+    money: 'Reward & Monetization'
+  };
+
+  const renderAccordion = () => {
+    accordionEl.innerHTML = roleMap.map((r) => `
+      <article class="accordion-item ${r.accent}" data-role-id="${r.id}">
+        <button class="accordion-trigger" type="button" aria-expanded="false" aria-controls="panel-${r.id}" id="trigger-${r.id}">
+          <div class="accordion-badge">${r.id}</div>
+          <div class="accordion-title">
+            <strong>${r.name}</strong>
+            <span>${r.role}</span>
+          </div>
+          <div class="accordion-meta">
+            <span class="accordion-role">${r.role}</span>
+            <span class="accordion-group">${r.group}</span>
+            <span class="accordion-chevron" aria-hidden="true">⌄</span>
+          </div>
+        </button>
+        <div class="accordion-panel" id="panel-${r.id}" role="region" aria-labelledby="trigger-${r.id}">
+          <div class="accordion-panel-inner">
+            <div class="accordion-inner">
+              <div class="accordion-grid">
+                <div class="accordion-block">
+                  <span>Thai Description</span>
+                  <p>${r.thai}</p>
+                </div>
+                <div class="accordion-block">
+                  <span>English Description</span>
+                  <p>${r.english}</p>
+                </div>
+                <div class="accordion-block">
+                  <span>Main Responsibility</span>
+                  <strong>${r.responsibility}</strong>
+                </div>
+                <div class="accordion-block">
+                  <span>Composition Usage</span>
+                  <strong>${r.composition}</strong>
+                </div>
+              </div>
+              <div class="accordion-list" style="margin-top:10px;">
+                <div class="accordion-rule">
+                  <strong>Do / Don’t Rule</strong>
+                  <p>${r.rule}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    `).join('');
+  };
+
+  const setOpen = (id) => {
+    accordionEl.querySelectorAll('.accordion-item').forEach((item) => {
+      const isOpen = item.dataset.roleId === id;
+      item.classList.toggle('open', isOpen);
+      const trigger = item.querySelector('.accordion-trigger');
+      trigger.setAttribute('aria-expanded', String(isOpen));
+    });
+  };
+
+  renderAccordion();
+  accordionEl.addEventListener('click', (event) => {
+    const trigger = event.target.closest('.accordion-trigger');
+    if (!trigger) return;
+    const item = trigger.closest('.accordion-item');
+    const id = item.dataset.roleId;
+    const open = item.classList.contains('open');
+    setOpen(open ? null : id);
+  });
+  setOpen('03');
+
+  if (mode === 'clean') {
+    document.querySelector('.hero p').textContent = 'Approved cutout roster for the 11 Guild Hall agents. Roles and groups stay aligned to the canon bible, while the clean export keeps the accordion role map as the reference section.';
+  } else {
+    document.querySelector('.hero p').textContent = 'Approved cutout roster for the 11 Guild Hall agents. Roles follow composition_bible.html, placement canon follows guild_layout.html, and sprites come only from front_cutouts/.';
+  }
+</script>
+</body>
+</html>

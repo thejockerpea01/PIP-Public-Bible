@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PIP Development Guild - Dashboard</title>
+<style>
+  :root {
+    --paper:#f6efe5;
+    --paper-2:#fffaf2;
+    --ink:#2f241d;
+    --muted:#6f5a4f;
+    --line:#d8c7b3;
+    --shadow:0 18px 44px rgba(56, 40, 24, .12);
+    --lead:#315b8f;
+    --build:#557a45;
+    --quality:#a94336;
+    --modes:#72539b;
+    --money:#b97d25;
+  }
+  * { box-sizing:border-box; }
+  html, body { margin:0; min-height:100%; }
+  body {
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 8% 0%, rgba(81, 124, 74, .11), transparent 25%),
+      radial-gradient(circle at 92% 14%, rgba(49, 91, 143, .12), transparent 23%),
+      linear-gradient(180deg, #fbf5ee 0%, #f1e4d5 100%);
+  }
+  body::before {
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+      linear-gradient(90deg, rgba(255,255,255,.18) 0 1px, transparent 1px 100%),
+      linear-gradient(180deg, rgba(255,255,255,.16) 0 1px, transparent 1px 100%);
+    background-size:38px 38px;
+    opacity:.16;
+    pointer-events:none;
+    mix-blend-mode:screen;
+  }
+  .wrap {
+    width:min(1480px, calc(100vw - 32px));
+    margin:0 auto;
+    padding:28px 0 32px;
+  }
+  .panel {
+    position:relative;
+    background:rgba(255,250,244,.95);
+    border:1px solid var(--line);
+    border-radius:28px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  .hero {
+    padding:28px 30px 24px;
+    margin-bottom:20px;
+    background:
+      linear-gradient(135deg, rgba(255,251,246,.98), rgba(255,247,239,.94)),
+      radial-gradient(circle at top right, rgba(122,83,155,.06), transparent 32%);
+  }
+  .eyebrow {
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 12px;
+    border-radius:999px;
+    background:#f0e7ff;
+    border:1px solid #dfd1f5;
+    color:#5b4387;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  h1 {
+    margin:14px 0 8px;
+    font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif;
+    font-size:44px;
+    line-height:1;
+    letter-spacing:-.05em;
+  }
+  .subtitle {
+    margin:0 0 10px;
+    font-size:18px;
+    font-weight:800;
+    color:#5b4387;
+    letter-spacing:-.02em;
+  }
+  .hero p {
+    margin:0;
+    max-width:1060px;
+    color:var(--muted);
+    line-height:1.58;
+    font-size:16px;
+  }
+  .hero-grid {
+    display:grid;
+    grid-template-columns:repeat(4, minmax(0, 1fr));
+    gap:12px;
+    margin-top:18px;
+  }
+  .stat {
+    padding:12px 14px;
+    border-radius:18px;
+    background:#fbf5ef;
+    border:1px solid #eadac8;
+    min-height:72px;
+  }
+  .stat span {
+    display:block;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:#95796c;
+    margin-bottom:6px;
+    font-weight:800;
+  }
+  .stat strong {
+    display:block;
+    font-size:14px;
+    line-height:1.35;
+  }
+  .section {
+    margin-bottom:18px;
+    padding:18px;
+    border-radius:24px;
+    border:1px solid var(--line);
+    background:rgba(255,250,244,.94);
+    box-shadow:0 10px 26px rgba(56,40,24,.07);
+  }
+  .section-header {
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:14px;
+    margin-bottom:14px;
+  }
+  .section-title {
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+  }
+  .section-title h2 {
+    margin:0;
+    font-size:24px;
+    letter-spacing:-.03em;
+    line-height:1.05;
+  }
+  .section-title p {
+    margin:0;
+    color:var(--muted);
+    font-size:13px;
+  }
+  .section-pill {
+    align-self:flex-start;
+    padding:9px 11px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    color:#fff;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);
+  }
+  .pill.lead { background:var(--lead); }
+  .pill.build { background:var(--build); }
+  .pill.quality { background:var(--quality); }
+  .pill.modes { background:var(--modes); }
+  .pill.money { background:var(--money); }
+  .grid-4 { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:14px; }
+  .grid-2 { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:14px; }
+  .grid-3 { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:14px; }
+  .card {
+    position:relative;
+    border-radius:22px;
+    border:1px solid #e7d7c9;
+    background:linear-gradient(180deg, rgba(255,255,255,.98), rgba(251,245,239,.98));
+    box-shadow:0 10px 20px rgba(56,40,24,.06);
+    overflow:hidden;
+  }
+  .card-inner {
+    padding:16px;
+  }
+  .card::after {
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.20), transparent 28%),
+      radial-gradient(circle at top right, rgba(255,255,255,.45), transparent 24%);
+    pointer-events:none;
+  }
+  .status {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .status h3 {
+    margin:0;
+    font-size:18px;
+    line-height:1.08;
+    letter-spacing:-.02em;
+  }
+  .status p {
+    margin:6px 0 0;
+    font-size:13px;
+    line-height:1.45;
+    color:var(--muted);
+  }
+  .badge {
+    display:inline-flex;
+    align-items:center;
+    padding:7px 10px;
+    border-radius:999px;
+    border:1px solid;
+    font-size:11px;
+    font-weight:900;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    white-space:nowrap;
+  }
+  .badge.lead { color:#2d568f; background:#edf4ff; border-color:#c9d8ef; }
+  .badge.build { color:#4e6f3a; background:#eef8e7; border-color:#cfe1bf; }
+  .badge.quality { color:#9c4439; background:#fff1ee; border-color:#ebc4bb; }
+  .badge.money { color:#8a6514; background:#fff4dc; border-color:#ebd58f; }
+  .badge.modes { color:#664ea0; background:#f2ecff; border-color:#d8cff5; }
+  .image-card {
+    padding:14px;
+  }
+  .image-card h3 {
+    margin:0 0 10px;
+    font-size:18px;
+    letter-spacing:-.02em;
+  }
+  .image-card p {
+    margin:0 0 12px;
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.5;
+  }
+  .image-frame {
+    display:block;
+    width:100%;
+    height:auto;
+    border-radius:18px;
+    border:1px solid #ead7cf;
+    background:#fff;
+  }
+  .summary-card {
+    padding:16px;
+  }
+  .summary-card h3 {
+    margin:0 0 8px;
+    font-size:18px;
+  }
+  .summary-card p {
+    margin:0;
+    color:var(--muted);
+    line-height:1.58;
+    font-size:14px;
+  }
+  .group-list {
+    display:grid;
+    gap:10px;
+  }
+  .group-row {
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    padding:12px 14px;
+    border-radius:16px;
+    border:1px solid #e8dacc;
+    background:#fbf6f0;
+  }
+  .group-row strong {
+    display:block;
+    min-width:220px;
+    font-size:14px;
+  }
+  .group-row span {
+    display:block;
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.45;
+  }
+  .rules-list {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+  .rule {
+    padding:14px;
+    border-radius:16px;
+    border:1px solid #e7d9cb;
+    background:#fffdf9;
+  }
+  .rule h3 {
+    margin:0 0 6px;
+    font-size:16px;
+  }
+  .rule p {
+    margin:0;
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.5;
+  }
+  .links-grid {
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:12px;
+  }
+  .link-box {
+    padding:14px;
+    border-radius:16px;
+    border:1px solid #e8dacc;
+    background:#fbf6f0;
+  }
+  .link-box span {
+    display:block;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:#95776b;
+    margin-bottom:6px;
+    font-weight:800;
+  }
+  code {
+    background:#f2e6da;
+    border:1px solid #e1cfbd;
+    padding:2px 6px;
+    border-radius:8px;
+    color:#5b3e32;
+    word-break:break-word;
+  }
+  a { color:#315b8f; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  .note {
+    margin-top:14px;
+    background:#fff4eb;
+    border-left:5px solid var(--money);
+    border-radius:16px;
+    padding:14px 16px;
+    color:#5d4538;
+    line-height:1.55;
+  }
+  .status-grid {
+    display:grid;
+    grid-template-columns:repeat(4, minmax(0, 1fr));
+    gap:12px;
+  }
+  .status-card {
+    padding:14px;
+    border-radius:18px;
+    border:1px solid #e7d7c9;
+    background:linear-gradient(180deg, rgba(255,255,255,.98), rgba(251,245,239,.98));
+  }
+  .status-card strong {
+    display:block;
+    font-size:15px;
+    margin-bottom:6px;
+  }
+  .status-card span {
+    display:block;
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.45;
+  }
+  .agent-grid {
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:12px;
+  }
+  .agent-card {
+    padding:16px;
+  }
+  .agent-card h3 {
+    margin:0 0 4px;
+    font-size:17px;
+    letter-spacing:-.02em;
+  }
+  .agent-card .meta {
+    display:grid;
+    gap:8px;
+    margin-top:12px;
+  }
+  .agent-card .meta div {
+    padding:11px 12px;
+    border-radius:14px;
+    border:1px solid #e8dacc;
+    background:#fbf6f0;
+  }
+  .agent-card .meta span {
+    display:block;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:#95776b;
+    margin-bottom:4px;
+    font-weight:800;
+  }
+  .agent-card .meta strong,
+  .agent-card .meta p {
+    display:block;
+    margin:0;
+    font-size:13px;
+    line-height:1.45;
+    color:var(--ink);
+  }
+  @media (max-width: 1200px) {
+    .hero-grid, .grid-4, .grid-3, .grid-2, .rules-list, .links-grid, .status-grid, .agent-grid { grid-template-columns:1fr 1fr; }
+    .group-row { flex-direction:column; }
+    .group-row strong { min-width:0; }
+  }
+  @media (max-width: 760px) {
+    .wrap { width:auto; margin:0; padding:14px; }
+    h1 { font-size:32px; }
+    .hero-grid, .grid-4, .grid-3, .grid-2, .rules-list, .links-grid, .status-grid, .agent-grid { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="panel hero">
+    <span class="eyebrow">PIP DEVELOPMENT GUILD</span>
+    <h1>PIP Development Guild</h1>
+    <div class="subtitle">Canon Dashboard / Agent Team Visual Reference</div>
+    <p>This dashboard is the compact canon overview for the guild. It links the approved Bible, Layout, Composition, Guild Hall references, and the current Agent Index Sheet so future edits stay on one approved path. หน้านี้เป็นแผงสรุป canon แบบอ่านเร็ว ใช้ดูภาพรวมของทีมและไฟล์อ้างอิงที่อนุมัติแล้วได้ในที่เดียว</p>
+    <div class="hero-grid">
+      <div class="stat"><span>Canon status</span><strong>Guild Bible / Layout / Composition / Index Sheet</strong></div>
+      <div class="stat"><span>Approved visuals</span><strong>Guild Hall v11 + Agent Index Sheet v2</strong></div>
+      <div class="stat"><span>Image rule</span><strong>Approved PNG references only</strong></div>
+      <div class="stat"><span>Editing rule</span><strong>Start future Guild Hall patches from v11</strong></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div class="section-title">
+        <h2>Canon Status Cards</h2>
+        <p>Approved documents and roster references that define the current guild canon.</p>
+      </div>
+      <span class="section-pill" style="background:var(--lead)">4 files</span>
+    </div>
+    <div class="status-grid">
+      <div class="status-card">
+        <strong>Guild Bible</strong>
+        <span>File: <code>guild_bible.html</code><br>Purpose: character identity, role mapping, character sheet reference<br>Status: Approved</span>
+      </div>
+      <div class="status-card">
+        <strong>Guild Layout</strong>
+        <span>File: <code>guild_layout.html</code><br>Purpose: Guild Hall placement canon based on v11<br>Status: Approved v11</span>
+      </div>
+      <div class="status-card">
+        <strong>Composition Bible</strong>
+        <span>File: <code>composition_bible.html</code><br>Purpose: role integrity and composition rules<br>Status: Approved</span>
+      </div>
+      <div class="status-card">
+        <strong>Index Sheet</strong>
+        <span>File: <code>index_sheet/01_agent_index_sheet_v2.html</code><br>Purpose: roster, role accordion, Thai/English role explanations<br>Status: Active</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div class="section-title">
+        <h2>Approved Guild Hall</h2>
+        <p>Use the v11 clean and labeled references as the current placement baseline.</p>
+      </div>
+      <span class="section-pill" style="background:var(--build)">approved</span>
+    </div>
+    <div class="grid-2">
+      <article class="card image-card">
+        <h3>Clean Guild Hall</h3>
+        <p>Matching clean composite without labels. This is the scene asset reference for composition and patch edits.</p>
+        <img class="image-frame" src="poster/01_guild_hall_composite_v11.png" alt="Approved Guild Hall Composite v11 Clean" loading="lazy">
+      </article>
+      <article class="card image-card">
+        <h3>Labeled Guild Hall</h3>
+        <p>Approved labeled reference with final positions and label placement locked to v11.</p>
+        <img class="image-frame" src="poster/01_guild_hall_composite_v11_labeled.png" alt="Approved Guild Hall Composite v11 Labeled" loading="lazy">
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div class="section-title">
+        <h2>Approved Agent Index Sheet</h2>
+        <p>Roster sheet for the 11 agents, with accordion role map and transparent cutout sprites only.</p>
+      </div>
+      <span class="section-pill" style="background:var(--money)">v2</span>
+    </div>
+    <div class="grid-2">
+      <article class="card image-card">
+        <h3>Clean Index Sheet</h3>
+        <p>Clean export for the guild roster overview without the labeled presentation layer.</p>
+        <img class="image-frame" src="index_sheet/01_agent_index_sheet_v2.png" alt="Agent Index Sheet v2 Clean" loading="lazy">
+      </article>
+      <article class="card image-card">
+        <h3>Labeled Index Sheet</h3>
+        <p>Approved labeled reference with the accordion role map expanded to Pip by default.</p>
+        <img class="image-frame" src="index_sheet/01_agent_index_sheet_v2_labeled.png" alt="Agent Index Sheet v2 Labeled" loading="lazy">
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div class="section-title">
+        <h2>Role Integrity Summary</h2>
+        <p>11 roles, 5 canonical role groups, and one strict role mapping across all deliverables.</p>
+      </div>
+      <span class="section-pill" style="background:var(--quality)">canon</span>
+    </div>
+    <div class="summary-card card" style="margin-bottom:14px;">
+      <h3>Thai + English Summary</h3>
+      <p>ทีมนี้มี 11 roles ที่ผูกกับ role groups แบบตายตัวตาม composition_bible.html เพื่อกันบทบาทสลับกันผิดหน้าที่. Each role has a fixed job, a fixed composition use, and a fixed do/don't rule so the roster stays visually and logically consistent.</p>
+    </div>
+    <div class="section" style="margin:0 0 14px; padding:16px; box-shadow:none;">
+      <h3 style="margin:0 0 12px; font-size:18px;">11-Agent Role Grid</h3>
+      <div class="agent-grid">
+        <article class="card agent-card">
+          <h3>01 Guild Master</h3>
+          <div class="meta">
+            <div><span>Role</span><strong>Codex Lead</strong></div>
+            <div><span>Group</span><strong>Leadership & Governance</strong></div>
+            <div><span>Thai summary</span><p>หัวหน้ากิลด์ ผู้คุมภาพรวม วางแผน และประสานงานทั้ง pipeline</p></div>
+            <div><span>English summary</span><p>Command lead responsible for planning, coordination, and overall pipeline direction.</p></div>
+          </div>
+        </article>
+        <article class="card agent-card">
+          <h3>02 High Priest</h3>
+          <div class="meta">
+            <div><span>Role</span><strong>Product Bible Guardian</strong></div>
+            <div><span>Group</span><strong>Leadership & Governance</strong></div>
+            <div><span>Thai summary</span><p>ผู้พิทักษ์ Product Bible และ source of truth ของโปรเจกต์</p></div>
+            <div><span>English summary</span><p>Guardian of the Product Bible and project source-of-truth rules.</p></div>
+          </div>
+        </article>
+        <article class="card agent-card">
+          <h3>03 Novice (Pip)</h3>
+          <div class="meta">
+            <div><span>Role</span><strong>Documentation Agent / Mascot</strong></div>
+            <div><span>Group</span><strong>Design & Build</strong></div>
+            <div><span>Thai summary</span><p>มาสคอตและผู้ช่วยจดบันทึก สรุปงาน และส่งต่อข้อมูล</p></div>
+            <div><span>English summary</span><p>Mascot and documentation runner for summaries, records, and handoffs.</p></div>
+          </div>
+        </article>
+        <article class="card agent-card">
+          <h3>04 Sage</h3>
+          <div class="meta">
+            <div><span>Role</span><strong>Design Auditor</strong></div>
+            <div><span>Group</span><strong>Design & Build</strong></div>
+            <div><span>Thai summary</span><p>ผู้ตรวจ Design System, spacing, typography, icon และ UI consistency</p></div>
+            <div><span>English summary</span><p>Design System auditor for spacing, typography, icons, and UI consistency.</p></div>
+          </div>
+        </article>
+        <article class="card agent-card">
+          <h3>05 Blacksmith</h3>
+          <div class="meta">
+            <div><span>Role</span><strong>Flutter Implementation Agent</strong></div>
+            <div><span>Group</span><strong>Design & Build</strong></div>
+            <div><span>Thai summary</span><p>ผู้สร้างงานจริงใน Flutter ทั้ง widget, screen, component และ refactor</p></div>
+            <div><span>English summary</span><p>Flutter builder responsible for widgets, screens, components, and refactoring.</p></div>
+          </div>
+        </article>
+        <article class="card agent-card">
+          <h3>06 Crusader</h3>
+          <div class="meta">
+            <div><span>Role</span><strong>Security Agent</strong></div>
+            <div><span>Group</span><strong>Security & Quality</strong></div>
+            <div><span>Thai summary</span><p>ผู้คุม security, system integrity, server authority และ anti-duplicate reward</p></div>
+            <div><span>English summary</span><p>Security guardian for system integrity, server authority, and anti-duplicate rewards.</p></div>
+          </div>
+        </article>
+        <article class="card agent-card">
+          <h3>07 Knight</h3>
+          <div class="meta">
+            <div><span>Role</span><strong>Mini Game Agent</strong></div>
+            <div><span>Group</span><strong>Product Modes</strong></div>
+            <div><span>Thai summary</span><p>ผู้ดูแล Mini Game flow, stage progression, pass/fail และ Summary & Insight</p></div>
+            <div><span>English summary</span><p>Mini Game owner for stage flow, progression, pass/fail, and Summary & Insight.</p></div>
+          </div>
+        </article>
+        <article class="card agent-card">
+          <h3>08 Assassin Cross</h3>
+          <div class="meta">
+            <div><span>Role</span><strong>QA / Tester</strong></div>
+            <div><span>Group</span><strong>Security & Quality</strong></div>
+            <div><span>Thai summary</span><p>ผู้ล่าบั๊ก ตรวจ regression และช่วยยืนยันว่าแก้แล้วไม่พังส่วนอื่น</p></div>
+            <div><span>English summary</span><p>Bug hunter and regression tester ensuring fixes do not break other areas.</p></div>
+          </div>
+        </article>
+        <article class="card agent-card">
+          <h3>09 Sniper</h3>
+          <div class="meta">
+            <div><span>Role</span><strong>Practice Mode Agent</strong></div>
+            <div><span>Group</span><strong>Product Modes</strong></div>
+            <div><span>Thai summary</span><p>ผู้ดูแล Practice Mode, mock exam, 100-question flow และ accuracy review</p></div>
+            <div><span>English summary</span><p>Practice Mode owner for mock exams, 100-question flow, and accuracy review.</p></div>
+          </div>
+        </article>
+        <article class="card agent-card">
+          <h3>10 Professor</h3>
+          <div class="meta">
+            <div><span>Role</span><strong>Reviewer</strong></div>
+            <div><span>Group</span><strong>Leadership & Governance</strong></div>
+            <div><span>Thai summary</span><p>ผู้ตรวจ code, architecture และ decision quality</p></div>
+            <div><span>English summary</span><p>Reviewer for code, architecture, and decision quality.</p></div>
+          </div>
+        </article>
+        <article class="card agent-card">
+          <h3>11 Gunslinger</h3>
+          <div class="meta">
+            <div><span>Role</span><strong>Reward / VIP Agent</strong></div>
+            <div><span>Group</span><strong>Reward & Monetization</strong></div>
+            <div><span>Thai summary</span><p>ผู้ดูแล Reward, VIP, monetization, x2 ticket และ rewarded ads</p></div>
+            <div><span>English summary</span><p>Reward and VIP owner for monetization, x2 tickets, and rewarded ads.</p></div>
+          </div>
+        </article>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card summary-card">
+        <h3>Role Groups</h3>
+        <div class="group-list">
+          <div class="group-row"><strong>Leadership & Governance</strong><span>Guild Master, High Priest, Professor</span></div>
+          <div class="group-row"><strong>Design & Build</strong><span>Sage, Blacksmith, Novice (Pip)</span></div>
+          <div class="group-row"><strong>Security & Quality</strong><span>Crusader, Assassin Cross</span></div>
+          <div class="group-row"><strong>Product Modes</strong><span>Knight, Sniper</span></div>
+          <div class="group-row"><strong>Reward & Monetization</strong><span>Gunslinger</span></div>
+        </div>
+      </div>
+      <div class="card summary-card">
+        <h3>Role Integrity Notes</h3>
+        <p>Guild Master leads planning, High Priest guards the Product Bible, Pip guides documentation, Sage audits design, Blacksmith implements Flutter, Crusader guards security, Knight owns Mini Game flow, Assassin Cross tests, Sniper runs Practice Mode, Professor reviews, and Gunslinger owns reward / VIP logic.</p>
+        <div class="note">All future composites and dashboards must preserve this mapping exactly. Do not swap roles between groups.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div class="section-title">
+        <h2>Future Work Rules</h2>
+        <p>Operational guardrails for every future Guild Hall, roster, or patch update.</p>
+      </div>
+      <span class="section-pill" style="background:var(--lead)">rules</span>
+    </div>
+    <div class="rules-list">
+      <div class="rule">
+        <h3>Do not redraw background</h3>
+        <p>Use the approved Guild Hall background asset only. Keep the background untouched in all future patches.</p>
+      </div>
+      <div class="rule">
+        <h3>Do not redesign sprites</h3>
+        <p>Use approved transparent cutouts from <code>cropped_sprites/front_cutouts/</code>. No new character redraws.</p>
+      </div>
+      <div class="rule">
+        <h3>Start Guild Hall edits from v11</h3>
+        <p>Use <code>poster/01_guild_hall_composite_v11.png</code> and <code>poster/01_guild_hall_composite_v11_labeled.png</code> as the baseline.</p>
+      </div>
+      <div class="rule">
+        <h3>Keep role mapping from the bible</h3>
+        <p>Role assignments must stay aligned to <code>composition_bible.html</code> and the approved Guild Bible canon.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div class="section-title">
+        <h2>Quick Links / File References</h2>
+        <p>Fast reference paths for all approved canon assets.</p>
+      </div>
+      <span class="section-pill" style="background:var(--modes)">links</span>
+    </div>
+    <div class="links-grid">
+      <div class="link-box">
+        <span>Guild Bible</span>
+        <code>guild_bible.html</code>
+      </div>
+      <div class="link-box">
+        <span>Guild Layout</span>
+        <code>guild_layout.html</code>
+      </div>
+      <div class="link-box">
+        <span>Composition Bible</span>
+        <code>composition_bible.html</code>
+      </div>
+      <div class="link-box">
+        <span>Agent Index Sheet</span>
+        <code>index_sheet/01_agent_index_sheet_v2.html</code>
+      </div>
+      <div class="link-box">
+        <span>Approved Guild Hall Clean</span>
+        <code>poster/01_guild_hall_composite_v11.png</code>
+      </div>
+      <div class="link-box">
+        <span>Approved Guild Hall Labeled</span>
+        <code>poster/01_guild_hall_composite_v11_labeled.png</code>
+      </div>
+      <div class="link-box">
+        <span>Approved Index Sheet Clean</span>
+        <code>index_sheet/01_agent_index_sheet_v2.png</code>
+      </div>
+      <div class="link-box">
+        <span>Approved Index Sheet Labeled</span>
+        <code>index_sheet/01_agent_index_sheet_v2_labeled.png</code>
+      </div>
+    </div>
+    <div class="note">This page is documentation only. It does not modify the PNGs, sprites, or canon source files.</div>
+  </section>
+</div>
+</body>
+</html>

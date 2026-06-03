@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PIP Development Guild - Animation Index</title>
+<style>
+  :root {
+    --paper:#f6efe5;
+    --paper-2:#fffaf2;
+    --ink:#2f241d;
+    --muted:#6f5a4f;
+    --line:#d8c7b3;
+    --shadow:0 18px 44px rgba(56, 40, 24, .12);
+    --lead:#315b8f;
+    --build:#557a45;
+    --quality:#a94336;
+    --modes:#72539b;
+    --money:#b97d25;
+  }
+  * { box-sizing:border-box; }
+  html, body { margin:0; min-height:100%; }
+  body {
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 8% 0%, rgba(81, 124, 74, .11), transparent 25%),
+      radial-gradient(circle at 92% 14%, rgba(49, 91, 143, .12), transparent 23%),
+      linear-gradient(180deg, #fbf5ee 0%, #f1e4d5 100%);
+  }
+  body::before {
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+      linear-gradient(90deg, rgba(255,255,255,.16) 0 1px, transparent 1px 100%),
+      linear-gradient(180deg, rgba(255,255,255,.14) 0 1px, transparent 1px 100%);
+    background-size:38px 38px;
+    opacity:.16;
+    pointer-events:none;
+    mix-blend-mode:screen;
+  }
+  .wrap {
+    width:min(1480px, calc(100vw - 32px));
+    margin:0 auto;
+    padding:28px 0 34px;
+  }
+  .hero, .controls, .agent-card, .rules {
+    background:rgba(255,250,244,.95);
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+  }
+  .hero {
+    border-radius:28px;
+    padding:28px 30px 24px;
+    margin-bottom:18px;
+    background:
+      linear-gradient(135deg, rgba(255,251,246,.98), rgba(255,247,239,.94)),
+      radial-gradient(circle at top right, rgba(122,83,155,.06), transparent 32%);
+  }
+  .eyebrow {
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 12px;
+    border-radius:999px;
+    background:#f0e7ff;
+    border:1px solid #dfd1f5;
+    color:#5b4387;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  h1 {
+    margin:14px 0 8px;
+    font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif;
+    font-size:44px;
+    line-height:1;
+    letter-spacing:-.05em;
+  }
+  .hero p {
+    margin:0;
+    max-width:1040px;
+    color:var(--muted);
+    line-height:1.58;
+    font-size:16px;
+  }
+  .global-toggle, .speed-toggle, .anchor-toggle {
+    position:absolute;
+    opacity:0;
+    pointer-events:none;
+  }
+  .controls {
+    position:sticky;
+    top:12px;
+    z-index:4;
+    border-radius:24px;
+    padding:14px;
+    margin-bottom:18px;
+  }
+  .control-row {
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    align-items:center;
+  }
+  .control-label {
+    color:var(--muted);
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    margin-right:2px;
+  }
+  .chip {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:9px 12px;
+    border-radius:999px;
+    border:1px solid #dccbb8;
+    background:#fffaf4;
+    color:var(--ink);
+    font-size:12px;
+    font-weight:900;
+    cursor:pointer;
+    user-select:none;
+    transition:transform .15s ease, background .15s ease, border-color .15s ease, color .15s ease;
+  }
+  .chip:hover { transform:translateY(-1px); }
+  .agent-grid {
+    display:grid;
+    grid-template-columns:repeat(4, minmax(0, 1fr));
+    gap:14px;
+  }
+  .agent-card {
+    border-radius:24px;
+    overflow:hidden;
+    min-height:430px;
+  }
+  .card-head {
+    padding:14px 15px 12px;
+    border-bottom:1px solid #ead8c8;
+    background:linear-gradient(180deg, rgba(255,255,255,.9), rgba(251,245,239,.96));
+  }
+  .card-head h2 {
+    margin:0 0 7px;
+    font-size:18px;
+    line-height:1.08;
+    letter-spacing:-.02em;
+  }
+  .meta {
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+  }
+  .badge {
+    display:inline-flex;
+    padding:6px 9px;
+    border-radius:999px;
+    border:1px solid;
+    font-size:11px;
+    font-weight:900;
+    line-height:1;
+  }
+  .lead { color:#2d568f; background:#edf4ff; border-color:#c9d8ef; }
+  .build { color:#4e6f3a; background:#eef8e7; border-color:#cfe1bf; }
+  .quality { color:#9c4439; background:#fff1ee; border-color:#ebc4bb; }
+  .modes { color:#664ea0; background:#f2ecff; border-color:#d8cff5; }
+  .money { color:#8a6514; background:#fff4dc; border-color:#ebd58f; }
+  .stage {
+    position:relative;
+    height:285px;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    padding:18px 16px 48px;
+    background:
+      radial-gradient(circle at 50% 34%, rgba(255,255,255,.70), transparent 38%),
+      linear-gradient(180deg, rgba(255,252,248,.98), rgba(248,239,225,.98));
+  }
+  .anchor-line {
+    position:absolute;
+    left:50%;
+    bottom:44px;
+    width:132px;
+    height:2px;
+    transform:translateX(-50%);
+    background:linear-gradient(90deg, transparent, rgba(60,48,39,.40), transparent);
+    opacity:1;
+    transition:opacity .2s ease;
+  }
+  .sprite-wrap {
+    position:relative;
+    width:150px;
+    height:226px;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    transform-origin:center bottom;
+    animation:idleBreath var(--duration, 1.5s) ease-in-out infinite;
+    will-change:transform;
+  }
+  .sprite-wrap::after {
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:1px;
+    width:86px;
+    height:14px;
+    transform:translateX(-50%);
+    border-radius:999px;
+    background:radial-gradient(ellipse at center, rgba(72,56,43,.22), rgba(72,56,43,.08) 58%, transparent 72%);
+    filter:blur(2px);
+    opacity:.72;
+    animation:shadowPulse var(--duration, 1.5s) ease-in-out infinite;
+    pointer-events:none;
+  }
+  .sprite-wrap img {
+    position:relative;
+    z-index:1;
+    width:auto;
+    max-width:100%;
+    height:var(--sprite-height, 210px);
+    image-rendering:pixelated;
+    filter:drop-shadow(0 12px 15px rgba(49, 34, 22, .18));
+    transform-origin:center bottom;
+  }
+  .card-body {
+    padding:13px 15px 15px;
+  }
+  .card-body p {
+    margin:0 0 10px;
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.5;
+  }
+  .card-link {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    padding:9px 11px;
+    border-radius:999px;
+    border:1px solid #dccbb8;
+    background:#fffaf4;
+    color:var(--ink);
+    font-size:12px;
+    font-weight:900;
+  }
+  .rules {
+    border-radius:24px;
+    padding:18px;
+    margin-top:18px;
+  }
+  .rules h2 {
+    margin:0 0 10px;
+    font-size:22px;
+    letter-spacing:-.03em;
+  }
+  .rules ul {
+    margin:0;
+    padding-left:20px;
+    color:var(--muted);
+    line-height:1.6;
+  }
+  .rules code {
+    background:#f2e6da;
+    border:1px solid #e1cfbd;
+    padding:2px 6px;
+    border-radius:8px;
+    color:#5b3e32;
+  }
+  @keyframes idleBreath {
+    0%, 100% { transform:translateY(0) translateX(0) scale(1); }
+    50% { transform:translateY(var(--lift, -1.5px)) translateX(var(--side, 0)) scale(var(--scale, 1.008)); }
+  }
+  @keyframes shadowPulse {
+    0%, 100% { transform:translateX(-50%) scale(1); opacity:.66; }
+    50% { transform:translateX(-50%) scale(.96); opacity:.84; }
+  }
+  #pause-all:checked ~ .agent-grid .sprite-wrap,
+  #pause-all:checked ~ .agent-grid .sprite-wrap::after {
+    animation-play-state:paused;
+  }
+  #speed-075:checked ~ .agent-grid .sprite-wrap,
+  #speed-075:checked ~ .agent-grid .sprite-wrap::after {
+    animation-duration:calc(var(--duration, 1.5s) / .75);
+  }
+  #speed-100:checked ~ .agent-grid .sprite-wrap,
+  #speed-100:checked ~ .agent-grid .sprite-wrap::after {
+    animation-duration:var(--duration, 1.5s);
+  }
+  #speed-125:checked ~ .agent-grid .sprite-wrap,
+  #speed-125:checked ~ .agent-grid .sprite-wrap::after {
+    animation-duration:calc(var(--duration, 1.5s) / 1.25);
+  }
+  #hide-anchor:checked ~ .agent-grid .anchor-line {
+    opacity:0;
+  }
+  #play-all:checked ~ .controls label[for="play-all"],
+  #pause-all:checked ~ .controls label[for="pause-all"],
+  #speed-075:checked ~ .controls label[for="speed-075"],
+  #speed-100:checked ~ .controls label[for="speed-100"],
+  #speed-125:checked ~ .controls label[for="speed-125"] {
+    background:#edf4ff;
+    border-color:#c9d8ef;
+    color:#2d568f;
+  }
+  #hide-anchor:checked ~ .controls label[for="hide-anchor"] {
+    background:#fff1ee;
+    border-color:#ebc4bb;
+    color:#9c4439;
+  }
+  @media (max-width:1200px) {
+    .agent-grid { grid-template-columns:repeat(3, minmax(0, 1fr)); }
+  }
+  @media (max-width:860px) {
+    .agent-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+    h1 { font-size:36px; }
+  }
+  @media (max-width:580px) {
+    .wrap { width:min(100% - 22px, 1480px); padding-top:14px; }
+    .agent-grid { grid-template-columns:1fr; }
+    .controls { position:relative; top:auto; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <span class="eyebrow">CSS-only idle preview</span>
+    <h1>PIP Development Guild Animation Index</h1>
+    <p>One-page comparison dashboard for all 11 approved static cutout sprites. The motion is CSS-only prototype breathing/presence; no new sprite frames, redraws, or character redesigns are introduced here.</p>
+  </section>
+
+  <input class="global-toggle" type="radio" name="playback" id="play-all" checked>
+  <input class="global-toggle" type="radio" name="playback" id="pause-all">
+  <input class="speed-toggle" type="radio" name="speed" id="speed-075">
+  <input class="speed-toggle" type="radio" name="speed" id="speed-100" checked>
+  <input class="speed-toggle" type="radio" name="speed" id="speed-125">
+  <input class="anchor-toggle" type="checkbox" id="hide-anchor">
+
+  <section class="controls">
+    <div class="control-row">
+      <span class="control-label">Playback</span>
+      <label class="chip" for="play-all">Play All</label>
+      <label class="chip" for="pause-all">Pause All</label>
+      <span class="control-label">Speed</span>
+      <label class="chip" for="speed-075">0.75x</label>
+      <label class="chip" for="speed-100">1x</label>
+      <label class="chip" for="speed-125">1.25x</label>
+      <span class="control-label">Anchors</span>
+      <label class="chip" for="hide-anchor">Show / Hide Anchor Lines</label>
+    </div>
+  </section>
+
+  <main class="agent-grid">
+    <article class="agent-card" style="--duration:1.4s; --lift:-1.7px; --scale:1.01; --sprite-height:210px;">
+      <div class="card-head"><h2>01 Guild Master</h2><div class="meta"><span class="badge lead">Codex Lead</span><span class="badge lead">Leadership & Governance</span></div></div>
+      <div class="stage"><div class="anchor-line"></div><div class="sprite-wrap"><img src="../cropped_sprites/front_cutouts/01_guild_master_front.png" alt="01 Guild Master static sprite"></div></div>
+      <div class="card-body"><p>Command lead idle: subtle vertical presence, anchored feet, no action pose.</p><a class="card-link" href="01_guild_master_idle_css_prototype.html">Open prototype</a></div>
+    </article>
+
+    <article class="agent-card" style="--duration:1.6s; --lift:-1.2px; --scale:1.008; --sprite-height:210px;">
+      <div class="card-head"><h2>02 High Priest</h2><div class="meta"><span class="badge lead">Product Bible Guardian</span><span class="badge lead">Leadership & Governance</span></div></div>
+      <div class="stage"><div class="anchor-line"></div><div class="sprite-wrap"><img src="../cropped_sprites/front_cutouts/02_high_priest_front.png" alt="02 High Priest static sprite"></div></div>
+      <div class="card-body"><p>Calm source-of-truth keeper idle: slow breathing and quiet protective presence.</p><a class="card-link" href="02_high_priest_idle_css_prototype.html">Open prototype</a></div>
+    </article>
+
+    <article class="agent-card" style="--duration:1.32s; --lift:-2px; --side:.6px; --scale:1.012; --sprite-height:210px;">
+      <div class="card-head"><h2>03 Novice (Pip)</h2><div class="meta"><span class="badge build">Documentation Agent / Mascot</span><span class="badge build">Design & Build</span></div></div>
+      <div class="stage"><div class="anchor-line"></div><div class="sprite-wrap"><img src="../cropped_sprites/front_cutouts/03_novice_pip_front.png" alt="03 Novice Pip static sprite"></div></div>
+      <div class="card-body"><p>Friendly mascot idle: soft-energy motion with feet kept in place.</p><a class="card-link" href="03_novice_pip_idle_css_prototype.html">Open prototype</a></div>
+    </article>
+
+    <article class="agent-card" style="--duration:1.5s; --lift:-1.4px; --scale:1.008; --sprite-height:210px;">
+      <div class="card-head"><h2>04 Sage</h2><div class="meta"><span class="badge build">Design Auditor</span><span class="badge build">Design & Build</span></div></div>
+      <div class="stage"><div class="anchor-line"></div><div class="sprite-wrap"><img src="../cropped_sprites/front_cutouts/04_sage_front.png" alt="04 Sage static sprite"></div></div>
+      <div class="card-body"><p>Analytical design-audit idle: precise breathing with a restrained focus pulse.</p><a class="card-link" href="04_sage_idle_css_prototype.html">Open prototype</a></div>
+    </article>
+
+    <article class="agent-card" style="--duration:1.45s; --lift:-1.5px; --scale:1.01; --sprite-height:210px;">
+      <div class="card-head"><h2>05 Blacksmith</h2><div class="meta"><span class="badge build">Flutter Implementation Agent</span><span class="badge build">Design & Build</span></div></div>
+      <div class="stage"><div class="anchor-line"></div><div class="sprite-wrap"><img src="../cropped_sprites/front_cutouts/05_blacksmith_front.png" alt="05 Blacksmith static sprite"></div></div>
+      <div class="card-body"><p>Grounded builder idle: sturdy breathing and practical presence only.</p><a class="card-link" href="05_blacksmith_idle_css_prototype.html">Open prototype</a></div>
+    </article>
+
+    <article class="agent-card" style="--duration:1.72s; --lift:-1px; --scale:1.006; --sprite-height:214px;">
+      <div class="card-head"><h2>06 Crusader</h2><div class="meta"><span class="badge quality">Security Agent</span><span class="badge quality">Security & Quality</span></div></div>
+      <div class="stage"><div class="anchor-line"></div><div class="sprite-wrap"><img src="../cropped_sprites/front_cutouts/06_crusader_front.png" alt="06 Crusader static sprite"></div></div>
+      <div class="card-body"><p>Stable security idle: guarded breathing, heavy stance, no combat motion.</p><a class="card-link" href="06_crusader_idle_css_prototype.html">Open prototype</a></div>
+    </article>
+
+    <article class="agent-card" style="--duration:1.45s; --lift:-1.6px; --scale:1.01; --sprite-height:214px;">
+      <div class="card-head"><h2>07 Knight</h2><div class="meta"><span class="badge modes">Mini Game Agent</span><span class="badge modes">Product Modes</span></div></div>
+      <div class="stage"><div class="anchor-line"></div><div class="sprite-wrap"><img src="../cropped_sprites/front_cutouts/07_knight_front.png" alt="07 Knight static sprite"></div></div>
+      <div class="card-body"><p>Mission-ready idle: focused stage commander presence without attack animation.</p><a class="card-link" href="07_knight_idle_css_prototype.html">Open prototype</a></div>
+    </article>
+
+    <article class="agent-card" style="--duration:1.54s; --lift:-1px; --side:-.5px; --scale:1.006; --sprite-height:212px;">
+      <div class="card-head"><h2>08 Assassin Cross</h2><div class="meta"><span class="badge quality">QA / Tester</span><span class="badge quality">Security & Quality</span></div></div>
+      <div class="stage"><div class="anchor-line"></div><div class="sprite-wrap"><img src="../cropped_sprites/front_cutouts/08_assassin_cross_front.png" alt="08 Assassin Cross static sprite"></div></div>
+      <div class="card-body"><p>Quiet bug-hunter idle: stealthy watchfulness and minimal movement.</p><a class="card-link" href="08_assassin_cross_idle_css_prototype.html">Open prototype</a></div>
+    </article>
+
+    <article class="agent-card" style="--duration:1.6s; --lift:-1px; --side:.5px; --scale:1.006; --sprite-height:210px;">
+      <div class="card-head"><h2>09 Sniper</h2><div class="meta"><span class="badge modes">Practice Mode Agent</span><span class="badge modes">Product Modes</span></div></div>
+      <div class="stage"><div class="anchor-line"></div><div class="sprite-wrap"><img src="../cropped_sprites/front_cutouts/09_sniper_front.png" alt="09 Sniper static sprite"></div></div>
+      <div class="card-body"><p>Precision lookout idle: calm accuracy-focused breathing only.</p><a class="card-link" href="09_sniper_idle_css_prototype.html">Open prototype</a></div>
+    </article>
+
+    <article class="agent-card" style="--duration:1.72s; --lift:-1px; --scale:1.006; --sprite-height:210px;">
+      <div class="card-head"><h2>10 Professor</h2><div class="meta"><span class="badge lead">Reviewer</span><span class="badge lead">Leadership & Governance</span></div></div>
+      <div class="stage"><div class="anchor-line"></div><div class="sprite-wrap"><img src="../cropped_sprites/front_cutouts/10_professor_front.png" alt="10 Professor static sprite"></div></div>
+      <div class="card-body"><p>Review-focused idle: thoughtful, calm breathing with analytical presence.</p><a class="card-link" href="10_professor_idle_css_prototype.html">Open prototype</a></div>
+    </article>
+
+    <article class="agent-card" style="--duration:1.5s; --lift:-1.1px; --scale:1.008; --sprite-height:214px;">
+      <div class="card-head"><h2>11 Gunslinger</h2><div class="meta"><span class="badge money">Reward / VIP Agent</span><span class="badge money">Reward & Monetization</span></div></div>
+      <div class="stage"><div class="anchor-line"></div><div class="sprite-wrap"><img src="../cropped_sprites/front_cutouts/11_gunslinger_front.png" alt="11 Gunslinger static sprite"></div></div>
+      <div class="card-body"><p>Cool reward-NPC idle: confident breathing, no draw, no shooting.</p><a class="card-link" href="11_gunslinger_idle_css_prototype.html">Open prototype</a></div>
+    </article>
+  </main>
+
+  <section class="rules">
+    <h2>Preview Rules</h2>
+    <ul>
+      <li>Sprites are loaded only from <code>../cropped_sprites/front_cutouts/</code>.</li>
+      <li>This page is an HTML preview index; it does not create animation frames or edit source PNG files.</li>
+      <li>Individual prototype pages remain the detailed source for each character's motion intent.</li>
+    </ul>
+  </section>
+</div>
+</body>
+</html>

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PIP Development Guild — Composition Bible</title>
+<style>
+  :root {
+    --bg:#f7efe7;
+    --paper:#fffaf3;
+    --paper2:#fffdf8;
+    --ink:#2f241f;
+    --muted:#6e5a50;
+    --line:#dec9b7;
+    --blue:#315b8f;
+    --gold:#c58a35;
+    --green:#557a45;
+    --red:#a94336;
+    --purple:#72539b;
+    --shadow:0 18px 38px rgba(65, 42, 24, .10);
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0;
+    padding:28px;
+    background:
+      radial-gradient(circle at 8% 0%, rgba(85,122,69,.16), transparent 30%),
+      radial-gradient(circle at 92% 12%, rgba(49,91,143,.13), transparent 28%),
+      linear-gradient(180deg,#fbf5ee 0%, #efe2d2 100%);
+    color:var(--ink);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  }
+  .wrap { max-width:1440px; margin:0 auto; }
+  .hero {
+    background:linear-gradient(135deg, rgba(255,250,243,.98), rgba(255,253,248,.92));
+    border:1px solid var(--line);
+    border-radius:28px;
+    padding:30px;
+    box-shadow:var(--shadow);
+    margin-bottom:22px;
+  }
+  h1 { margin:0; font-size:42px; letter-spacing:-.04em; }
+  h2 { margin:0 0 14px; font-size:26px; letter-spacing:-.02em; }
+  h3 { margin:0 0 6px; font-size:20px; }
+  p, li { color:var(--muted); line-height:1.58; }
+  .subtitle { font-size:18px; margin:10px 0 0; max-width:980px; }
+  .badges { display:flex; flex-wrap:wrap; gap:10px; margin-top:18px; }
+  .badge {
+    display:inline-flex; align-items:center; gap:8px;
+    padding:8px 12px; border-radius:999px;
+    background:#e9f2ff; color:#173b64;
+    border:1px solid #c7d8ef;
+    font-size:13px; font-weight:800;
+  }
+  .section {
+    background:rgba(255,250,243,.96);
+    border:1px solid var(--line);
+    border-radius:24px;
+    padding:22px;
+    box-shadow:0 12px 26px rgba(65,42,24,.07);
+    margin-bottom:20px;
+  }
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  .grid-3 { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:18px; }
+  .card {
+    background:linear-gradient(180deg, var(--paper2), var(--paper));
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:18px;
+    box-shadow:0 10px 22px rgba(65,42,24,.06);
+  }
+  .card .tag {
+    display:inline-flex;
+    padding:6px 10px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:800;
+    margin-bottom:12px;
+    border:1px solid;
+  }
+  .lead { background:#e9f2ff; color:#17406e; border-color:#c5d6ee; }
+  .gov { background:#fff4d9; color:#755118; border-color:#ecd39a; }
+  .build { background:#eef8e8; color:#3f6532; border-color:#cfe4c3; }
+  .quality { background:#fff0ec; color:#7a352d; border-color:#e8beb6; }
+  .product { background:#f1ecff; color:#543d84; border-color:#d6c8f1; }
+  .money { background:#fff7dc; color:#7b5a16; border-color:#ead78d; }
+  .role-card {
+    display:grid;
+    grid-template-columns:54px 1fr;
+    gap:14px;
+    align-items:start;
+  }
+  .num {
+    width:48px; height:48px;
+    display:flex; align-items:center; justify-content:center;
+    border-radius:16px;
+    color:white;
+    font-weight:900;
+    background:linear-gradient(180deg,#315b8f,#223d63);
+  }
+  .role-name { color:var(--blue); font-weight:900; margin:0; }
+  .class-name { color:var(--gold); font-weight:900; margin:2px 0 8px; }
+  .role-desc { margin:0; color:var(--muted); }
+  table {
+    width:100%;
+    border-collapse:collapse;
+    overflow:hidden;
+    border-radius:18px;
+    border:1px solid var(--line);
+    background:white;
+  }
+  th, td {
+    padding:13px 12px;
+    border-bottom:1px solid #eadfd3;
+    text-align:left;
+    vertical-align:top;
+    font-size:14px;
+  }
+  th {
+    background:#efe1cf;
+    color:#4c382c;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    font-size:12px;
+  }
+  tr:last-child td { border-bottom:none; }
+  .do-dont {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+  }
+  .ok { border-left:6px solid var(--green); }
+  .bad { border-left:6px solid var(--red); }
+  ul { margin:8px 0 0 20px; padding:0; }
+  code {
+    background:#f2e6da;
+    border:1px solid #e1cfbd;
+    padding:2px 6px;
+    border-radius:8px;
+    color:#5b3e32;
+  }
+  .note {
+    margin-top:14px;
+    background:#fff4eb;
+    border-left:5px solid var(--red);
+    border-radius:16px;
+    padding:14px 16px;
+    color:#5d4538;
+  }
+  @media (max-width:1100px) {
+    .grid-2, .grid-3, .do-dont { grid-template-columns:1fr; }
+  }
+  @media (max-width:720px) {
+    body { padding:14px; }
+    h1 { font-size:32px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <h1>PIP Development Guild — Composition Bible</h1>
+    <p class="subtitle">
+      ไฟล์นี้ล็อก “หน้าที่ของแต่ละ Role” สำหรับการจัดองค์ประกอบภาพของ PIP Development Guild
+      เพื่อไม่ให้角色/Agent หลุดหน้าที่เวลาใช้ทำ Poster, Guild Hall Composite, Index Sheet, Dashboard หรือภาพโปรโมต
+    </p>
+    <div class="badges">
+      <span class="badge">HTML Only</span>
+      <span class="badge">Role-safe Composition</span>
+      <span class="badge">No Redraw Rule</span>
+      <span class="badge">11 Guild Agents</span>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Main Visual Anchors</h2>
+    <div class="grid-2">
+      <div class="card">
+        <span class="tag lead">Main Mascot / Viewer Guide</span>
+        <h3>Novice (Pip)</h3>
+        <p><strong>Role:</strong> Documentation Agent</p>
+        <p>Pip คือ mascot และตัวพาผู้ชมเข้าใจทีม เหมาะอยู่จุดที่มองเห็นง่าย เช่น center floor, foreground, dashboard guide หรือ tutorial scene</p>
+      </div>
+      <div class="card">
+        <span class="tag lead">Command Authority</span>
+        <h3>Guild Master</h3>
+        <p><strong>Role:</strong> Codex Lead</p>
+        <p>Guild Master คือหัวหน้าทีมและคนคุมภาพรวม ใช้เป็นจุด authority ของฉาก แต่ไม่ควรแย่งบท mascot จาก Pip</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Composition Groups</h2>
+    <div class="grid-3">
+      <div class="card">
+        <span class="tag gov">Leadership & Governance</span>
+        <h3>Guild Master</h3>
+        <p>Command lead / คุมภาพรวม / ตัดสินใจขั้นสุดท้าย</p>
+        <h3>High Priest</h3>
+        <p>Product Bible Guardian / คุม source of truth และ logic ไม่ให้หลุด</p>
+        <h3>Professor</h3>
+        <p>Reviewer / ตรวจ architecture, code quality, decision quality</p>
+      </div>
+
+      <div class="card">
+        <span class="tag build">Design & Build</span>
+        <h3>Sage</h3>
+        <p>Design Auditor / ตรวจ Design System, typography, spacing, glass, icon</p>
+        <h3>Blacksmith</h3>
+        <p>Flutter Implementation / สร้าง widget, screen, refactor, implementation</p>
+        <h3>Novice (Pip)</h3>
+        <p>Documentation runner / จดบันทึก ส่งต่อ สรุป pipeline</p>
+      </div>
+
+      <div class="card">
+        <span class="tag quality">Security & Quality</span>
+        <h3>Crusader</h3>
+        <p>Security Agent / system integrity, anti-duplicate reward, server authority</p>
+        <h3>Assassin Cross</h3>
+        <p>QA / Tester / bug hunter, regression, analyze/test</p>
+      </div>
+
+      <div class="card">
+        <span class="tag product">Product Modes</span>
+        <h3>Knight</h3>
+        <p>Mini Game Agent / stage, progression, Summary & Insight</p>
+        <h3>Sniper</h3>
+        <p>Practice Mode Agent / 100-question flow, mock exam, accuracy review</p>
+      </div>
+
+      <div class="card">
+        <span class="tag money">Reward & Monetization</span>
+        <h3>Gunslinger</h3>
+        <p>Reward / VIP Agent / reward, VIP, monetization, x2 ticket, rewarded ads</p>
+      </div>
+
+      <div class="card">
+        <span class="tag lead">Composition Rule</span>
+        <h3>ห้ามสลับหน้าที่</h3>
+        <p>Sniper ห้ามกลายเป็น Reward Agent, Gunslinger ห้ามกลายเป็น Practice Agent, Crusader ห้ามกลายเป็น Mini Game Agent ฯลฯ</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Role Integrity Table</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>No.</th>
+          <th>Character</th>
+          <th>Agent Role</th>
+          <th>Composition Meaning</th>
+          <th>Do Not Turn Into</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>01</td><td>Guild Master</td><td>Codex Lead</td>
+          <td>Leader, command authority, final coordination</td>
+          <td>Mascot-only, random warrior, shop NPC</td>
+        </tr>
+        <tr>
+          <td>02</td><td>High Priest</td><td>Product Bible Guardian</td>
+          <td>Truth keeper, rules, product logic protection</td>
+          <td>Designer, tester, monetization NPC</td>
+        </tr>
+        <tr>
+          <td>03</td><td>Novice (Pip)</td><td>Documentation Agent</td>
+          <td>Mascot, viewer guide, documentation runner</td>
+          <td>Team leader, security guard, reward shopkeeper</td>
+        </tr>
+        <tr>
+          <td>04</td><td>Sage</td><td>Design Auditor</td>
+          <td>Design System, spacing, typography, UI precision</td>
+          <td>Flutter coder, reward agent, practice agent</td>
+        </tr>
+        <tr>
+          <td>05</td><td>Blacksmith</td><td>Flutter Implementation Agent</td>
+          <td>Builder, implementation, widgets, screens, refactor</td>
+          <td>Product bible keeper, tester-only role</td>
+        </tr>
+        <tr>
+          <td>06</td><td>Crusader</td><td>Security Agent</td>
+          <td>Security, system integrity, anti-exploit, server authority</td>
+          <td>Mini Game agent, designer, reward agent</td>
+        </tr>
+        <tr>
+          <td>07</td><td>Knight</td><td>Mini Game Agent</td>
+          <td>Stage progression, mission flow, Summary & Insight</td>
+          <td>Practice 100-question owner, monetization owner</td>
+        </tr>
+        <tr>
+          <td>08</td><td>Assassin Cross</td><td>QA / Tester</td>
+          <td>Bug hunter, regression testing, analyze/test gate</td>
+          <td>Security owner, product owner, designer</td>
+        </tr>
+        <tr>
+          <td>09</td><td>Sniper</td><td>Practice Mode Agent</td>
+          <td>Practice mode, 100-question flow, mock exam, accuracy</td>
+          <td>Reward/VIP agent, Mini Game stage owner</td>
+        </tr>
+        <tr>
+          <td>10</td><td>Professor</td><td>Reviewer</td>
+          <td>Code review, architecture review, decision review</td>
+          <td>Lead commander, visual designer-only role</td>
+        </tr>
+        <tr>
+          <td>11</td><td>Gunslinger</td><td>Reward / VIP Agent</td>
+          <td>Reward, VIP, monetization, x2 ticket, rewarded ads</td>
+          <td>Practice agent, product bible guardian</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <h2>Scene Composition Rules</h2>
+    <div class="do-dont">
+      <div class="card ok">
+        <h3>Do</h3>
+        <ul>
+          <li>ให้ Pip เป็น mascot / viewer guide ที่อ่านง่าย</li>
+          <li>ให้ Guild Master เป็น authority ของทีม</li>
+          <li>ให้ High Priest อยู่กับกฎ / source of truth / product logic</li>
+          <li>ให้ Sage + Blacksmith อยู่ในโซน Design & Build</li>
+          <li>ให้ Crusader + Assassin Cross อยู่ในโซน Security & Quality</li>
+          <li>ให้ Knight ดูแล Mini Game และ Sniper ดูแล Practice</li>
+          <li>ให้ Gunslinger อยู่กับ Reward / VIP / Monetization</li>
+        </ul>
+      </div>
+      <div class="card bad">
+        <h3>Don't</h3>
+        <ul>
+          <li>อย่าสลับ role ระหว่าง Sniper กับ Gunslinger</li>
+          <li>อย่าให้ Blacksmith กลายเป็น Reviewer หลัก</li>
+          <li>อย่าให้ Crusader กลายเป็นแค่ตัวละครตกแต่ง</li>
+          <li>อย่าให้ High Priest ไปอยู่บท monetization</li>
+          <li>อย่าให้ Pip ถูกซ่อนจนไม่เห็นในภาพหลัก</li>
+          <li>อย่า redraw หรือ redesign ตัวละครใหม่จาก character sheet</li>
+          <li>อย่าใช้ภาพ group generation ที่ทำให้ character continuity หลุด</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note">
+      กฎใหญ่ที่สุด: Composition เปลี่ยนได้ตาม scene แต่ “หน้าที่ของ Role” ห้ามหลุด
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Quick Prompt Guard for Codex / Claude / Artist</h2>
+    <div class="card">
+      <p>
+        When creating any PIP Development Guild visual, preserve role integrity:
+        Guild Master is Codex Lead, High Priest is Product Bible Guardian, Novice Pip is Documentation Mascot,
+        Sage is Design Auditor, Blacksmith is Flutter Builder, Crusader is Security, Knight is Mini Game,
+        Assassin Cross is QA/Tester, Sniper is Practice Mode, Professor is Reviewer, and Gunslinger is Reward/VIP.
+        Do not redraw or redesign approved characters.
+      </p>
+    </div>
+  </section>
+</div>
+</body>
+</html>

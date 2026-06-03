@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PIP Development Guild - Archive Index</title>
+<style>
+  :root {
+    --paper:#f6efe5;
+    --paper-2:#fffaf2;
+    --ink:#2f241d;
+    --muted:#6f5a4f;
+    --line:#d8c7b3;
+    --shadow:0 18px 44px rgba(56, 40, 24, .12);
+    --lead:#315b8f;
+  }
+  * { box-sizing:border-box; }
+  html, body { margin:0; min-height:100%; }
+  body {
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 8% 0%, rgba(81, 124, 74, .11), transparent 25%),
+      radial-gradient(circle at 92% 14%, rgba(49, 91, 143, .12), transparent 23%),
+      linear-gradient(180deg, #fbf5ee 0%, #f1e4d5 100%);
+  }
+  .wrap {
+    width:min(1480px, calc(100vw - 32px));
+    margin:0 auto;
+    padding:28px 0 34px;
+  }
+  .hero, .section {
+    background:rgba(255,250,244,.95);
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+  }
+  .hero {
+    border-radius:30px;
+    padding:30px;
+    margin-bottom:18px;
+  }
+  .eyebrow {
+    display:inline-flex;
+    padding:8px 12px;
+    border-radius:999px;
+    background:#edf4ff;
+    border:1px solid #c9d8ef;
+    color:#2d568f;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  h1 {
+    margin:14px 0 8px;
+    font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif;
+    font-size:44px;
+    line-height:1;
+    letter-spacing:-.05em;
+  }
+  h2 {
+    margin:0 0 12px;
+    font-size:24px;
+    letter-spacing:-.03em;
+  }
+  p {
+    margin:0;
+    color:var(--muted);
+    line-height:1.58;
+  }
+  .section {
+    border-radius:26px;
+    padding:18px;
+    margin-bottom:18px;
+  }
+  table {
+    width:100%;
+    border-collapse:collapse;
+    border-radius:18px;
+    overflow:hidden;
+    background:#fffaf4;
+    border:1px solid #e7d7c9;
+  }
+  th, td {
+    padding:12px;
+    border-bottom:1px solid #ead8c8;
+    text-align:left;
+    vertical-align:top;
+    font-size:13px;
+  }
+  th {
+    background:#efe1cf;
+    color:#4c382c;
+    font-size:12px;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+  }
+  tr:last-child td { border-bottom:none; }
+  code, .file {
+    display:inline-block;
+    max-width:100%;
+    padding:3px 7px;
+    border-radius:8px;
+    background:#f2e6da;
+    border:1px solid #e1cfbd;
+    color:#5b3e32;
+    word-break:break-word;
+  }
+  .ok {
+    padding:14px 16px;
+    border-radius:18px;
+    border:1px solid #cfe1bf;
+    background:#eef8e7;
+    color:#3f6532;
+    font-weight:800;
+  }
+  a { color:var(--lead); font-weight:800; }
+  @media (max-width:760px) {
+    .wrap { width:min(100% - 22px, 1480px); padding-top:14px; }
+    h1 { font-size:34px; }
+    table { display:block; overflow-x:auto; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <span class="eyebrow">Safe Archive</span>
+    <h1>PIP Development Guild Archive Index</h1>
+    <p>Old drafts and superseded outputs are stored here for traceability. Current canon files remain active outside the archive and should be used for future work.</p>
+  </section>
+
+  <section class="section">
+    <h2>Active Canon Confirmation</h2>
+    <p class="ok">Canon remains active: <code>poster/01_guild_hall_composite_v11.png</code>, <code>poster/01_guild_hall_composite_v11_labeled.png</code>, <code>index_sheet/01_agent_index_sheet_v2.html</code>, <code>index_sheet/01_agent_index_sheet_v2.png</code>, and <code>index_sheet/01_agent_index_sheet_v2_labeled.png</code>.</p>
+  </section>
+
+  <section class="section">
+    <h2>Archived Files</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Original Path</th>
+          <th>Archive Path</th>
+          <th>Reason</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><code>index_sheet/01_agent_index_sheet_v1.html</code></td><td><a href="old_index_sheets/01_agent_index_sheet_v1.html">old_index_sheets/01_agent_index_sheet_v1.html</a></td><td>Superseded by v2 Index Sheet HTML.</td></tr>
+        <tr><td><code>index_sheet/01_agent_index_sheet_v1.png</code></td><td><a href="old_index_sheets/01_agent_index_sheet_v1.png">old_index_sheets/01_agent_index_sheet_v1.png</a></td><td>Superseded by v2 clean Index Sheet export.</td></tr>
+        <tr><td><code>index_sheet/01_agent_index_sheet_v1_labeled.png</code></td><td><a href="old_index_sheets/01_agent_index_sheet_v1_labeled.png">old_index_sheets/01_agent_index_sheet_v1_labeled.png</a></td><td>Superseded by v2 labeled Index Sheet export.</td></tr>
+        <tr><td><code>/private/tmp/guild_hall_composite_v1.html</code></td><td><a href="old_html_drafts/guild_hall_composite_v1.html">old_html_drafts/guild_hall_composite_v1.html</a></td><td>Old temporary Guild Hall draft.</td></tr>
+        <tr><td><code>/private/tmp/guild_hall_composite_v1_labeled.html</code></td><td><a href="old_html_drafts/guild_hall_composite_v1_labeled.html">old_html_drafts/guild_hall_composite_v1_labeled.html</a></td><td>Old temporary Guild Hall labeled draft.</td></tr>
+        <tr><td><code>/private/tmp/guild_hall_composite_v2.html</code></td><td><a href="old_html_drafts/guild_hall_composite_v2.html">old_html_drafts/guild_hall_composite_v2.html</a></td><td>Old temporary Guild Hall draft.</td></tr>
+        <tr><td><code>/private/tmp/guild_hall_composite_v2_labeled.html</code></td><td><a href="old_html_drafts/guild_hall_composite_v2_labeled.html">old_html_drafts/guild_hall_composite_v2_labeled.html</a></td><td>Old temporary Guild Hall labeled draft.</td></tr>
+        <tr><td><code>/private/tmp/guild_hall_composite_v3.html</code></td><td><a href="old_html_drafts/guild_hall_composite_v3.html">old_html_drafts/guild_hall_composite_v3.html</a></td><td>Old temporary Guild Hall draft.</td></tr>
+        <tr><td><code>/private/tmp/guild_hall_composite_v3_labeled.html</code></td><td><a href="old_html_drafts/guild_hall_composite_v3_labeled.html">old_html_drafts/guild_hall_composite_v3_labeled.html</a></td><td>Old temporary Guild Hall labeled draft.</td></tr>
+        <tr><td><code>/private/tmp/guild_hall_composite_v4.html</code></td><td><a href="old_html_drafts/guild_hall_composite_v4.html">old_html_drafts/guild_hall_composite_v4.html</a></td><td>Old temporary Guild Hall draft.</td></tr>
+        <tr><td><code>/private/tmp/guild_hall_composite_v4_labeled.html</code></td><td><a href="old_html_drafts/guild_hall_composite_v4_labeled.html">old_html_drafts/guild_hall_composite_v4_labeled.html</a></td><td>Old temporary Guild Hall labeled draft.</td></tr>
+        <tr><td><code>/private/tmp/guild_hall_composite_v5.html</code></td><td><a href="old_html_drafts/guild_hall_composite_v5.html">old_html_drafts/guild_hall_composite_v5.html</a></td><td>Old temporary Guild Hall draft.</td></tr>
+        <tr><td><code>/private/tmp/guild_hall_composite_v5_labeled.html</code></td><td><a href="old_html_drafts/guild_hall_composite_v5_labeled.html">old_html_drafts/guild_hall_composite_v5_labeled.html</a></td><td>Old temporary Guild Hall labeled draft.</td></tr>
+        <tr><td><code>/private/tmp/guild_hall_composite_v6.html</code></td><td><a href="old_html_drafts/guild_hall_composite_v6.html">old_html_drafts/guild_hall_composite_v6.html</a></td><td>Old temporary Guild Hall draft.</td></tr>
+        <tr><td><code>/private/tmp/guild_hall_composite_v6_labeled.html</code></td><td><a href="old_html_drafts/guild_hall_composite_v6_labeled.html">old_html_drafts/guild_hall_composite_v6_labeled.html</a></td><td>Old temporary Guild Hall labeled draft.</td></tr>
+        <tr><td><code>/private/tmp/guild_hall_composite_v7.html</code></td><td><a href="old_html_drafts/guild_hall_composite_v7.html">old_html_drafts/guild_hall_composite_v7.html</a></td><td>Old temporary Guild Hall draft.</td></tr>
+        <tr><td><code>/private/tmp/guild_hall_composite_v7_labeled.html</code></td><td><a href="old_html_drafts/guild_hall_composite_v7_labeled.html">old_html_drafts/guild_hall_composite_v7_labeled.html</a></td><td>Old temporary Guild Hall labeled draft.</td></tr>
+        <tr><td><code>/private/tmp/guild_hall_composite_v8.html</code></td><td><a href="old_html_drafts/guild_hall_composite_v8.html">old_html_drafts/guild_hall_composite_v8.html</a></td><td>Old temporary Guild Hall draft.</td></tr>
+        <tr><td><code>/private/tmp/guild_hall_composite_v8_labeled.html</code></td><td><a href="old_html_drafts/guild_hall_composite_v8_labeled.html">old_html_drafts/guild_hall_composite_v8_labeled.html</a></td><td>Old temporary Guild Hall labeled draft.</td></tr>
+        <tr><td><code>/private/tmp/guild_hall_composite_v9.html</code></td><td><a href="old_html_drafts/guild_hall_composite_v9.html">old_html_drafts/guild_hall_composite_v9.html</a></td><td>Old temporary Guild Hall draft.</td></tr>
+        <tr><td><code>/private/tmp/guild_hall_composite_v9_labeled.html</code></td><td><a href="old_html_drafts/guild_hall_composite_v9_labeled.html">old_html_drafts/guild_hall_composite_v9_labeled.html</a></td><td>Old temporary Guild Hall labeled draft.</td></tr>
+        <tr><td><code>/private/tmp/guild_hall_composite_v10_labeled.html</code></td><td><a href="old_html_drafts/guild_hall_composite_v10_labeled.html">old_html_drafts/guild_hall_composite_v10_labeled.html</a></td><td>Old temporary Guild Hall labeled draft superseded by v11 labeled canon.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <h2>Empty Archive Categories</h2>
+    <p>No old composite PNGs were present to move into <code>old_composites/</code>. No temporary export PNGs were present to move into <code>temp_exports/</code>.</p>
+  </section>
+</div>
+</body>
+</html>
