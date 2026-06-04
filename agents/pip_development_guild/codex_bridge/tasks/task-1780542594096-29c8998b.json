@@ -1,0 +1,15 @@
+{
+  "id": "task-1780542594096-29c8998b",
+  "agentId": "01",
+  "agentName": "01 หัวหน้ากิลด์",
+  "taskType": "วางแผนงาน",
+  "taskDetails": "Create a sequential plan for this goal: วางแผนการทำ Mini Game ใหม่ตาม Claude design",
+  "status": "running",
+  "createdAt": "2026-06-04T03:09:54.108Z",
+  "startedAt": "2026-06-04T03:09:54.110Z",
+  "completedAt": null,
+  "exitCode": null,
+  "error": null,
+  "result": "",
+  "logFile": "task-1780542594096-29c8998b.log"
+}

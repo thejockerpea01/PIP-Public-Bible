@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Codex Bridge สำหรับ PIP Agent Dashboard</title>
+<style>
+  :root {
+    --paper:#fffaf2;
+    --ink:#2f251f;
+    --muted:#69594c;
+    --line:#dfcbb3;
+    --gold:#c99036;
+    --green:#577848;
+    --red:#9d4636;
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0;
+    min-height:100vh;
+    padding:30px;
+    color:var(--ink);
+    background:linear-gradient(180deg, #fbf4e9, #efe1cd);
+    font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    line-height:1.65;
+  }
+  main {
+    width:min(920px, 100%);
+    margin:0 auto;
+  }
+  section {
+    margin:0 0 16px;
+    padding:22px;
+    border:1px solid var(--line);
+    border-radius:18px;
+    background:rgba(255, 250, 242, .96);
+  }
+  h1, h2 { margin:0 0 10px; line-height:1.12; }
+  h1 { font-size:36px; letter-spacing:-.04em; }
+  h2 { color:#6f4728; font-size:22px; }
+  p { margin:0 0 10px; color:var(--muted); }
+  ul { margin:8px 0 0; padding-left:22px; color:var(--muted); }
+  li { margin:6px 0; }
+  code, pre {
+    border:1px solid #e4d1b9;
+    border-radius:10px;
+    background:#f4e6d5;
+    color:#563820;
+    font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+  code { padding:2px 6px; }
+  pre {
+    overflow:auto;
+    padding:14px;
+    white-space:pre-wrap;
+  }
+  .ok { border-left:5px solid var(--green); }
+  .warn { border-left:5px solid var(--red); }
+</style>
+</head>
+<body>
+<main>
+  <section>
+    <h1>Codex Bridge สำหรับ PIP Agent Dashboard</h1>
+    <p>Codex Bridge เป็นเซิร์ฟเวอร์ Node.js แบบ local-only ที่รับงานจาก <code>agent_dashboard.html</code> แล้วสั่ง <code>codex exec</code> ในเครื่องนี้เท่านั้น</p>
+    <p>เส้นทางการทำงานคือ Dashboard ส่ง JSON ไปที่ bridge จากนั้น bridge สร้างคำสั่ง Codex เอง จัดคิวงาน เก็บ log และรายงานสถานะกลับไปที่หน้า dashboard</p>
+  </section>
+
+  <section class="ok">
+    <h2>วิธีเริ่มใช้งาน</h2>
+    <pre>cd /Users/Pae/Developer/PIP/PIP-Public-Bible/agents/pip_development_guild/codex_bridge
+node codex_bridge.js</pre>
+    <p>เมื่อเริ่มสำเร็จ bridge จะฟังที่ <code>http://127.0.0.1:8787</code></p>
+  </section>
+
+  <section>
+    <h2>วิธีหยุด</h2>
+    <p>กลับไปที่ terminal ที่รัน bridge แล้วกด <code>Control+C</code></p>
+  </section>
+
+  <section>
+    <h2>Endpoint หลัก</h2>
+    <ul>
+      <li><code>GET /health</code> ตรวจว่า bridge พร้อมใช้งานหรือไม่</li>
+      <li><code>POST /tasks</code> ส่งงานแบบ structured payload จาก dashboard</li>
+      <li><code>GET /tasks</code> ดูรายการงานทั้งหมดในหน่วยความจำของ bridge รอบนี้</li>
+      <li><code>GET /tasks/:id</code> ดูสถานะงานเดียว</li>
+    </ul>
+  </section>
+
+  <section class="warn">
+    <h2>กฎความปลอดภัย</h2>
+    <ul>
+      <li>ระบบนี้เป็น local-only เท่านั้น</li>
+      <li>ห้าม expose port <code>8787</code> ขึ้น internet</li>
+      <li>ห้ามรันด้วย <code>danger-full-access</code></li>
+      <li>bridge ไม่รับ shell command จาก browser และไม่ให้ browser เปลี่ยน working directory</li>
+      <li>working directory ถูกล็อกไว้ที่ <code>/Users/Pae/Developer/PIP/PIP-Public-Bible</code></li>
+      <li>ควร commit ก่อนรันงานใหญ่</li>
+      <li>หลัง Codex รันเสร็จ ให้ตรวจ <code>git diff</code> ทุกครั้ง</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Logs และ Tasks</h2>
+    <p>ไฟล์ log ของแต่ละงานจะอยู่ใน <code>logs/</code> และสถานะงานจะถูกบันทึกใน <code>tasks/</code></p>
+    <p>bridge รันงานทีละหนึ่งงานเท่านั้น งานใหม่จะเข้าคิวและรอจนกว่างานก่อนหน้าจะจบ</p>
+  </section>
+
+  <section>
+    <h2>Troubleshooting</h2>
+    <ul>
+      <li>ถ้า dashboard แสดงว่ายังไม่ได้เปิด Codex Bridge ให้ตรวจว่า terminal ยังรัน <code>node codex_bridge.js</code> อยู่</li>
+      <li>ถ้า task เป็น <code>failed</code> ให้เปิดไฟล์ log ใน <code>logs/</code></li>
+      <li>ถ้า Codex start ไม่ได้ ให้ตรวจว่า <code>codex</code> CLI อยู่ใน PATH ของ terminal ที่รัน bridge</li>
+      <li>ถ้า port ถูกใช้อยู่ ให้ปิด process เดิมก่อน เพราะ bridge นี้ตั้งใจใช้ port <code>8787</code> เท่านั้น</li>
+    </ul>
+  </section>
+</main>
+</body>
+</html>

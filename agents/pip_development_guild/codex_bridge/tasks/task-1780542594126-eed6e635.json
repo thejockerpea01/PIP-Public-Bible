@@ -1,0 +1,15 @@
+{
+  "id": "task-1780542594126-eed6e635",
+  "agentId": "08",
+  "agentName": "08 แอสซาซินครอส",
+  "taskType": "ทำ QA Checklist",
+  "taskDetails": "Create and run a focused QA checklist for the completed work: วางแผนการทำ Mini Game ใหม่ตาม Claude design",
+  "status": "queued",
+  "createdAt": "2026-06-04T03:09:54.126Z",
+  "startedAt": null,
+  "completedAt": null,
+  "exitCode": null,
+  "error": null,
+  "result": "",
+  "logFile": "task-1780542594126-eed6e635.log"
+}

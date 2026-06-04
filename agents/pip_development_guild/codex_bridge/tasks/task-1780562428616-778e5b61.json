@@ -1,0 +1,15 @@
+{
+  "id": "task-1780562428616-778e5b61",
+  "agentId": "03",
+  "agentName": "โนวิซ (Pip)",
+  "taskType": "สรุปงาน",
+  "taskDetails": "ตรวจสอบว่า stdin ถูกปิดแล้ว",
+  "status": "queued",
+  "createdAt": "2026-06-04T08:40:28.617Z",
+  "startedAt": null,
+  "completedAt": null,
+  "exitCode": null,
+  "error": null,
+  "result": "",
+  "logFile": "task-1780562428616-778e5b61.log"
+}

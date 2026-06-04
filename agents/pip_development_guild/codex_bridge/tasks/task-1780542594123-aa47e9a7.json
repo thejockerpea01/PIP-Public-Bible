@@ -1,0 +1,15 @@
+{
+  "id": "task-1780542594123-aa47e9a7",
+  "agentId": "04",
+  "agentName": "04 เซจ",
+  "taskType": "ตรวจ Design System",
+  "taskDetails": "Check UI/design constraints and approved visual canon related to this goal: วางแผนการทำ Mini Game ใหม่ตาม Claude design",
+  "status": "queued",
+  "createdAt": "2026-06-04T03:09:54.123Z",
+  "startedAt": null,
+  "completedAt": null,
+  "exitCode": null,
+  "error": null,
+  "result": "",
+  "logFile": "task-1780542594123-aa47e9a7.log"
+}

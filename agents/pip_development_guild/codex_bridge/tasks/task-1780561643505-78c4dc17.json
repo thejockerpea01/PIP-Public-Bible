@@ -1,0 +1,15 @@
+{
+  "id": "task-1780561643505-78c4dc17",
+  "agentId": "03",
+  "agentName": "โนวิซ (พิป)",
+  "taskType": "สรุปงาน",
+  "taskDetails": "Inspection only. Read README.html and AGENTS.html. Report whether they exist. Do not modify files.",
+  "status": "running",
+  "createdAt": "2026-06-04T08:27:23.505Z",
+  "startedAt": "2026-06-04T08:27:23.507Z",
+  "completedAt": null,
+  "exitCode": null,
+  "error": null,
+  "result": "",
+  "logFile": "task-1780561643505-78c4dc17.log"
+}

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PIP Public Bible — Agent Instructions</title>
+<style>
+:root {
+  --bg:#f7efe4; --paper:#fffaf2; --ink:#2f251f; --muted:#745f50;
+  --line:#dfcbb3; --gold:#c99036; --brown:#6f4728; --green:#5f7f4c;
+  --shadow:rgba(73,48,26,.14);
+}
+* { box-sizing:border-box; }
+body {
+  margin:0; min-height:100vh; padding:32px;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at top left,rgba(201,144,54,.20),transparent 28%),
+    radial-gradient(circle at top right,rgba(95,127,76,.18),transparent 32%),
+    linear-gradient(180deg,#fbf4e9 0%,#efe1cd 100%);
+  line-height:1.65;
+}
+.wrap { max-width:960px; margin:0 auto; }
+.hero {
+  padding:32px; border:1px solid var(--line); border-radius:28px;
+  background:linear-gradient(135deg,rgba(255,250,242,.96),rgba(255,244,228,.92));
+  box-shadow:0 18px 38px var(--shadow); margin-bottom:22px;
+}
+.eyebrow {
+  display:inline-flex; padding:7px 11px; border-radius:999px; background:#fff1d6;
+  border:1px solid #ead19a; color:#754d16; font-size:13px; font-weight:800; margin-bottom:14px;
+}
+h1 { margin:0; font-size:clamp(32px,5vw,52px); letter-spacing:-.055em; line-height:1; }
+.lead { margin:14px 0 0; max-width:760px; font-size:17px; color:var(--muted); }
+.card {
+  padding:28px; border:1px solid var(--line); border-radius:24px;
+  background:rgba(255,250,242,.94); box-shadow:0 12px 28px rgba(73,48,26,.08);
+}
+h2 { margin:0 0 14px; font-size:26px; letter-spacing:-.03em; color:var(--brown); }
+p { color:var(--muted); margin:10px 0; }
+ul { margin:14px 0 0; padding-left:24px; color:var(--muted); }
+li { margin:8px 0; }
+code {
+  padding:2px 7px; border-radius:7px; background:#f3e5d4; border:1px solid #e1cbb3;
+  color:#5f3c24; font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+  font-size:.92em;
+}
+.notice {
+  margin-top:18px; padding:16px; border-radius:16px; background:#eff8ea;
+  border-left:5px solid var(--green); color:#415e36;
+}
+.footer { margin-top:18px; color:var(--muted); font-size:13px; text-align:center; }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <section class="hero">
+    <div class="eyebrow">AGENTS.html</div>
+    <h1>PIP Public Bible — Agent Instructions</h1>
+    <p class="lead">
+      HTML version of the repository agent instructions. Use this as a readable entry page for AI/Codex guidance, while keeping AGENTS.md if a tool specifically expects Markdown.
+    </p>
+  </section>
+  <section class="card">
+    <h2>UI/UX Skill</h2>
+<p>Before creating, reviewing, or modifying UI/UX, use the installed UI UX Pro Max skill as design reasoning support.</p>
+<p>Also read:</p>
+<ul>
+<li><code>agents/pip_development_guild/skills/visual_agent_team_skill.html</code></li>
+<li><code>product_bible/</code></li>
+</ul>
+    <h2 style="margin-top:24px;">External UI/UX Skills</h2>
+<p>Before frontend/UI polish, review <code>skills_external/taste_skill/README.html</code>.</p>
+<ul>
+<li>Use Taste Skill as design reasoning support only.</li>
+<li>Do not let it override <code>product_bible/</code> or approved UI canon.</li>
+</ul>
+    <div class="notice">
+      <strong>Note:</strong> This HTML file was generated from the uploaded <code>AGENTS.md</code>. Keep the original Markdown if Codex or another tool requires <code>AGENTS.md</code> specifically.
+    </div>
+  </section>
+  <div class="footer">Generated as AGENTS.html</div>
+</main>
+</body>
+</html>

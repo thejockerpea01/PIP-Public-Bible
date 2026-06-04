@@ -182,7 +182,7 @@
     bottom:24px;
     z-index:120;
     width:min(880px, calc(100vw - 28px));
-    max-height:min(54vh, 540px);
+    height:min(54vh, 540px);
     transform:translateX(-50%);
     border:2px solid rgba(239, 198, 106, .88);
     border-radius:18px;
@@ -191,6 +191,9 @@
       var(--window);
     box-shadow:var(--shadow), inset 0 0 0 1px rgba(255,255,255,.08);
     overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    min-height:0;
     opacity:0;
     pointer-events:none;
     transition:opacity .16s ease, transform .16s ease;
@@ -200,7 +203,7 @@
     top:18px;
     bottom:18px;
     width:min(50vw, 820px);
-    max-height:calc(100vh - 36px);
+    height:calc(100vh - 36px);
     transform:translateX(-10px);
   }
   .dialogue.open {
@@ -220,6 +223,7 @@
     pointer-events:none;
   }
   .dialogue-head {
+    flex:0 0 auto;
     display:flex;
     align-items:flex-start;
     justify-content:space-between;
@@ -321,13 +325,16 @@
     background:rgba(255,255,255,.08);
   }
   .dialogue-body {
-    padding:15px 18px 24px;
-    overflow:auto;
-    max-height:calc(min(54vh, 540px) - 92px);
+    flex:1 1 auto;
+    min-height:0;
+    padding:15px 18px 40px;
+    overflow-y:auto;
+    overflow-x:hidden;
+    overscroll-behavior:contain;
+    scrollbar-gutter:stable;
   }
   .dialogue.expanded .dialogue-body {
-    max-height:calc(100vh - 132px);
-    padding-bottom:30px;
+    padding-bottom:48px;
   }
   .dialogue-panel[hidden] {
     display:none;
@@ -337,6 +344,7 @@
     grid-template-columns:minmax(0, 1fr) minmax(0, 1fr);
     gap:14px;
     align-items:start;
+    min-height:0;
   }
   .workflow-grid > * {
     min-height:auto;
@@ -350,6 +358,36 @@
   .role-notes {
     margin:0;
     overflow-wrap:anywhere;
+    min-height:0;
+  }
+  .workflow-steps {
+    display:grid;
+    gap:10px;
+    min-height:0;
+  }
+  .workflow-step {
+    border:1px solid rgba(255, 226, 165, .20);
+    border-radius:14px;
+    background:rgba(247, 234, 212, .06);
+    padding:12px;
+  }
+  .workflow-step h3 {
+    margin:0 0 6px;
+    color:#fff4cf;
+    font-size:13px;
+    line-height:1.25;
+  }
+  .workflow-step p {
+    margin:0;
+    color:#f0dcc4;
+    line-height:1.5;
+    font-size:13px;
+  }
+  .workflow-step .step-caption {
+    margin-top:6px;
+    color:#d9c4a8;
+    font-size:12px;
+    line-height:1.45;
   }
   .speech p {
     margin:0;
@@ -558,6 +596,325 @@
     margin:0 0 5px;
     overflow-wrap:anywhere;
   }
+  .launcher-intro {
+    margin:0 0 12px;
+    color:#f3ddc1;
+    line-height:1.5;
+    font-size:13px;
+    font-weight:800;
+  }
+  .preset-list {
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:7px;
+    margin:8px 0 0;
+  }
+  .preset-button {
+    min-height:36px;
+    border:1px solid rgba(255, 226, 165, .26);
+    border-radius:10px;
+    padding:8px 10px;
+    color:#fff8e8;
+    background:rgba(255,255,255,.05);
+    cursor:pointer;
+    font-size:12px;
+    font-weight:900;
+    text-align:left;
+  }
+  .preset-button:hover,
+  .preset-button:focus-visible {
+    outline:none;
+    border-color:rgba(255, 226, 165, .82);
+    background:rgba(255, 232, 177, .12);
+  }
+  .preset-button.active {
+    border-color:rgba(240, 198, 107, .95);
+    background:rgba(240, 198, 107, .20);
+    color:#fff4cf;
+  }
+  .task-input {
+    width:100%;
+    min-height:96px;
+    border:1px solid rgba(255, 226, 165, .26);
+    border-radius:12px;
+    padding:11px 12px;
+    resize:vertical;
+    color:#fff3d9;
+    background:rgba(0,0,0,.22);
+    font:13px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    overflow:auto;
+    user-select:text;
+  }
+  .task-input::placeholder {
+    color:rgba(240, 220, 196, .62);
+  }
+  .task-input:focus {
+    outline:none;
+    border-color:rgba(255, 226, 165, .82);
+    box-shadow:0 0 0 3px rgba(240, 198, 107, .13);
+  }
+  .generate-button {
+    width:100%;
+    min-height:40px;
+    border:1px solid rgba(240, 198, 107, .62);
+    border-radius:12px;
+    padding:10px 12px;
+    color:#20170d;
+    background:linear-gradient(180deg, #ffe5a3, #dba64c);
+    cursor:pointer;
+    font-size:13px;
+    font-weight:1000;
+    box-shadow:0 10px 18px rgba(0,0,0,.20);
+  }
+  .generate-button:hover,
+  .generate-button:focus-visible {
+    outline:none;
+    border-color:#fff1bf;
+    filter:brightness(1.04);
+  }
+  .launcher-state {
+    min-height:18px;
+    margin-top:8px;
+    color:var(--gold-soft);
+    font-size:12px;
+    font-weight:900;
+  }
+  .launcher-state.warning {
+    color:#ffd2b8;
+  }
+  .bridge-state {
+    min-height:18px;
+    margin-top:8px;
+    color:var(--gold-soft);
+    font-size:12px;
+    font-weight:900;
+  }
+  .bridge-state.offline {
+    color:#ffd2b8;
+  }
+  .prompt-box:placeholder-shown {
+    color:#f0dcc4;
+    font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  }
+  .generate-button:disabled,
+  .choice-button:disabled {
+    cursor:not-allowed;
+    opacity:.48;
+    filter:saturate(.7);
+  }
+  .generate-button:disabled:hover,
+  .choice-button:disabled:hover {
+    border-color:rgba(240, 198, 107, .62);
+    filter:saturate(.7);
+  }
+  .copy-icon:disabled {
+    cursor:not-allowed;
+    opacity:.45;
+  }
+  .copy-icon:disabled:hover {
+    border-color:rgba(255, 226, 165, .34);
+    background:rgba(0,0,0,.18);
+  }
+  .bridge-state {
+    margin-top:8px;
+    color:#f0dcc4;
+    font-size:12px;
+    font-weight:900;
+  }
+  .bridge-state.offline {
+    color:#ffd2b8;
+  }
+  .bridge-state.ready {
+    color:#b8efb1;
+  }
+  .command-panel {
+    position:fixed;
+    top:14px;
+    right:14px;
+    z-index:110;
+    width:min(360px, calc(100vw - 28px));
+    max-height:calc(100vh - 28px);
+    border:1px solid rgba(239, 198, 106, .54);
+    border-radius:16px;
+    background:rgba(18, 24, 32, .84);
+    box-shadow:0 18px 42px rgba(0,0,0,.38), inset 0 0 0 1px rgba(255,255,255,.06);
+    backdrop-filter:blur(8px);
+    overflow:hidden;
+    transition:transform .18s ease;
+    pointer-events:none;
+  }
+  .command-panel.collapsed {
+    transform:translateX(100%);
+  }
+  .command-panel > * {
+    pointer-events:auto;
+  }
+  .command-head {
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:10px;
+    padding:12px 12px 9px;
+    border-bottom:1px solid rgba(239, 198, 106, .22);
+  }
+  .command-title {
+    margin:0;
+    color:#fff8e8;
+    font-size:15px;
+    line-height:1.2;
+    font-weight:1000;
+  }
+  .command-mode {
+    margin:4px 0 0;
+    color:var(--gold-soft);
+    font-size:11px;
+    line-height:1.35;
+    font-weight:900;
+  }
+  .panel-toggle {
+    width:32px;
+    height:32px;
+    flex:0 0 auto;
+    border:1px solid rgba(255, 226, 165, .36);
+    border-radius:9px;
+  }
+  .command-panel-tab {
+    position:fixed;
+    top:14px;
+    right:0;
+    z-index:111;
+    display:none;
+    align-items:center;
+    gap:7px;
+    min-height:42px;
+    padding:8px 12px 8px 11px;
+    border:1px solid rgba(239, 198, 106, .54);
+    border-right:0;
+    border-radius:12px 0 0 12px;
+    background:rgba(18, 24, 32, .92);
+    color:#fff8e8;
+    box-shadow:0 18px 42px rgba(0,0,0,.30), inset 0 0 0 1px rgba(255,255,255,.04);
+    backdrop-filter:blur(8px);
+    cursor:pointer;
+    pointer-events:auto;
+    font-size:12px;
+    font-weight:1000;
+  }
+  .command-panel-tab .icon {
+    width:18px;
+    height:18px;
+  }
+  .command-panel-tab:hover,
+  .command-panel-tab:focus-visible {
+    outline:none;
+    border-color:rgba(255, 226, 165, .90);
+    background:rgba(255,255,255,.10);
+  }
+  .command-panel.is-collapsed + .command-panel-tab {
+    display:inline-flex;
+  }
+  .command-body {
+    display:grid;
+    gap:10px;
+    max-height:calc(100vh - 94px);
+    padding:11px 12px 14px;
+    overflow:auto;
+  }
+  .command-section {
+    border:1px solid rgba(255, 226, 165, .16);
+    border-radius:12px;
+    padding:10px;
+    background:rgba(247, 234, 212, .06);
+  }
+  .command-section h2 {
+    margin:0 0 7px;
+    color:#fff4cf;
+    font-size:12px;
+    line-height:1.25;
+  }
+  .command-empty,
+  .command-item {
+    margin:0;
+    color:#f0dcc4;
+    font-size:12px;
+    line-height:1.42;
+  }
+  .command-item + .command-item {
+    margin-top:6px;
+    padding-top:6px;
+    border-top:1px solid rgba(255,255,255,.08);
+  }
+  .command-item strong {
+    color:#fff8e8;
+  }
+  .queue-controls {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+  }
+  .queue-button {
+    min-height:34px;
+    border:1px solid rgba(255, 226, 165, .32);
+    border-radius:10px;
+    padding:8px 9px;
+    color:#fff8e8;
+    background:rgba(255,255,255,.06);
+    cursor:pointer;
+    font-size:12px;
+    font-weight:900;
+  }
+  .queue-button:hover,
+  .queue-button:focus-visible {
+    outline:none;
+    border-color:rgba(255, 226, 165, .90);
+    background:rgba(255, 232, 177, .12);
+  }
+  .status-table {
+    display:grid;
+    gap:6px;
+  }
+  .agent-status-row {
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    gap:8px;
+    align-items:start;
+    padding:7px;
+    border-radius:10px;
+    background:rgba(0,0,0,.16);
+  }
+  .agent-status-number {
+    color:var(--gold-soft);
+    font-size:11px;
+    font-weight:1000;
+  }
+  .agent-status-name {
+    margin:0;
+    color:#fff8e8;
+    font-size:12px;
+    font-weight:1000;
+    line-height:1.2;
+  }
+  .agent-status-role,
+  .agent-status-task {
+    margin:2px 0 0;
+    color:#d9c4a8;
+    font-size:11px;
+    line-height:1.3;
+  }
+  .status-pill {
+    padding:4px 6px;
+    border-radius:999px;
+    color:#111820;
+    background:#d7c6aa;
+    font-size:10px;
+    font-weight:1000;
+    white-space:nowrap;
+  }
+  .status-idle { background:#d7c6aa; }
+  .status-queued { background:#ffe2a1; }
+  .status-running { background:#9fd2ff; }
+  .status-completed { background:#aee3a3; }
+  .status-failed { background:#ffb19b; }
   @keyframes idleBreath {
     0%, 100% { transform:scale(1); }
     50% { transform:scale(var(--scale)); }
@@ -576,7 +933,7 @@
     .dialogue {
       bottom:10px;
       width:calc(100vw - 16px);
-      max-height:60vh;
+      height:60vh;
       border-radius:15px;
     }
     .dialogue.expanded {
@@ -584,19 +941,32 @@
       top:8px;
       bottom:8px;
       width:calc(100vw - 16px);
-      max-height:calc(100vh - 16px);
+      height:calc(100vh - 16px);
     }
     .dialogue-head { padding:14px 14px 9px; }
     .dialogue-title { font-size:22px; }
     .dialogue-body {
-      padding:12px 14px 20px;
-      max-height:calc(60vh - 90px);
-    }
-    .dialogue.expanded .dialogue-body {
-      max-height:calc(100vh - 122px);
+      padding:12px 14px 32px;
     }
     .workflow-grid {
       grid-template-columns:1fr;
+    }
+    .preset-list {
+      grid-template-columns:1fr;
+    }
+    .command-panel {
+      top:8px;
+      right:8px;
+      width:min(330px, calc(100vw - 16px));
+      max-height:44vh;
+    }
+    .command-panel.collapsed {
+      transform:translateX(100%);
+    }
+    .command-panel-tab {
+      top:8px;
+      min-height:40px;
+      padding:7px 11px 7px 10px;
     }
     .tip {
       bottom:14px;
@@ -651,6 +1021,45 @@
   <div class="vignette" aria-hidden="true"></div>
   <div class="tip" id="tip">คลิกตัวละครเพื่อพูดคุย</div>
 
+  <aside class="command-panel" id="commandPanel" aria-label="สถานะการทำงานของกิลด์">
+    <div class="command-head">
+      <div>
+        <h1 class="command-title">สถานะการทำงานของกิลด์</h1>
+        <p class="command-mode">คิว Codex Bridge ในเครื่อง</p>
+      </div>
+      <button class="panel-toggle icon-btn" type="button" id="toggleCommandPanel" title="ย่อหรือขยายแผงงาน" aria-label="ย่อหรือขยายแผงงาน">
+        <svg class="icon" aria-hidden="true"><use href="#icon-workflow"></use></svg>
+      </button>
+    </div>
+    <div class="command-body">
+      <div class="queue-controls">
+        <button class="queue-button" type="button" id="startNextTaskButton">รีเฟรชคิว</button>
+        <button class="queue-button" type="button" id="stopQueueButton">หยุดติดตามคิว</button>
+        <button class="queue-button" type="button" id="clearCompletedButton">ล้างงานที่เสร็จแล้ว</button>
+      </div>
+      <section class="command-section">
+        <h2>งานที่กำลังทำ</h2>
+        <div id="activeTaskView"></div>
+      </section>
+      <section class="command-section">
+        <h2>งานรอคิว</h2>
+        <div id="queuedTaskView"></div>
+      </section>
+      <section class="command-section">
+        <h2>งานเสร็จแล้วล่าสุด</h2>
+        <div id="completedTaskView"></div>
+      </section>
+      <section class="command-section">
+        <h2>สถานะเอเจนต์</h2>
+        <div class="status-table" id="agentStatusTable"></div>
+      </section>
+    </div>
+  </aside>
+  <button class="command-panel-tab" type="button" id="reopenCommandPanel" title="เปิดสถานะกิลด์" aria-label="เปิดสถานะกิลด์">
+    <svg class="icon" aria-hidden="true"><use href="#icon-workflow"></use></svg>
+    <span>สถานะกิลด์</span>
+  </button>
+
   <section class="dialogue" id="dialogue" aria-live="polite" aria-hidden="true">
     <div class="dialogue-head">
       <div>
@@ -672,73 +1081,48 @@
       </div>
     </div>
     <div class="dialogue-body">
-      <div class="dialogue-panel" id="menuPanel">
-        <p class="npc-greeting" id="agentGreeting"></p>
-        <div class="choice-list">
-          <button class="choice-button menu-choice" type="button" id="showRoleButton">ดูหน้าที่ของเอเจนต์นี้</button>
-          <button class="choice-button menu-choice" type="button" id="showWorkflowButton">สั่งงานเอเจนต์นี้</button>
-        </div>
-      </div>
-
-      <div class="dialogue-panel" id="rolePanel" hidden>
-        <button class="back-button" type="button" id="roleBackToMenuButton">
-          <svg class="icon" aria-hidden="true"><use href="#icon-back"></use></svg>
-          <span>ย้อนกลับ</span>
-        </button>
-        <h2 class="panel-title" id="roleDetailTitle"></h2>
-        <p class="panel-subtitle" id="roleDetailRole"></p>
-        <div class="simple-content">
-          <div class="simple-section">
-            <h3>รายละเอียดบทบาท</h3>
-            <p id="thaiText"></p>
-          </div>
-          <div class="simple-section">
-            <h3>หน้าที่หลัก</h3>
-            <p id="responsibility"></p>
-          </div>
-          <div class="simple-section">
-            <h3>แนวทางการใช้งาน</h3>
-            <p id="usage"></p>
-          </div>
-          <div class="simple-section">
-            <h3>ข้อควรทำ / ข้อไม่ควรทำ</h3>
-            <p id="rule"></p>
-          </div>
-        </div>
-      </div>
-
       <div class="dialogue-panel" id="workflowPanel" hidden>
-        <button class="back-button" type="button" id="workflowBackToMenuButton">
-          <svg class="icon" aria-hidden="true"><use href="#icon-back"></use></svg>
-          <span>ย้อนกลับ</span>
-        </button>
         <div class="workflow-grid">
-          <dl class="role-notes">
-            <div class="note-row">
-              <dt>ชื่อเวิร์กโฟลว์</dt>
-              <dd id="workflowPanelTitle"></dd>
-            </div>
-            <div class="note-row">
-              <dt>เอเจนต์ที่รับผิดชอบ</dt>
-              <dd id="workflowPanelRole"></dd>
-            </div>
-            <div class="note-row">
-              <dt>เหมาะสำหรับงานประเภทไหน</dt>
-              <dd><ul class="workflow-list" id="workflowUseFor"></ul></dd>
-            </div>
-            <div class="note-row">
-              <dt>รายการตรวจสอบก่อนสั่งงาน</dt>
-              <dd><ul class="workflow-list" id="workflowChecklist"></ul></dd>
-            </div>
-          </dl>
+          <div class="workflow-steps">
+            <section class="workflow-step">
+              <h3>Agent Command Center</h3>
+              <p id="workflowAgentContext"></p>
+              <div class="step-caption" id="workflowInstruction"></div>
+            </section>
+            <section class="workflow-step">
+              <h3>Step 1: เลือกประเภทงาน</h3>
+              <div class="preset-list" id="taskPresetList"></div>
+              <div class="step-caption" id="presetHint"></div>
+            </section>
+            <section class="workflow-step">
+              <h3>Step 2: เขียนรายละเอียดงาน</h3>
+              <textarea class="task-input" id="taskDetailInput" placeholder="พิมพ์สิ่งที่ต้องการให้เอเจนต์นี้ช่วย เช่น ตรวจ flow, แก้ bug, สรุปงาน, วางแผน implementation..."></textarea>
+              <div class="launcher-state" id="taskWarning" aria-live="polite"></div>
+            </section>
+            <section class="workflow-step">
+              <h3>Step 4: ส่งงาน</h3>
+              <div class="queue-controls" style="grid-template-columns:1fr;">
+                <button class="generate-button" type="button" id="sendAgentTaskButton">ส่งให้ Codex</button>
+                <button class="choice-button" type="button" id="addQueueButton" style="width:100%;justify-content:center;">เตรียม Prompt</button>
+                <button class="choice-button" type="button" id="queueTaskButton" style="width:100%;justify-content:center;">เพิ่มเข้าคิว</button>
+                <button class="choice-button" type="button" id="fullAutomateButton" style="width:100%;justify-content:center;" hidden>วางแผนอัตโนมัติ</button>
+              </div>
+              <div class="bridge-state offline" id="bridgeStatusText" aria-live="polite">ยังไม่ได้เปิด Codex Bridge</div>
+              <div class="step-caption" id="bridgeHint"></div>
+            </section>
+            <section class="workflow-step">
+              <h3>สถานะล่าสุด</h3>
+              <p class="step-caption" id="latestTaskSummary">ยังไม่มีงานล่าสุด</p>
+            </section>
+          </div>
           <div class="speech prompt-card">
             <div class="prompt-card-head">
-              <p class="prompt-card-title">แม่แบบคำสั่งภาษาอังกฤษสำหรับสั่งโค้เด็กซ์</p>
-              <button class="copy-icon icon-btn" type="button" id="copyPromptButton" title="คัดลอก Prompt" aria-label="คัดลอก Prompt">
+              <p class="prompt-card-title">Step 3: ตรวจคำสั่งที่จะส่ง</p>
+              <button class="copy-icon icon-btn" type="button" id="copyPromptButton" title="Copy Prompt" aria-label="Copy Prompt">
                 <svg class="icon" aria-hidden="true"><use href="#icon-copy"></use></svg>
               </button>
             </div>
-            <textarea class="prompt-box" id="workflowPrompt" readonly></textarea>
+            <textarea class="prompt-box" id="workflowPrompt" readonly placeholder="เลือกประเภทงานและเขียนรายละเอียดก่อน ระบบจะสร้างคำสั่งให้ที่นี่"></textarea>
             <div class="copy-state" id="copyState" aria-live="polite"></div>
           </div>
         </div>
@@ -897,6 +1281,18 @@ const agents = [
 const workflowTemplates = {
   "01": {
     name:"วางแผนงาน / คุมทิศทาง",
+    codexRole:"Guild Master / Codex Lead",
+    presets:["วางแผนงาน", "แตกงานเป็นขั้นตอน", "ตรวจลำดับการทำงาน", "สรุป Next Step"],
+    presetsEnglish:["Planning control", "Break work into steps", "Check work sequence", "Summarize next steps"],
+    presetHelp:[
+      "เหมาะสำหรับเริ่มงานใหญ่ แยกเป็นแผนที่ชัดเจนก่อนลงมือ",
+      "เหมาะสำหรับงานที่ต้องแตกเป็นขั้นตอนและวางลำดับก่อนทำ",
+      "ใช้เมื่ออยากตรวจว่าลำดับงานยังไม่ข้ามขั้น",
+      "ใช้เมื่ออยากสรุปทางเดินถัดไปให้ทีมตามต่อได้"
+    ],
+    presetHelpDefault:"เลือกงานที่ต้องการให้เอเจนต์ช่วยวางแผนและคุมทิศทาง",
+    readFirst:["README.html", "AGENTS.html", "product_bible/", "agents/pip_development_guild/README.html"],
+    expectedOutput:"Produce a safe implementation plan, ordered next steps, risks, and which files should be read or modified before any changes.",
     useFor:[
       "แตกงานใหญ่เป็นงานย่อย",
       "ตรวจลำดับการทำงาน",
@@ -912,6 +1308,18 @@ const workflowTemplates = {
   },
   "02": {
     name:"ตรวจคัมภีร์ผลิตภัณฑ์ / แหล่งความจริง",
+    codexRole:"High Priest / Product Bible Guardian",
+    presets:["ตรวจ Source of Truth", "ตรวจ Product Bible", "ตรวจกฎที่ขัดกัน", "ตรวจว่า logic หลุด canon ไหม"],
+    presetsEnglish:["Audit source of truth", "Audit Product Bible", "Check conflicting rules", "Check logic drift from canon"],
+    presetHelp:[
+      "ใช้ตรวจไฟล์แหล่งความจริงและ rule ที่ต้องยึด",
+      "ใช้ตรวจว่าเนื้อหายังตรงกับ Product Bible",
+      "ใช้เมื่อสงสัยว่ากฎหลายชุดขัดกัน",
+      "ใช้เช็กว่าตรรกะหลุดจาก canon หรือไม่"
+    ],
+    presetHelpDefault:"ใช้เพื่อเช็กความถูกต้องของกฎและแหล่งความจริง",
+    readFirst:["README.html", "AGENTS.html", "product_bible/", "agents/pip_development_guild/README.html"],
+    expectedOutput:"Report pass/fail against source-of-truth files, exact mismatches, unsafe assumptions, and any rule conflicts. Do not implement changes.",
     useFor:[
       "ตรวจว่าตรรกะหลุดคัมภีร์ไหม",
       "ตรวจว่าข้อมูลขัดกันไหม",
@@ -926,6 +1334,18 @@ const workflowTemplates = {
   },
   "03": {
     name:"สรุปงาน / ทำเอกสารส่งต่อ",
+    codexRole:"Novice (Pip) / Documentation Agent",
+    presets:["สรุปงาน", "ทำ Handoff", "ทำ Changelog", "สร้าง Prompt ส่งต่อ"],
+    presetsEnglish:["Summarize work", "Create handoff", "Create changelog", "Create follow-up prompt"],
+    presetHelp:[
+      "เหมาะกับการสรุปสถานะงานให้เข้าใจเร็ว",
+      "ใช้ทำเอกสารส่งต่อให้เอเจนต์หรือคนอื่น",
+      "ใช้บันทึกสิ่งที่เปลี่ยนแปลงอย่างเป็นระบบ",
+      "ใช้เตรียมข้อความส่งต่อสำหรับรอบถัดไป"
+    ],
+    presetHelpDefault:"งานนี้เหมาะกับการสรุปสถานะและส่งต่อให้เอเจนต์หรือ AI ตัวอื่น",
+    readFirst:["README.html", "AGENTS.html", "agents/pip_development_guild/README.html"],
+    expectedOutput:"Produce a concise handoff with completed work, changed files, approved decisions, open issues, next steps, and guardrails.",
     useFor:[
       "สรุปสิ่งที่ทำไปแล้ว",
       "ทำคำสั่งส่งต่อ",
@@ -940,6 +1360,18 @@ const workflowTemplates = {
   },
   "04": {
     name:"ตรวจระบบออกแบบ",
+    codexRole:"Sage / Design Auditor",
+    presets:["ตรวจ Design System", "ตรวจ UI Consistency", "ตรวจ Spacing / Typography", "ตรวจ Icon / Component"],
+    presetsEnglish:["Audit design system", "Audit UI consistency", "Audit spacing and typography", "Audit icons and components"],
+    presetHelp:[
+      "ใช้ตรวจมาตรฐานดีไซน์และ token ที่ใช้ร่วมกัน",
+      "ใช้ตรวจความกลมกลืนของหน้าจอและ component",
+      "ใช้เช็กระยะห่างและตัวอักษร",
+      "ใช้ตรวจไอคอน ปุ่ม และองค์ประกอบย่อย"
+    ],
+    presetHelpDefault:"ใช้ตรวจความสวยงาม ความสม่ำเสมอ และความถูกต้องของ UI",
+    readFirst:["README.html", "AGENTS.html", "agents/pip_development_guild/README.html", "agents/pip_development_guild/agent_dashboard.html", "skills_external/taste_skill/README.html"],
+    expectedOutput:"Report UI/design mismatches, spacing and typography issues, component inconsistencies, and recommended fixes without redesigning unless requested.",
     useFor:[
       "ตรวจหน้าจอ ระยะห่าง ตัวอักษร ไอคอน และองค์ประกอบ",
       "ตรวจว่าเลย์เอาต์ตรงระบบออกแบบไหม"
@@ -953,6 +1385,18 @@ const workflowTemplates = {
   },
   "05": {
     name:"ทำงานพัฒนาฟลัตเตอร์",
+    codexRole:"Blacksmith / Flutter Implementation Agent",
+    presets:["ทำ Flutter Implementation", "แก้ Bug Flutter", "Refactor Component", "ตรวจ Build Error"],
+    presetsEnglish:["Flutter implementation", "Fix Flutter bug", "Refactor component", "Check build error"],
+    presetHelp:[
+      "ใช้เมื่อจะลงมือเขียนหรืออัปเดตหน้าจอจริง",
+      "ใช้เมื่อมีบั๊กเฉพาะที่ต้องแก้",
+      "ใช้เมื่อ component ซ้ำหรือโครงสร้างเริ่มรก",
+      "ใช้เมื่อ build หรือ compile มีปัญหา"
+    ],
+    presetHelpDefault:"ใช้สำหรับงานพัฒนา Flutter และการแก้บั๊กที่เกี่ยวข้อง",
+    readFirst:["README.html", "AGENTS.html", "product_bible/"],
+    expectedOutput:"Implement or plan the Flutter work using existing structure, then report files changed, risks, and verification steps.",
     useFor:[
       "เขียนวิดเจ็ตหรือหน้าจอ",
       "ปรับโครงสร้างองค์ประกอบ",
@@ -968,6 +1412,18 @@ const workflowTemplates = {
   },
   "06": {
     name:"ตรวจความปลอดภัย / ความสมบูรณ์ของระบบ",
+    codexRole:"Crusader / Security Agent",
+    presets:["ตรวจ Security", "ตรวจ Client Trust", "ตรวจ Duplicate Reward", "ตรวจ Server Authority"],
+    presetsEnglish:["Security audit", "Client trust audit", "Duplicate reward audit", "Server authority audit"],
+    presetHelp:[
+      "ใช้ตรวจความเสี่ยงด้านความปลอดภัยรวม",
+      "ใช้เช็กข้อมูลที่ไม่ควรเชื่อฝั่งผู้ใช้",
+      "ใช้ตรวจการได้รางวัลซ้ำ",
+      "ใช้ตรวจว่าฝั่งเซิร์ฟเวอร์เป็นผู้มีอำนาจจริง"
+    ],
+    presetHelpDefault:"ใช้ตรวจความปลอดภัยและความสมบูรณ์ของระบบ",
+    readFirst:["README.html", "AGENTS.html", "product_bible/02_reward_system/", "product_bible/03_vip_and_subscription/", "product_bible/04_monetization/"],
+    expectedOutput:"Report security risks, duplicate-action risks, unsafe client trust, missing validation, and required safeguards. Do not implement unless explicitly requested.",
     useFor:[
       "ตรวจความไว้ใจฝั่งผู้ใช้",
       "ตรวจรางวัลซ้ำ",
@@ -982,6 +1438,18 @@ const workflowTemplates = {
   },
   "07": {
     name:"ลำดับงานมินิเกม",
+    codexRole:"Knight / Mini Game Agent",
+    presets:["ตรวจ Mini Game Flow", "ตรวจ Stage Progression", "ตรวจ Summary & Insight", "ตรวจ Pass / Fail Logic"],
+    presetsEnglish:["Audit Mini Game flow", "Audit stage progression", "Audit Summary & Insight", "Audit pass/fail logic"],
+    presetHelp:[
+      "ใช้ตรวจภาพรวม flow ของมินิเกม",
+      "ใช้ดูว่าด่านและความคืบหน้ายังถูกต้อง",
+      "ใช้ตรวจหน้าสรุปและ insight",
+      "ใช้ตรวจตรรกะผ่านหรือไม่ผ่าน"
+    ],
+    presetHelpDefault:"ใช้วางหรือทบทวน flow ของ Mini Game",
+    readFirst:["README.html", "AGENTS.html", "product_bible/01_game_flow/mini_game_flow.md", "product_bible/02_reward_system/mini_game_reward_logic.md"],
+    expectedOutput:"Review or plan the Mini Game flow, stage progression, pass/fail behavior, Summary & Insight states, and navigation impact.",
     useFor:[
       "ลำดับด่าน",
       "กฎผ่านหรือไม่ผ่าน",
@@ -997,6 +1465,18 @@ const workflowTemplates = {
   },
   "08": {
     name:"ตรวจคุณภาพ / ทดสอบการถดถอย",
+    codexRole:"Assassin Cross / QA Tester",
+    presets:["ทำ QA Checklist", "ตรวจ Regression", "ตรวจ Broken Flow", "ตรวจ Functional Test"],
+    presetsEnglish:["Create QA checklist", "Regression audit", "Broken flow audit", "Functional test audit"],
+    presetHelp:[
+      "ใช้สร้างรายการทดสอบที่ต้องเช็ก",
+      "ใช้ตรวจผลกระทบจากการแก้ก่อนหน้า",
+      "ใช้ตามหาจุด flow ที่พัง",
+      "ใช้ตรวจพฤติกรรมหลักของฟังก์ชัน"
+    ],
+    presetHelpDefault:"ใช้ตรวจบั๊กและ regression อย่างเป็นระบบ",
+    readFirst:["README.html", "AGENTS.html", "product_bible/", "agents/pip_development_guild/agent_dashboard.html"],
+    expectedOutput:"Produce and run a focused QA checklist where possible, then report pass/fail evidence, edge cases, and regression risks.",
     useFor:[
       "ตรวจบั๊ก",
       "เขียนรายการทดสอบ",
@@ -1011,6 +1491,18 @@ const workflowTemplates = {
   },
   "09": {
     name:"โหมดฝึก / ตรวจความแม่นยำ",
+    codexRole:"Sniper / Practice Mode Agent",
+    presets:["ตรวจ Practice Mode", "ตรวจ Mock Exam", "ตรวจ Accuracy Flow", "ตรวจ 100-question Session"],
+    presetsEnglish:["Audit Practice Mode", "Audit mock exam", "Audit accuracy flow", "Audit 100-question session"],
+    presetHelp:[
+      "ใช้ตรวจ flow ของ Practice Mode",
+      "ใช้ตรวจการสอบจำลอง",
+      "ใช้ตรวจการวัดความแม่นยำ",
+      "ใช้ตรวจเซสชัน 100 ข้อ"
+    ],
+    presetHelpDefault:"ใช้สำหรับโหมดฝึกและการวัดความแม่นยำ",
+    readFirst:["README.html", "AGENTS.html", "product_bible/"],
+    expectedOutput:"Review or plan Practice Mode behavior with focus on accuracy, mock exams, 100-question sessions, progress feedback, and result review.",
     useFor:[
       "ลำดับโหมดฝึก",
       "การสอบจำลอง",
@@ -1026,6 +1518,18 @@ const workflowTemplates = {
   },
   "10": {
     name:"ตรวจโค้ด / โครงสร้างระบบ",
+    codexRole:"Professor / Reviewer",
+    presets:["Review Code", "Review Architecture", "ตรวจ Maintainability", "ตรวจ Technical Debt"],
+    presetsEnglish:["Review code", "Review architecture", "Audit maintainability", "Audit technical debt"],
+    presetHelp:[
+      "ใช้ตรวจโค้ดที่เขียนไปแล้ว",
+      "ใช้ทบทวนสถาปัตยกรรมและการจัดโครงสร้าง",
+      "ใช้ดูว่าดูแลต่อได้ง่ายไหม",
+      "ใช้เช็กหนี้ทางเทคนิคที่ควรลด"
+    ],
+    presetHelpDefault:"ใช้สำหรับ review โค้ดและโครงสร้างระบบ",
+    readFirst:["README.html", "AGENTS.html", "product_bible/", "agents/pip_development_guild/README.html"],
+    expectedOutput:"Report findings by severity, including maintainability, coupling, duplication, naming, architecture, and safe improvement recommendations.",
     useFor:[
       "ตรวจโค้ด",
       "ตรวจโครงสร้างระบบ",
@@ -1040,6 +1544,18 @@ const workflowTemplates = {
   },
   "11": {
     name:"รางวัล / วีไอพี / รายได้",
+    codexRole:"Gunslinger / Reward and VIP Agent",
+    presets:["ตรวจ Reward Logic", "ตรวจ VIP Flow", "ตรวจ x2 Ticket", "ตรวจ Rewarded Ads"],
+    presetsEnglish:["Audit reward logic", "Audit VIP flow", "Audit x2 ticket", "Audit rewarded ads"],
+    presetHelp:[
+      "ใช้ตรวจ logic ของรางวัล",
+      "ใช้ตรวจ flow ของ VIP",
+      "ใช้ตรวจบัตรคูณสอง",
+      "ใช้ตรวจโฆษณาแลกรางวัล"
+    ],
+    presetHelpDefault:"ใช้ตรวจระบบรางวัล วีไอพี และรายได้",
+    readFirst:["README.html", "AGENTS.html", "product_bible/02_reward_system/", "product_bible/03_vip_and_subscription/", "product_bible/04_monetization/"],
+    expectedOutput:"Review or plan Reward/VIP/monetization logic while preventing duplicate rewards and separating Free, VIP, ticket, and ad-based flows.",
     useFor:[
       "ตรรกะรางวัล",
       "ลำดับงานวีไอพี",
@@ -1062,21 +1578,63 @@ const sceneScale = document.getElementById("sceneScale");
 const dialogue = document.getElementById("dialogue");
 const tip = document.getElementById("tip");
 const expandDialogueButton = document.getElementById("expandDialogue");
-const menuPanel = document.getElementById("menuPanel");
-const rolePanel = document.getElementById("rolePanel");
 const workflowPanel = document.getElementById("workflowPanel");
-const agentGreeting = document.getElementById("agentGreeting");
-const roleDetailTitle = document.getElementById("roleDetailTitle");
-const roleDetailRole = document.getElementById("roleDetailRole");
 const workflowPanelTitle = document.getElementById("workflowPanelTitle");
 const workflowPanelRole = document.getElementById("workflowPanelRole");
-const workflowUseFor = document.getElementById("workflowUseFor");
+const workflowInstruction = document.getElementById("workflowInstruction");
+const workflowAgentContext = document.getElementById("workflowAgentContext");
+const presetHint = document.getElementById("presetHint");
+const bridgeHint = document.getElementById("bridgeHint");
+const latestTaskSummary = document.getElementById("latestTaskSummary");
+const taskPresetList = document.getElementById("taskPresetList");
+const taskDetailInput = document.getElementById("taskDetailInput");
+const taskWarning = document.getElementById("taskWarning");
 const workflowChecklist = document.getElementById("workflowChecklist");
 const workflowPrompt = document.getElementById("workflowPrompt");
 const copyState = document.getElementById("copyState");
+const copyPromptButton = document.getElementById("copyPromptButton");
+const sendAgentTaskButton = document.getElementById("sendAgentTaskButton");
+const addQueueButton = document.getElementById("addQueueButton");
+const queueTaskButton = document.getElementById("queueTaskButton");
+const fullAutomateButton = document.getElementById("fullAutomateButton");
+const bridgeStatusText = document.getElementById("bridgeStatusText");
+const commandPanel = document.getElementById("commandPanel");
+const reopenCommandPanel = document.getElementById("reopenCommandPanel");
+const activeTaskView = document.getElementById("activeTaskView");
+const queuedTaskView = document.getElementById("queuedTaskView");
+const completedTaskView = document.getElementById("completedTaskView");
+const agentStatusTable = document.getElementById("agentStatusTable");
 let selectedNode = null;
 let selectedAgent = null;
 let dialogueExpanded = false;
+let selectedTaskPreset = "";
+let selectedTaskPresetEnglish = "";
+let selectedTaskPresetHelp = "";
+let tasks = [];
+let taskSequence = 1;
+let queueRunning = false;
+let activeTaskTimer = null;
+let bridgeAvailable = false;
+let bridgePollTimer = null;
+let isCommandPanelCollapsed = false;
+const DEBUG_AGENT_DASHBOARD = false;
+
+const BRIDGE_URL = "http://127.0.0.1:8787";
+
+const statusThai = {
+  idle:"ว่าง",
+  queued:"รอคิว",
+  running:"กำลังทำงาน",
+  completed:"เสร็จแล้ว",
+  failed:"ติดปัญหา"
+};
+
+const bridgeStatusMessage = {
+  queued:"งานเข้าคิวแล้ว",
+  running:"Codex กำลังทำงาน",
+  completed:"งานเสร็จแล้ว",
+  failed:"งานติดปัญหา"
+};
 
 function setSceneScale() {
   const rect = scene.getBoundingClientRect();
@@ -1084,10 +1642,13 @@ function setSceneScale() {
 }
 
 function setDialoguePanel(panelName) {
-  menuPanel.hidden = panelName !== "menu";
-  rolePanel.hidden = panelName !== "role";
   workflowPanel.hidden = panelName !== "workflow";
   copyState.textContent = "";
+}
+
+function debugLog(...args) {
+  if (!DEBUG_AGENT_DASHBOARD || typeof console === "undefined") return;
+  console.log(...args);
 }
 
 function setDialogueExpanded(expanded) {
@@ -1096,6 +1657,13 @@ function setDialogueExpanded(expanded) {
   expandDialogueButton.dataset.expanded = dialogueExpanded ? "true" : "false";
   expandDialogueButton.title = dialogueExpanded ? "ย่อกลับ" : "ขยาย";
   expandDialogueButton.setAttribute("aria-label", dialogueExpanded ? "ย่อกลับ" : "ขยาย");
+}
+
+function setCommandPanelCollapsed(collapsed) {
+  isCommandPanelCollapsed = collapsed;
+  commandPanel.classList.toggle("collapsed", isCommandPanelCollapsed);
+  commandPanel.classList.toggle("is-collapsed", isCommandPanelCollapsed);
+  reopenCommandPanel.hidden = !isCommandPanelCollapsed;
 }
 
 function renderList(listNode, items) {
@@ -1107,17 +1675,479 @@ function renderList(listNode, items) {
   });
 }
 
+function renderTaskPresets(agent, workflow) {
+  taskPresetList.innerHTML = "";
+  selectedTaskPreset = workflow.presets[0] || "";
+  selectedTaskPresetEnglish = (workflow.presetsEnglish && workflow.presetsEnglish[0]) || selectedTaskPreset;
+  selectedTaskPresetHelp = (workflow.presetHelp && workflow.presetHelp[0]) || workflow.presetHelpDefault || "";
+  presetHint.textContent = selectedTaskPresetHelp;
+  workflow.presets.forEach((preset, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "preset-button";
+    button.textContent = preset;
+    button.dataset.preset = preset;
+    button.dataset.presetEnglish = (workflow.presetsEnglish && workflow.presetsEnglish[index]) || preset;
+    button.dataset.presetHelp = (workflow.presetHelp && workflow.presetHelp[index]) || workflow.presetHelpDefault || "";
+    if (preset === selectedTaskPreset) button.classList.add("active");
+    button.addEventListener("click", (event) => {
+      event.stopPropagation();
+      selectedTaskPreset = preset;
+      selectedTaskPresetEnglish = button.dataset.presetEnglish;
+      selectedTaskPresetHelp = button.dataset.presetHelp || workflow.presetHelpDefault || "";
+      taskPresetList.querySelectorAll(".preset-button").forEach((item) => {
+        item.classList.toggle("active", item.dataset.preset === preset);
+      });
+      presetHint.textContent = selectedTaskPresetHelp;
+      taskWarning.textContent = "";
+      taskWarning.classList.remove("warning");
+    });
+    taskPresetList.appendChild(button);
+  });
+}
+
 function renderWorkflow(agent) {
   const workflow = workflowTemplates[agent.id];
-  workflowPanelTitle.textContent = workflow.name;
-  workflowPanelRole.textContent = `${agent.number} ${agent.thaiName}`;
-  renderList(workflowUseFor, workflow.useFor);
-  renderList(workflowChecklist, workflow.checklist);
-  workflowPrompt.value = workflow.prompt;
+  if (!workflow) {
+    debugLog("[AgentClick] missing workflow template", agent.id, agent.name);
+    return;
+  }
+  workflowAgentContext.textContent = `${agent.thaiName} · ${agent.thaiRole}`;
+  workflowInstruction.textContent = "เลือกงานที่ต้องการให้เอเจนต์ช่วย แล้วเขียนรายละเอียด จากนั้นกดส่งให้ Codex";
+  renderTaskPresets(agent, workflow);
+  if (workflowChecklist) {
+    renderList(workflowChecklist, workflow.checklist);
+  }
+  taskDetailInput.value = "";
+  taskWarning.textContent = "";
+  taskWarning.classList.remove("warning");
+  workflowPrompt.value = "";
+  workflowPrompt.placeholder = "เลือกประเภทงานและเขียนรายละเอียดก่อน ระบบจะสร้างคำสั่งให้ที่นี่";
+  copyState.textContent = "";
+  copyPromptButton.disabled = true;
+  fullAutomateButton.hidden = agent.id !== "01";
+  bridgeHint.textContent = bridgeAvailable ? "ระบบจะส่งคำสั่งนี้ไปที่ Codex ผ่านเครื่องของคุณ" : "เปิด Codex Bridge ก่อน หรือใช้ Copy Prompt แทน";
+  latestTaskSummary.textContent = "ยังไม่มีงานล่าสุด";
+  updateBridgeControls();
+}
+
+function formatPromptList(items) {
+  return items.map((item) => `- ${item}`).join("\n");
+}
+
+function buildGeneratedPrompt(agent, workflow, taskPreset, taskPresetEnglish, taskDetails) {
+  const readFirst = workflow.readFirst || ["README.html", "AGENTS.html"];
+  const baseRules = [
+    "Do not use archive/ files.",
+    "Preserve approved canon unless explicitly requested.",
+    "Do not modify unrelated files.",
+    "Do not turn this into a visual redesign task.",
+    "Follow the current Product Bible and approved role mapping.",
+    "Keep user-facing UI Thai if UI copy is involved.",
+    "Do not call external APIs unless explicitly requested.",
+    "Do not modify approved images, sprites, backgrounds, character coordinates, hitboxes, hover/ring logic, or scene scaling unless explicitly requested."
+  ];
+
+  return `Start from README.html and AGENTS.html.
+Act as ${workflow.codexRole}.
+
+Agent role instruction:
+${workflow.prompt}
+
+Task:
+${taskDetails}
+
+Task type:
+${taskPresetEnglish} (${taskPreset})
+
+Read first:
+${formatPromptList(readFirst)}
+
+Scope:
+- Work only on the files and behavior directly related to the requested task.
+- Use existing project structure, canon files, and approved UI/system rules.
+- Treat Product Bible, Guild canon, and approved role mapping as source-of-truth constraints.
+
+Rules:
+${formatPromptList(baseRules)}
+
+Expected output:
+${workflow.expectedOutput}
+
+Report requirements:
+- Files read.
+- Files changed, if any.
+- What was implemented or audited.
+- Verification steps and results.
+- Any risks, mismatches, or follow-up items.
+`;
+}
+
+function createCommandPayload(agent, workflow, taskPreset, taskPresetEnglish, taskDetails) {
+  return {
+    mode:"local-codex-bridge",
+    bridge:"http://127.0.0.1:8787",
+    targetAgent:agent.id,
+    agentName:`${agent.number} ${agent.thaiName}`,
+    agentRole:workflow.codexRole,
+    taskType:taskPreset,
+    taskTypeEnglish:taskPresetEnglish,
+    taskDetails,
+    filesToRead:workflow.readFirst || ["README.html", "AGENTS.html"],
+    guardrails:[
+      "Do not use archive/ files.",
+      "Preserve approved canon unless explicitly requested.",
+      "Do not modify unrelated files.",
+      "Do not modify approved images, sprites, backgrounds, character coordinates, hitboxes, hover/ring logic, or scene scaling unless explicitly requested."
+    ],
+    expectedOutput:workflow.expectedOutput
+  };
+}
+
+function createTask(agent, taskPreset, taskPresetEnglish, taskDetails) {
+  const workflow = workflowTemplates[agent.id];
+  const generatedPrompt = buildGeneratedPrompt(agent, workflow, taskPreset, taskPresetEnglish, taskDetails);
+  return {
+    id:`task-${String(taskSequence++).padStart(3, "0")}`,
+    agentId:agent.id,
+    agentName:`${agent.number} ${agent.thaiName}`,
+    taskType:taskPreset,
+    taskTitle:taskPreset,
+    taskDetails,
+    status:"queued",
+    createdAt:new Date().toISOString(),
+    startedAt:null,
+    completedAt:null,
+    generatedPrompt,
+    resultSummary:"",
+    commandPayload:createCommandPayload(agent, workflow, taskPreset, taskPresetEnglish, taskDetails)
+  };
+}
+
+function normalizeBridgeTask(task) {
+  return {
+    id:task.id,
+    agentId:task.agentId,
+    agentName:task.agentName,
+    taskType:task.taskType,
+    taskTitle:task.taskType,
+    taskDetails:task.taskDetails,
+    status:task.status,
+    createdAt:task.createdAt,
+    startedAt:task.startedAt,
+    completedAt:task.completedAt,
+    generatedPrompt:"",
+    resultSummary:task.result || "",
+    commandPayload:null
+  };
+}
+
+function updateBridgeControls() {
+  if (!bridgeStatusText) return;
+  sendAgentTaskButton.disabled = !bridgeAvailable;
+  fullAutomateButton.disabled = !bridgeAvailable;
+  bridgeStatusText.textContent = bridgeAvailable ? "Codex Bridge พร้อมใช้งาน" : "ยังไม่ได้เปิด Codex Bridge";
+  bridgeStatusText.classList.toggle("offline", !bridgeAvailable);
+  bridgeStatusText.classList.toggle("ready", bridgeAvailable);
+  if (bridgeHint) {
+    bridgeHint.textContent = bridgeAvailable
+      ? "ระบบจะส่งคำสั่งนี้ไปที่ Codex ผ่านเครื่องของคุณ"
+      : "เปิด Codex Bridge ก่อน หรือใช้ Copy Prompt แทน";
+  }
+}
+
+async function checkBridgeHealth() {
+  try {
+    const response = await fetch(`${BRIDGE_URL}/health`, { cache:"no-store" });
+    const data = await response.json();
+    bridgeAvailable = Boolean(response.ok && data.ok);
+  } catch (error) {
+    bridgeAvailable = false;
+  }
+  updateBridgeControls();
+}
+
+function startBridgePolling() {
+  if (bridgePollTimer) return;
+  bridgePollTimer = setInterval(loadBridgeTasks, 3000);
+}
+
+function stopBridgePollingIfIdle() {
+  if (!bridgePollTimer) return;
+  if (tasks.some((task) => task.status === "queued" || task.status === "running")) return;
+  clearInterval(bridgePollTimer);
+  bridgePollTimer = null;
+}
+
+async function loadBridgeTasks() {
+  try {
+    const response = await fetch(`${BRIDGE_URL}/tasks`, { cache:"no-store" });
+    if (!response.ok) throw new Error("ไม่สามารถอ่านคิวจาก Codex Bridge");
+    const data = await response.json();
+    tasks = data.map(normalizeBridgeTask);
+    renderCommandPanel();
+    stopBridgePollingIfIdle();
+  } catch (error) {
+    bridgeAvailable = false;
+    updateBridgeControls();
+  }
+}
+
+async function sendTaskToBridge(task) {
+  const response = await fetch(`${BRIDGE_URL}/tasks`, {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body:JSON.stringify({
+      agentId:task.agentId,
+      agentName:task.agentName,
+      taskType:task.taskType,
+      taskDetails:task.taskDetails,
+      prompt:task.generatedPrompt
+    })
+  });
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error || "ส่งงานเข้า Codex Bridge ไม่สำเร็จ");
+  return normalizeBridgeTask(data);
+}
+
+function prepareSelectedTaskPrompt() {
+  if (!selectedAgent) return null;
+  const taskDetails = taskDetailInput.value.trim();
+  copyState.textContent = "";
+  if (!taskDetails) {
+    taskWarning.textContent = "กรุณากรอกรายละเอียดงานก่อน";
+    taskWarning.classList.add("warning");
+    workflowPrompt.value = "";
+    workflowPrompt.placeholder = "เลือกประเภทงานและเขียนรายละเอียดก่อน ระบบจะสร้างคำสั่งให้ที่นี่";
+    copyPromptButton.disabled = true;
+    return null;
+  }
+
+  const task = createTask(selectedAgent, selectedTaskPreset, selectedTaskPresetEnglish, taskDetails);
+  taskWarning.textContent = "เตรียมคำสั่งสำหรับ Codex แล้ว";
+  taskWarning.classList.remove("warning");
+  workflowPrompt.value = task.generatedPrompt;
+  copyPromptButton.disabled = false;
+  return task;
+}
+
+function queueTask(task, shouldStart) {
+  tasks.push(task);
+  taskWarning.textContent = shouldStart ? "งานเข้าคิวแล้ว" : "เตรียมคำสั่งสำหรับ Codex แล้ว";
+  taskWarning.classList.remove("warning");
+  latestTaskSummary.textContent = `${task.agentName} · ${task.taskTitle} · ${statusThai[task.status]}`;
+  workflowPrompt.value = task.generatedPrompt;
+  copyPromptButton.disabled = false;
+  renderCommandPanel();
+  if (shouldStart) startLocalQueue();
+}
+
+async function submitSelectedTask(shouldSendToBridge) {
+  const task = prepareSelectedTaskPrompt();
+  if (!task) return;
+  if (!shouldSendToBridge) {
+    queueTask(task, false);
+    return;
+  }
+  if (!bridgeAvailable) {
+    taskWarning.textContent = "ยังไม่ได้เปิด Codex Bridge";
+    taskWarning.classList.add("warning");
+    return;
+  }
+  try {
+    sendAgentTaskButton.disabled = true;
+    const bridgeTask = await sendTaskToBridge(task);
+    tasks = tasks.filter((item) => item.id !== bridgeTask.id);
+    tasks.push(bridgeTask);
+    taskWarning.textContent = bridgeStatusMessage[bridgeTask.status] || "งานเข้าคิวแล้ว";
+    taskWarning.classList.remove("warning");
+    renderCommandPanel();
+    latestTaskSummary.textContent = `${bridgeTask.agentName} · ${bridgeTask.taskTitle} · ${statusThai[bridgeTask.status]}`;
+    startBridgePolling();
+  } catch (error) {
+    taskWarning.textContent = "งานติดปัญหา";
+    taskWarning.classList.add("warning");
+  } finally {
+    updateBridgeControls();
+  }
+}
+
+async function createFullAutomatePlan() {
+  if (!selectedAgent || selectedAgent.id !== "01") return;
+  const goal = taskDetailInput.value.trim();
+  copyState.textContent = "";
+  if (!goal) {
+    taskWarning.textContent = "กรุณากรอกรายละเอียดงานก่อน";
+    taskWarning.classList.add("warning");
+    return;
+  }
+
+  const plan = [
+    { agentId:"01", preset:"วางแผนงาน", presetEnglish:"Planning control", detail:`Create a sequential plan for this goal: ${goal}` },
+    { agentId:"02", preset:"ตรวจ Source of Truth", presetEnglish:"Audit source of truth", detail:`Audit the goal against source-of-truth files before implementation: ${goal}` },
+    { agentId:"04", preset:"ตรวจ Design System", presetEnglish:"Audit design system", detail:`Check UI/design constraints and approved visual canon related to this goal: ${goal}` },
+    { agentId:"05", preset:"ทำ Flutter Implementation", presetEnglish:"Flutter implementation", detail:`Plan or implement the build step for this goal after canon checks pass: ${goal}` },
+    { agentId:"08", preset:"ทำ QA Checklist", presetEnglish:"Create QA checklist", detail:`Create and run a focused QA checklist for the completed work: ${goal}` },
+    { agentId:"10", preset:"Review Code", presetEnglish:"Review code", detail:`Review the final code, architecture, maintainability, and risks for this goal: ${goal}` },
+    { agentId:"03", preset:"ทำ Handoff", presetEnglish:"Create handoff", detail:`Summarize the finished workflow, changed files, verification, risks, and next steps for this goal: ${goal}` }
+  ];
+
+  const plannedTasks = plan.map((step) => {
+    const agent = agents.find((item) => item.id === step.agentId);
+    return createTask(agent, step.preset, step.presetEnglish, step.detail);
+  });
+  workflowPrompt.value = plannedTasks.map((task, index) => `${index + 1}. ${task.agentName} - ${task.taskTitle}\n${task.generatedPrompt}`).join("\n\n---\n\n");
+  copyPromptButton.disabled = false;
+  if (!bridgeAvailable) {
+    taskWarning.textContent = "ยังไม่ได้เปิด Codex Bridge";
+    taskWarning.classList.add("warning");
+    tasks.push(...plannedTasks);
+    renderCommandPanel();
+    latestTaskSummary.textContent = `วางแผนอัตโนมัติ · ${plannedTasks.length} ขั้นตอน`;
+    return;
+  }
+  try {
+    fullAutomateButton.disabled = true;
+    const bridgeTasks = [];
+    for (const task of plannedTasks) {
+      bridgeTasks.push(await sendTaskToBridge(task));
+    }
+    tasks.push(...bridgeTasks);
+    taskWarning.textContent = "งานเข้าคิวแล้ว";
+    taskWarning.classList.remove("warning");
+    renderCommandPanel();
+    latestTaskSummary.textContent = `วางแผนอัตโนมัติ · ${bridgeTasks.length} ขั้นตอน`;
+    startBridgePolling();
+  } catch (error) {
+    taskWarning.textContent = "งานติดปัญหา";
+    taskWarning.classList.add("warning");
+  } finally {
+    updateBridgeControls();
+  }
+}
+
+function getTaskAgent(task) {
+  return agents.find((agent) => agent.id === task.agentId);
+}
+
+function formatTaskLine(task) {
+  const agent = getTaskAgent(task);
+  return `<p class="command-item"><strong>${task.agentName}</strong><br>${task.taskTitle}<br>${agent ? agent.thaiRole : ""}</p>`;
+}
+
+function renderTaskList(container, items, emptyText, limit) {
+  const visibleItems = typeof limit === "number" ? items.slice(0, limit) : items;
+  container.innerHTML = visibleItems.length
+    ? visibleItems.map(formatTaskLine).join("")
+    : `<p class="command-empty">${emptyText}</p>`;
+}
+
+function getAgentStatus(agent) {
+  const active = tasks.find((task) => task.agentId === agent.id && task.status === "running");
+  if (active) return { status:"running", task:active };
+  const queued = tasks.find((task) => task.agentId === agent.id && task.status === "queued");
+  if (queued) return { status:"queued", task:queued };
+  const latest = tasks.filter((task) => task.agentId === agent.id && (task.status === "completed" || task.status === "failed")).at(-1);
+  if (latest) return { status:latest.status, task:latest };
+  return { status:"idle", task:null };
+}
+
+function renderAgentStatuses() {
+  agentStatusTable.innerHTML = agents.map((agent) => {
+    const state = getAgentStatus(agent);
+    const taskText = state.task ? state.task.taskTitle : "ไม่มีงานค้าง";
+    return `
+      <div class="agent-status-row">
+        <div class="agent-status-number">${agent.number}</div>
+        <div>
+          <p class="agent-status-name">${agent.thaiName}</p>
+          <p class="agent-status-role">${agent.thaiRole}</p>
+          <p class="agent-status-task">${taskText}</p>
+        </div>
+        <div class="status-pill status-${state.status}">${statusThai[state.status]}</div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderCommandPanel() {
+  const activeTasks = tasks.filter((task) => task.status === "running");
+  const queuedTasks = tasks.filter((task) => task.status === "queued");
+  const completedTasks = tasks.filter((task) => task.status === "completed" || task.status === "failed").slice(-3).reverse();
+  renderTaskList(activeTaskView, activeTasks, "ยังไม่มีงานที่กำลังทำ", 1);
+  renderTaskList(queuedTaskView, queuedTasks, "ยังไม่มีงานรอคิว", 5);
+  renderTaskList(completedTaskView, completedTasks, "ยังไม่มีงานที่เสร็จแล้ว", 3);
+  renderAgentStatuses();
+  const latestTask = tasks.at(-1);
+  latestTaskSummary.textContent = latestTask
+    ? `${latestTask.agentName} · ${latestTask.taskTitle} · ${statusThai[latestTask.status]}`
+    : "ยังไม่มีงานล่าสุด";
+}
+
+function startNextTask() {
+  if (bridgeAvailable) {
+    loadBridgeTasks();
+    startBridgePolling();
+    return;
+  }
+  startLocalQueue();
+}
+
+function stopQueue() {
+  queueRunning = false;
+  if (activeTaskTimer) {
+    clearTimeout(activeTaskTimer);
+    activeTaskTimer = null;
+  }
+  if (bridgePollTimer) {
+    clearInterval(bridgePollTimer);
+    bridgePollTimer = null;
+  }
+  renderCommandPanel();
+}
+
+function clearCompletedTasks() {
+  tasks = tasks.filter((task) => task.status !== "completed" && task.status !== "failed");
+  renderCommandPanel();
+}
+
+function startLocalQueue() {
+  if (bridgeAvailable) return;
+  if (queueRunning) return;
+  queueRunning = true;
+  processLocalQueue();
+}
+
+function processLocalQueue() {
+  if (!queueRunning) return;
+  if (tasks.some((task) => task.status === "running")) return;
+  const nextTask = tasks.find((task) => task.status === "queued");
+  if (!nextTask) {
+    queueRunning = false;
+    renderCommandPanel();
+    return;
+  }
+
+  nextTask.status = "running";
+  nextTask.startedAt = new Date().toISOString();
+  nextTask.resultSummary = "จำลองการทำงาน: เตรียมคำสั่งสำหรับ Codex และรอเชื่อมต่อ Codex Bridge";
+  renderCommandPanel();
+  activeTaskTimer = setTimeout(() => {
+    nextTask.status = "completed";
+    nextTask.completedAt = new Date().toISOString();
+    nextTask.resultSummary = "เสร็จแล้วในโหมดจำลอง ยังไม่ได้รัน Codex จริง";
+    activeTaskTimer = null;
+    renderCommandPanel();
+    processLocalQueue();
+  }, 1800);
 }
 
 async function copyWorkflowPrompt() {
   const promptText = workflowPrompt.value;
+  if (!promptText.trim()) {
+    copyState.textContent = "ยังไม่มี Prompt ให้คัดลอก";
+    return;
+  }
   try {
     await navigator.clipboard.writeText(promptText);
   } catch (error) {
@@ -1168,6 +2198,7 @@ function renderAgents() {
       hitbox.addEventListener("blur", () => node.classList.remove("hovered"));
       hitbox.addEventListener("click", (event) => {
         event.stopPropagation();
+        debugLog("[AgentClick] hotspot clicked", agent.id, agent.name);
         openDialogue(agent, node);
       });
       agentLayer.appendChild(node);
@@ -1175,6 +2206,7 @@ function renderAgents() {
 }
 
 function openDialogue(agent, node) {
+  debugLog("[AgentClick] openDialogue called", agent.id, agent.name);
   if (selectedNode) selectedNode.classList.remove("selected");
   selectedNode = node;
   selectedAgent = agent;
@@ -1182,19 +2214,18 @@ function openDialogue(agent, node) {
   document.getElementById("agentTitle").textContent = `${agent.number} ${agent.thaiName}`;
   document.getElementById("agentRole").textContent = `บทบาท: ${agent.thaiRole}`;
   document.getElementById("agentZone").textContent = `พื้นที่: ${agent.zone}`;
-  roleDetailTitle.textContent = `${agent.number} ${agent.thaiName}`;
-  roleDetailRole.textContent = `บทบาท: ${agent.thaiRole}`;
-  agentGreeting.textContent = `${agent.thaiName} พร้อมช่วยงาน เลือกหัวข้อที่ต้องการคุยได้เลย`;
-  document.getElementById("thaiText").textContent = agent.thaiDescription;
-  document.getElementById("responsibility").textContent = agent.thaiResponsibility;
-  document.getElementById("usage").textContent = agent.thaiUsage;
-  document.getElementById("rule").textContent = agent.thaiRule;
   renderWorkflow(agent);
-  setDialoguePanel("menu");
+  setDialoguePanel("workflow");
   setDialogueExpanded(false);
   dialogue.classList.add("open");
   dialogue.setAttribute("aria-hidden", "false");
   tip.classList.add("hidden");
+  debugLog("[AgentClick] panel state", {
+    open: dialogue.classList.contains("open"),
+    expanded: dialogue.classList.contains("expanded"),
+    selectedAgent: selectedAgent && selectedAgent.id,
+    commandPanelCollapsed: isCommandPanelCollapsed
+  });
 }
 
 function closeDialogue() {
@@ -1205,34 +2236,68 @@ function closeDialogue() {
     selectedNode = null;
   }
   selectedAgent = null;
-  setDialoguePanel("menu");
+  setDialoguePanel("workflow");
   setDialogueExpanded(false);
   tip.classList.remove("hidden");
 }
 
-document.getElementById("showRoleButton").addEventListener("click", (event) => {
+sendAgentTaskButton.addEventListener("click", (event) => {
   event.stopPropagation();
-  setDialoguePanel("role");
+  submitSelectedTask(true);
 });
 
-document.getElementById("showWorkflowButton").addEventListener("click", (event) => {
+addQueueButton.addEventListener("click", (event) => {
   event.stopPropagation();
-  setDialoguePanel("workflow");
+  submitSelectedTask(false);
 });
 
-document.getElementById("roleBackToMenuButton").addEventListener("click", (event) => {
+queueTaskButton.addEventListener("click", (event) => {
   event.stopPropagation();
-  setDialoguePanel("menu");
+  const task = prepareSelectedTaskPrompt();
+  if (!task) return;
+  queueTask(task, true);
 });
 
-document.getElementById("workflowBackToMenuButton").addEventListener("click", (event) => {
+fullAutomateButton.addEventListener("click", (event) => {
   event.stopPropagation();
-  setDialoguePanel("menu");
+  createFullAutomatePlan();
 });
 
-document.getElementById("copyPromptButton").addEventListener("click", (event) => {
+taskDetailInput.addEventListener("input", () => {
+  if (taskDetailInput.value.trim()) {
+    taskWarning.textContent = "";
+    taskWarning.classList.remove("warning");
+  }
+});
+
+copyPromptButton.addEventListener("click", (event) => {
   event.stopPropagation();
   copyWorkflowPrompt();
+});
+
+document.getElementById("startNextTaskButton").addEventListener("click", (event) => {
+  event.stopPropagation();
+  startNextTask();
+});
+
+document.getElementById("stopQueueButton").addEventListener("click", (event) => {
+  event.stopPropagation();
+  stopQueue();
+});
+
+document.getElementById("clearCompletedButton").addEventListener("click", (event) => {
+  event.stopPropagation();
+  clearCompletedTasks();
+});
+
+document.getElementById("toggleCommandPanel").addEventListener("click", (event) => {
+  event.stopPropagation();
+  setCommandPanelCollapsed(!isCommandPanelCollapsed);
+});
+
+reopenCommandPanel.addEventListener("click", (event) => {
+  event.stopPropagation();
+  setCommandPanelCollapsed(false);
 });
 
 expandDialogueButton.addEventListener("click", (event) => {
@@ -1259,6 +2324,12 @@ document.addEventListener("keydown", (event) => {
 window.addEventListener("resize", setSceneScale);
 renderAgents();
 setSceneScale();
+renderCommandPanel();
+updateBridgeControls();
+setCommandPanelCollapsed(false);
+checkBridgeHealth().then(() => {
+  if (bridgeAvailable) loadBridgeTasks();
+});
 </script>
 </body>
 </html>

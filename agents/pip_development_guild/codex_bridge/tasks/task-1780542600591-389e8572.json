@@ -1,0 +1,15 @@
+{
+  "id": "task-1780542600591-389e8572",
+  "agentId": "01",
+  "agentName": "01 หัวหน้ากิลด์",
+  "taskType": "วางแผนงาน",
+  "taskDetails": "วางแผนการทำ Mini Game ใหม่ตาม Claude design",
+  "status": "queued",
+  "createdAt": "2026-06-04T03:10:00.591Z",
+  "startedAt": null,
+  "completedAt": null,
+  "exitCode": null,
+  "error": null,
+  "result": "",
+  "logFile": "task-1780542600591-389e8572.log"
+}
