@@ -1,0 +1,3835 @@
+Task task-1780573989282-33c1e989 queued at 2026-06-04T11:53:09.282Z
+Task task-1780573989282-33c1e989 started at 2026-06-04T11:53:09.283Z
+Agent: 07 ไนท์
+Task type: ตรวจ Mini Game Flow
+
+Reading additional input from stdin...
+2026-06-04T11:53:09.754488Z ERROR codex_core::session: failed to load skill /Users/Pae/.codex/plugins/cache/claude-cowork/anthropic-skills/1.0.0/skills/schedule/SKILL.md: invalid YAML: did not find expected key at line 2 column 110, while parsing a block mapping
+OpenAI Codex v0.130.0
+--------
+workdir: /Users/Pae/Developer/PIP/PIP-Public-Bible
+model: gpt-5.5
+provider: openai
+approval: never
+sandbox: workspace-write [workdir, /tmp, $TMPDIR, /Users/Pae/.codex/memories]
+reasoning effort: low
+reasoning summaries: none
+session id: 019e927a-eb7f-7ff2-9eca-5c991cb1dc15
+--------
+user
+Start from README.html and AGENTS.html.
+Act as Knight / Mini Game Agent.
+
+Agent role instruction:
+Act as the Knight / Mini Game Agent. Review or implement the Mini Game flow while preserving the approved game rules. Check stage progression, pass/fail behavior, Summary & Insight states, revisit behavior, and navigation. Do not mix reward/subscription rules unless required by the task.
+
+Task:
+Check Product Modes and Mini Game role logic for conflicts or missing guardrails related to this goal. Inspection only. Goal: ทดสอบ Guild Master Dispatcher ให้กระจายงานจริงครบ Agent 02-11 ผ่าน Codex Bridge แบบ sequential
+
+เป้าหมาย:
+ให้ 01 หัวหน้ากิลด์ทำหน้าที่เป็นผู้ควบคุมงานหลัก และให้ระบบ Dashboard สร้าง child task แยกจริงสำหรับ Agent 02-11 แล้วส่งเข้า Codex Bridge ทีละงาน จนครบทุก Agent
+
+ข้อกำหนดสำคัญ:
+- ต้องสร้าง task แยกจริงสำหรับ Agent 02, 03, 04, 05, 06, 07, 08, 09, 10, 11
+- ห้ามรวมงานทุก Agent ไว้ใน prompt ก้อนเดียวของ 01 หัวหน้ากิลด์
+- ต้องส่งงานเข้า Codex Bridge ผ่าน POST /tasks ทีละ Agent
+- ห้ามรันพร้อมกัน
+- Agent ถัดไปเริ่มได้หลัง Agent ก่อนหน้าจบเป็น completed หรือ failed เท่านั้น
+- ถ้า Agent ใด failed ให้บันทึกสถานะ แล้วไป Agent ถัดไปได้
+- หลัง Agent 11 จบ ให้ 01 หัวหน้ากิลด์สรุปผลรวม
+- งานนี้เป็น Inspection Only
+- ห้ามแก้ไฟล์
+- ห้ามสร้างไฟล์ใหม่
+- ห้ามลบไฟล์
+- ห้ามแก้ background
+- ห้ามแก้ sprites
+- ห้ามแก้ coordinates
+- ห้ามแก้ hitboxes
+- ห้ามแก้ hover/ring logic
+- ห้ามแก้ scene scaling
+- ห้ามใช้ archive/
+- ห้ามสร้าง Markdown
+- ใช้ HTML-first rule
+- อ่าน README.html และ AGENTS.html ก่อนเสมอ
+- รายงานผลเป็นภาษาไทย
+
+ลำดับงานที่ต้องกระจาย:
+
+02 ไฮพรีสต์:
+ตรวจ Source of Truth ว่า README.html, AGENTS.html, product_bible/, และไฟล์ Agent Guild canon ยังเชื่อมกันถูกต้องไหม มี rule ไหนขัดกันหรือไม่
+
+03 โนวิซ (พิป):
+สรุปสถานะระบบ Agent Dashboard + Codex Bridge เป็น handoff ภาษาไทย ให้คนอื่นอ่านต่อได้ง่าย
+
+04 เซจ:
+ตรวจ UX clarity ของ Agent Dashboard เฉพาะเรื่อง flow การใช้งานจริง เช่น คลิก Agent, เตรียม Prompt, ส่งให้ Codex, ดูสถานะ ไม่ต้องวิจารณ์ visual polish
+
+05 แบล็กสมิธ:
+ตรวจ maintainability ของ agent_dashboard.html ในระดับโครงสร้าง HTML/CSS/JS ว่ามีจุดที่ควร refactor ภายหลังไหม ห้ามแก้ไฟล์
+
+06 ครูเซเดอร์:
+ตรวจ security ของ Codex Bridge เช่น localhost-only, no arbitrary shell command, hardcoded cwd, prompt validation, sequential queue, timeout, logs/tasks safety
+
+07 ไนท์:
+ตรวจ role mapping และ Product Modes/Mini Game related responsibility ว่าหน้าที่ของ Agent 07 ชัดและเหมาะกับระบบหรือไม่
+
+08 แอสซาซินครอส:
+ทำ QA checklist สำหรับ flow: click agent → command panel → prepare prompt → send to Codex → side status panel → completed task
+
+09 สไนเปอร์:
+ตรวจ readiness ของ Practice/Mock Exam related Agent ว่ามี preset และหน้าที่เหมาะสำหรับงาน future product flow หรือไม่
+
+10 โปรเฟสเซอร์:
+review architecture ของ Agent Dashboard + Codex Bridge ว่าขยายไปทำทีม Agent อื่นได้ไหม มี technical debt หรือ risk อะไร
+
+11 กันสลิงเกอร์:
+ตรวจ reward/VIP/monetization role ว่ามี guardrail พอสำหรับใช้กับ Product Bible ภายหลังหรือไม่
+
+ผลลัพธ์ที่ต้องการ:
+- รายงานแยก Agent 02-11
+- แต่ละ Agent ให้สถานะ PASS / WARNING / FAIL
+- สรุปปัญหาที่พบ
+- สรุปสิ่งที่ควรทำต่อ
+- สรุปว่า Dispatcher สร้าง task แยกครบ 02-11 หรือไม่
+- สรุปว่า task รันแบบ sequential จริงหรือไม่
+- ยืนยันว่าไม่มีการแก้ไฟล์
+- ถ้ามี Agent ใด failed ให้บอกสาเหตุและ log/task ที่ควรตรวจ
+
+Task type:
+Review product mode logic (ตรวจ Mini Game Flow)
+
+Read first:
+- README.html
+- AGENTS.html
+- product_bible/01_game_flow/mini_game_flow.md
+- product_bible/02_reward_system/mini_game_reward_logic.md
+
+Scope:
+- Work only on the files and behavior directly related to the requested task.
+- Use existing project structure, canon files, and approved UI/system rules.
+- Treat Product Bible, Guild canon, and approved role mapping as source-of-truth constraints.
+
+Rules:
+- Do not use archive/ files.
+- Preserve approved canon unless explicitly requested.
+- Do not modify unrelated files.
+- Do not turn this into a visual redesign task.
+- Follow the current Product Bible and approved role mapping.
+- Keep user-facing UI Thai if UI copy is involved.
+- Do not call external APIs unless explicitly requested.
+- Do not modify approved images, sprites, backgrounds, character coordinates, hitboxes, hover/ring logic, or scene scaling unless explicitly requested.
+
+Expected output:
+Review or plan the Mini Game flow, stage progression, pass/fail behavior, Summary & Insight states, and navigation impact.
+
+Report requirements:
+- Files read.
+- Files changed, if any.
+- What was implemented or audited.
+- Verification steps and results.
+- Any risks, mismatches, or follow-up items.
+2026-06-04T11:53:10.831681Z  WARN codex_core_plugins::manifest: ignoring interface.defaultPrompt[0]: prompt must be at most 128 characters path=/Users/Pae/.codex/.tmp/plugins/plugins/ngs-analysis/.codex-plugin/plugin.json
+2026-06-04T11:53:17.533587Z  WARN codex_core_plugins::manifest: ignoring interface.defaultPrompt[0]: prompt must be at most 128 characters path=/Users/Pae/.codex/.tmp/plugins/plugins/ngs-analysis/.codex-plugin/plugin.json
+2026-06-04T11:53:17.550162Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:17.550172Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:17.551165Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:17.551168Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:17.551525Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:17.551528Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:17.551913Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:17.551915Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:17.552272Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:17.552275Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:17.553101Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:17.553104Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:19.358489Z  WARN codex_core_plugins::manifest: ignoring interface.defaultPrompt[0]: prompt must be at most 128 characters path=/Users/Pae/.codex/.tmp/plugins/plugins/ngs-analysis/.codex-plugin/plugin.json
+2026-06-04T11:53:19.367225Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:19.367230Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:19.367514Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:19.367517Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:19.367796Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:19.367799Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:19.368081Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:19.368084Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:19.368360Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:19.368363Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:19.368950Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:19.368952Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+codex
+ผมจะทำแบบ inspection เท่านั้นตามข้อกำหนด: เริ่มจากอ่าน `README.html` และ `AGENTS.html` ก่อน แล้วค่อยตรวจไฟล์ Product Bible กับส่วน Dashboard/Bridge ที่เกี่ยวข้อง โดยจะไม่แก้หรือสร้างไฟล์ใด ๆ.
+exec
+/bin/zsh -lc "pwd && rg --files -g 'README.html' -g 'AGENTS.html' -g 'product_bible/01_game_flow/mini_game_flow.md' -g 'product_bible/02_reward_system/mini_game_reward_logic.md' -g '*agent_dashboard*' -g '*codex*' -g '*bridge*'" in /Users/Pae/Developer/PIP/PIP-Public-Bible
+ succeeded in 0ms:
+/Users/Pae/Developer/PIP/PIP-Public-Bible
+skills_external/taste_skill/README.html
+product_bible/02_reward_system/mini_game_reward_logic.md
+product_bible/01_game_flow/mini_game_flow.md
+AGENTS.html
+README.html
+agents/pip_development_guild/agent_dashboard.html
+agents/pip_development_guild/README.html
+agents/pip_development_guild/codex_bridge/README.html
+agents/pip_development_guild/codex_bridge/codex_bridge.js
+
+exec
+/bin/zsh -lc 'git status --short' in /Users/Pae/Developer/PIP/PIP-Public-Bible
+ succeeded in 0ms:
+ M agents/pip_development_guild/agent_dashboard.html
+?? agents/pip_development_guild/codex_bridge/logs/task-1780565666132-300651c4.log
+?? agents/pip_development_guild/codex_bridge/logs/task-1780572249543-7fa7e7b7.log
+?? agents/pip_development_guild/codex_bridge/logs/task-1780573506413-f0fe8258.log
+?? agents/pip_development_guild/codex_bridge/logs/task-1780573605491-b92c5e10.log
+?? agents/pip_development_guild/codex_bridge/logs/task-1780573689490-88a480bf.log
+?? agents/pip_development_guild/codex_bridge/logs/task-1780573773493-29feb122.log
+?? agents/pip_development_guild/codex_bridge/logs/task-1780573875494-5569c365.log
+?? agents/pip_development_guild/codex_bridge/logs/task-1780573989282-33c1e989.log
+?? agents/pip_development_guild/codex_bridge/tasks/task-1780565666132-300651c4.json
+?? agents/pip_development_guild/codex_bridge/tasks/task-1780572249543-7fa7e7b7.json
+?? agents/pip_development_guild/codex_bridge/tasks/task-1780573506413-f0fe8258.json
+?? agents/pip_development_guild/codex_bridge/tasks/task-1780573605491-b92c5e10.json
+?? agents/pip_development_guild/codex_bridge/tasks/task-1780573689490-88a480bf.json
+?? agents/pip_development_guild/codex_bridge/tasks/task-1780573773493-29feb122.json
+?? agents/pip_development_guild/codex_bridge/tasks/task-1780573875494-5569c365.json
+?? agents/pip_development_guild/codex_bridge/tasks/task-1780573989282-33c1e989.json
+
+2026-06-04T11:53:28.363137Z  WARN codex_core_plugins::manifest: ignoring interface.defaultPrompt[0]: prompt must be at most 128 characters path=/Users/Pae/.codex/.tmp/plugins/plugins/ngs-analysis/.codex-plugin/plugin.json
+2026-06-04T11:53:28.372337Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:28.372343Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:28.372667Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:28.372670Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:28.372950Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:28.372953Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:28.373238Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:28.373243Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:28.373537Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:28.373541Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:28.374157Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:28.374160Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+codex
+พบว่า worktree มีการแก้ไข/ไฟล์ log-task อยู่ก่อนแล้ว โดยผมจะไม่แตะไฟล์เหล่านั้นและจะใช้เป็นหลักฐานตรวจ dispatcher เท่าที่เกี่ยวกับงานนี้เท่านั้น. ต่อไปผมจะอ่าน source-of-truth และไฟล์ Dashboard/Bridge โดยตรง.
+exec
+/bin/zsh -lc "sed -n '1,240p' README.html" in /Users/Pae/Developer/PIP/PIP-Public-Bible
+ succeeded in 0ms:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PIP Public Bible - Documentation Hub</title>
+<style>
+  :root {
+    --paper: #f7efe4;
+    --paper-2: #fffaf2;
+    --ink: #2f241d;
+    --muted: #675649;
+    --line: #d8c6b1;
+    --shadow: 0 18px 42px rgba(57, 40, 23, 0.12);
+    --blue: #305a8e;
+    --green: #4f7444;
+    --gold: #b8832e;
+    --purple: #6d4f96;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; }
+
+  body {
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(circle at 10% 0%, rgba(48, 90, 142, 0.10), transparent 28%),
+      radial-gradient(circle at 88% 12%, rgba(109, 79, 150, 0.10), transparent 24%),
+      linear-gradient(180deg, #fbf5ee 0%, #f2e4d3 100%);
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.14;
+    background:
+      linear-gradient(90deg, rgba(255,255,255,0.18) 0 1px, transparent 1px 100%),
+      linear-gradient(180deg, rgba(255,255,255,0.16) 0 1px, transparent 1px 100%);
+    background-size: 40px 40px;
+    mix-blend-mode: screen;
+  }
+
+  .wrap {
+    width: min(1240px, calc(100vw - 32px));
+    margin: 0 auto;
+    padding: 28px 0 40px;
+  }
+
+  .hero,
+  .section,
+  .card {
+    background: rgba(255, 250, 244, 0.95);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+  }
+
+  .hero {
+    border-radius: 28px;
+    padding: 30px;
+    margin-bottom: 18px;
+    background:
+      linear-gradient(135deg, rgba(255,251,246,0.98), rgba(255,247,239,0.94)),
+      radial-gradient(circle at top right, rgba(184,131,46,0.08), transparent 30%);
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1px solid #dfcfbc;
+    background: #f8f0e5;
+    color: #7b5c2d;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin: 14px 0 8px;
+    font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+    font-size: 46px;
+    line-height: 1;
+    letter-spacing: -0.05em;
+  }
+
+  .subtitle {
+    margin: 0 0 12px;
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--blue);
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .hero p {
+    max-width: 920px;
+    font-size: 16px;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 1px solid #c9d7ec;
+    background: #eef4ff;
+    color: #2d568f;
+    font-size: 13px;
+    font-weight: 900;
+    text-decoration: none;
+  }
+
+  .button.secondary {
+    border-color: #dcc9b5;
+    background: #fffaf4;
+    color: var(--ink);
+  }
+
+  .section {
+    border-radius: 24px;
+    padding: 18px;
+    margin-bottom: 18px;
+  }
+
+  .section-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 24px;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+  }
+
+  .section-head p {
+    margin-top: 5px;
+    font-size: 13px;
+  }
+
+  .pill {
+    align-self: flex-start;
+    padding: 8px 11px;
+    border-radius: 999px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .pill.blue { background: var(--blue); }
+  .pill.green { background: var(--green); }
+  .pill.purple { background: var(--purple); }
+  .pill.gold { background: var(--gold); }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .card {
+    border-radius: 22px;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(251,245,239,0.98));
+    box-shadow: 0 10px 20px rgba(56, 40, 24, 0.06);
+  }
+
+  .card-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    min-height: 100%;
+  }
+
+  .card-inner {
+    padding: 18px;
+  }
+
+  .card h3 {
+    margin: 0 0 8px;
+    font-size: 19px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .card p {
+    margin-bottom: 14px;
+    font-size: 14px;
+  }
+
+  .path {
+    display: inline-block;
+    max-width: 100%;
+    padding: 7px 9px;
+    border-radius: 10px;
+    border: 1px solid #e2d1bf;
+    background: #f4e8dc;
+    color: #5c3f32;
+    font-size: 12px;
+    font-weight: 800;
+    word-break: break-word;
+  }
+
+  .meta {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .meta-item {
+    padding: 12px 14px;
+    border-radius: 18px;
+
+exec
+/bin/zsh -lc "sed -n '1,260p' AGENTS.html" in /Users/Pae/Developer/PIP/PIP-Public-Bible
+ succeeded in 0ms:
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PIP Public Bible — Agent Instructions</title>
+<style>
+:root {
+  --bg:#f7efe4; --paper:#fffaf2; --ink:#2f251f; --muted:#745f50;
+  --line:#dfcbb3; --gold:#c99036; --brown:#6f4728; --green:#5f7f4c;
+  --shadow:rgba(73,48,26,.14);
+}
+* { box-sizing:border-box; }
+body {
+  margin:0; min-height:100vh; padding:32px;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at top left,rgba(201,144,54,.20),transparent 28%),
+    radial-gradient(circle at top right,rgba(95,127,76,.18),transparent 32%),
+    linear-gradient(180deg,#fbf4e9 0%,#efe1cd 100%);
+  line-height:1.65;
+}
+.wrap { max-width:960px; margin:0 auto; }
+.hero {
+  padding:32px; border:1px solid var(--line); border-radius:28px;
+  background:linear-gradient(135deg,rgba(255,250,242,.96),rgba(255,244,228,.92));
+  box-shadow:0 18px 38px var(--shadow); margin-bottom:22px;
+}
+.eyebrow {
+  display:inline-flex; padding:7px 11px; border-radius:999px; background:#fff1d6;
+  border:1px solid #ead19a; color:#754d16; font-size:13px; font-weight:800; margin-bottom:14px;
+}
+h1 { margin:0; font-size:clamp(32px,5vw,52px); letter-spacing:-.055em; line-height:1; }
+.lead { margin:14px 0 0; max-width:760px; font-size:17px; color:var(--muted); }
+.card {
+  padding:28px; border:1px solid var(--line); border-radius:24px;
+  background:rgba(255,250,242,.94); box-shadow:0 12px 28px rgba(73,48,26,.08);
+}
+h2 { margin:0 0 14px; font-size:26px; letter-spacing:-.03em; color:var(--brown); }
+p { color:var(--muted); margin:10px 0; }
+ul { margin:14px 0 0; padding-left:24px; color:var(--muted); }
+li { margin:8px 0; }
+code {
+  padding:2px 7px; border-radius:7px; background:#f3e5d4; border:1px solid #e1cbb3;
+  color:#5f3c24; font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+  font-size:.92em;
+}
+.notice {
+  margin-top:18px; padding:16px; border-radius:16px; background:#eff8ea;
+  border-left:5px solid var(--green); color:#415e36;
+}
+.footer { margin-top:18px; color:var(--muted); font-size:13px; text-align:center; }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <section class="hero">
+    <div class="eyebrow">AGENTS.html</div>
+    <h1>PIP Public Bible — Agent Instructions</h1>
+    <p class="lead">
+      HTML version of the repository agent instructions. Use this as a readable entry page for AI/Codex guidance, while keeping AGENTS.md if a tool specifically expects Markdown.
+    </p>
+  </section>
+  <section class="card">
+    <h2>UI/UX Skill</h2>
+<p>Before creating, reviewing, or modifying UI/UX, use the installed UI UX Pro Max skill as design reasoning support.</p>
+<p>Also read:</p>
+<ul>
+<li><code>agents/pip_development_guild/skills/visual_agent_team_skill.html</code></li>
+<li><code>product_bible/</code></li>
+</ul>
+    <h2 style="margin-top:24px;">External UI/UX Skills</h2>
+<p>Before frontend/UI polish, review <code>skills_external/taste_skill/README.html</code>.</p>
+<ul>
+<li>Use Taste Skill as design reasoning support only.</li>
+<li>Do not let it override <code>product_bible/</code> or approved UI canon.</li>
+</ul>
+    <div class="notice">
+      <strong>Note:</strong> This HTML file was generated from the uploaded <code>AGENTS.md</code>. Keep the original Markdown if Codex or another tool requires <code>AGENTS.md</code> specifically.
+    </div>
+  </section>
+  <div class="footer">Generated as AGENTS.html</div>
+</main>
+</body>
+</html>
+
+exec
+/bin/zsh -lc "sed -n '1,260p' product_bible/01_game_flow/mini_game_flow.md" in /Users/Pae/Developer/PIP/PIP-Public-Bible
+ succeeded in 0ms:
+# PIP — Mini Game Flow
+
+**Status:** Current Approved Game Flow + Daily Soft Reward Decay Proposal  
+**Scope:** Mini Game screens and in-game behavior only  
+**External References:** `mini_game_reward_logic.md`, `vip_subscription_logic.md`, `reward_inventory_logic.md`, `ad_monetization_logic.md`  
+**Design Source of Truth:** `Sprint & Mock - Design System.html`
+
+---
+
+## 1. Document Boundary
+
+This document defines only the playable Mini Game experience:
+
+- Mini Game Main Entry / Stage Path
+- Starting a stage
+- Answering 10 questions
+- Pass/fail progression
+- Quick Result screen
+- Game-facing reward choice after an Attempt
+- Summary & Insight screen states
+- Reviewing previous Attempts
+- Navigation inside Mini Game
+
+This document may describe reward values only when they directly affect Mini Game UI state, button labels, and post-Attempt flow.
+
+It does **not** define:
+
+- VIP pricing
+- Subscription benefits
+- Ticket allocation
+- Level reward schedules
+- Billing cycles
+- Commercial ad inventory rules
+- Interstitial ad frequency
+- Ad placement outside the Mini Game reward choice
+- Server-side reward economy outside this Mini Game flow
+
+Those rules belong in the external reward, VIP, inventory, and monetization documents.
+
+---
+
+## 2. Mode Definition
+
+Mini Game is a separate mode from Practice.
+
+- Do not present Mini Game as inside Practice.
+- Use `Mini Game Main Entry` as the neutral parent screen until final app navigation is approved.
+- The playable entry action is `เริ่มตะลุยโจทย์`.
+- Mini Game is designed as a short, repeatable, stage-based learning loop.
+- Mini Game must not block learning progress with forced ads or energy-style wait timers.
+
+---
+
+## 3. Mini Game Main Entry / Stage Path
+
+The Stage Path allows the user to:
+
+- View stage progression
+- Start an available stage
+- Recognize locked stages
+- Revisit previously played stages
+- Open previous Attempt review states
+
+### Stage States
+
+| State | Meaning | Tap Behavior |
+|---|---|---|
+| `locked` | Prerequisite progression is not complete | Cannot start stage |
+| `available` | Stage may be played now | Start a new 10-question Attempt |
+| `completed_insight_unlocked` | A completed Attempt has unlocked Insight | Open Summary & Insight |
+| `completed_insight_locked` | A completed Attempt has locked Insight | Open Locked Insight state |
+| `failed_attempt` | A completed Attempt failed | Open review; next stage remains locked |
+
+### Multiple Attempts
+
+- A stage may have multiple Attempts.
+- Tapping a played stage opens the latest completed Attempt by default.
+- The review experience must provide access to older Attempts for the same stage.
+- Insight status is stored per Attempt, not only per Stage.
+
+---
+
+## 4. Stage Gameplay
+
+- One stage contains exactly 10 questions.
+- The user answers one question at a time.
+- After selecting an answer, the UI may show selected/correct/incorrect option states.
+- Do not show an inline explanation card under the answer choices during gameplay.
+- Explanation content belongs in Summary & Insight after the Attempt.
+- After Question 10, open Quick Result immediately.
+
+```text
+Mini Game Main Entry
+  → Start Available Stage
+  → Question 1 … Question 10
+  → Quick Result
+  → Reward Choice
+  → Summary & Insight / Stage Path / Next Stage action
+```
+
+---
+
+## 5. Pass / Fail and Progression
+
+| Score | Result | Next Stage |
+|---:|---|---|
+| 8/10, 9/10, 10/10 | `passed` | May be unlocked according to progression |
+| 0/10–7/10 | `failed` | Remains unavailable |
+
+Rules:
+
+- Pass/fail controls progression only.
+- A failed user must still be able to review or unlock Insight according to external access rules.
+- Reviewing Insight never converts failure into a pass.
+- Only a new passing Attempt may open progression.
+- Reward claiming does not change pass/fail status.
+- Unlocking Insight does not change pass/fail status.
+
+---
+
+## 6. Daily Soft Reward Decay
+
+Mini Game supports a daily soft reward decay for Free Users who continue playing without choosing the rewarded-ad option.
+
+This rule is intended to:
+
+- Let Free Users continue playing Mini Game without a hard block.
+- Avoid forcing ads before or during gameplay.
+- Keep the first sessions of the day generous.
+- Create a natural incentive to choose the rewarded-ad option when the user wants faster progress.
+- Limit unlimited free reward farming while preserving learning value.
+
+### Free User Base Reward by Daily Mini Game Completion Count
+
+| Daily completed Mini Game Attempt | Base reward if user does not watch rewarded ad | Rewarded-ad option |
+|---:|---:|---:|
+| Attempts 1–7 | `100 ค่าประสบการณ์` | `200 ค่าประสบการณ์` |
+| Attempts 8–10 | `75 ค่าประสบการณ์` | `200 ค่าประสบการณ์` |
+| Attempts 11+ | `50 ค่าประสบการณ์` | `200 ค่าประสบการณ์` |
+
+Rules:
+
+- The user may continue playing Mini Game after Attempt 10.
+- The system must not block gameplay when the base reward decreases.
+- The base reward decrease must be communicated as a daily reward state, not as punishment.
+- The rewarded-ad option remains available after each completed Attempt when ad availability and external reward logic allow it.
+- If the user chooses the rewarded-ad option, the displayed reward for that Attempt is `200 ค่าประสบการณ์`.
+- If the user does not choose the rewarded-ad option, the displayed reward follows the daily base reward tier.
+- The reset boundary for the daily counter is controlled by reward/system logic outside this file.
+- The daily counter must be server-authoritative when implemented.
+
+### Recommended UI Messaging
+
+Before soft decay begins:
+
+- `วันนี้ยังรับค่าประสบการณ์เต็มได้อีก {n} รอบ`
+
+During Attempts 8–10:
+
+- `รอบนี้รับ 75 ค่าประสบการณ์`
+- `ดูโฆษณาเพื่อรับ 200 ค่าประสบการณ์`
+
+After Attempt 10:
+
+- `วันนี้รับค่าประสบการณ์เต็มครบแล้ว`
+- `ยังฝึกต่อได้ตามปกติ`
+- `รับ 50 ค่าประสบการณ์ หรือดูโฆษณาเพื่อรับ 200 ค่าประสบการณ์`
+
+Do not use wording that implies punishment, loss, or failure for not watching an ad.
+
+Forbidden wording examples:
+
+- `รางวัลของคุณถูกลดลง`
+- `ต้องดูโฆษณาเพื่อรับรางวัล`
+- `ไม่ดูโฆษณาจะไม่ได้รางวัล`
+
+---
+
+## 7. Quick Result Screen
+
+Quick Result appears immediately after the tenth answer.
+
+Every user must see:
+
+- Score
+- Correct and incorrect counts
+- Result state: `ผ่านเกณฑ์` or `ยังไม่ผ่าน`
+- Current base reward display based on the daily reward tier
+- Rewarded-ad option display when available
+- Available next actions supplied by reward/access logic
+
+Rules:
+
+- Never hide basic result information behind an advertisement, VIP prompt, or Insight lock.
+- Quick Result must show the reward state clearly before the user claims a reward.
+- The normal claim button must use the current base reward value for that Attempt.
+- The rewarded-ad claim button must display `200 ค่าประสบการณ์` when available.
+- Reward actions are supplied and validated by `mini_game_reward_logic.md`.
+- Access entitlements are supplied by `vip_subscription_logic.md`.
+- Advertisement availability and commercial rules are supplied by `ad_monetization_logic.md`.
+
+Approved result wording:
+
+- Passed: `ผ่านเกณฑ์!` / `คุณตอบถูก 8 / 10 ข้อ`
+- Failed: `ยังไม่ผ่าน` / `คุณตอบถูก 6 / 10 ข้อ`
+
+Example reward actions:
+
+| Daily reward tier | Normal claim button | Rewarded-ad button |
+|---|---|---|
+| Attempts 1–7 | `รับ 100 ค่าประสบการณ์` | `ดูโฆษณา รับ 200 ค่าประสบการณ์` |
+| Attempts 8–10 | `รับ 75 ค่าประสบการณ์` | `ดูโฆษณา รับ 200 ค่าประสบการณ์` |
+| Attempts 11+ | `รับ 50 ค่าประสบการณ์` | `ดูโฆษณา รับ 200 ค่าประสบการณ์` |
+
+---
+
+## 8. Reward Claim Flow
+
+The reward claim flow happens after Quick Result.
+
+```text
+Question 10 Completed
+  → Quick Result
+  → User chooses reward action
+      → Claim current base reward
+      OR
+      → Watch rewarded ad, then claim 200 ค่าประสบการณ์
+  → Open next available Mini Game action
+```
+
+Rules:
+
+- A completed Attempt may receive only one final reward claim.
+- Reward claim must be idempotent.
+- Refreshing the screen, retrying a network request, or reopening the Attempt must not duplicate rewards.
+- Reward amount must be calculated and confirmed by trusted reward logic, not only by the client UI.
+- The UI may display the expected reward, but the backend/source of truth must finalize the claimed reward.
+- If rewarded ad is unavailable or fails, the user must still be able to claim the current base reward.
+- If the user has already claimed the base reward, the Attempt must not later be upgraded to rewarded-ad reward unless external reward logic explicitly supports that rule.
+
+---
+
+## 9. Summary & Insight Screen States
+
+### Locked State
+
+A locked state may show:
+
+- Existing score
+- Pass/fail state
+- Final claimed reward, if finalized
+- Locked Insight message
+- Available unlock action from external logic
+
+It must not reveal full answer review before unlock.
+
+### Unlocked State
+
+When unlocked, Summary & Insight must provide:
+
+
+exec
+/bin/zsh -lc "sed -n '1,260p' product_bible/02_reward_system/mini_game_reward_logic.md" in /Users/Pae/Developer/PIP/PIP-Public-Bible
+ succeeded in 0ms:
+# PIP — Mini Game Reward & Insight Unlock Logic
+
+**Status:** Current Approved Reward Logic  
+**Scope:** Reward outcomes generated by a completed Mini Game Attempt  
+**Related Flow:** `mini_game_flow.md`
+
+## 1. Boundary
+This document defines:
+- 100 / 200 ค่าประสบการณ์ outcomes
+- Immediate Rewarded Ad action
+- Locked Insight unlock after claiming 100
+- Unlocking a previous Attempt
+- Permanent Insight unlock behavior
+
+It does not define subscription pricing, VIP allocation schedules, billing behavior, or general ad placements.
+
+## 2. Base Reward
+Every completed 10-question Mini Game Attempt has a base reward:
+
+| Completed Action | Base Reward |
+|---|---:|
+| Complete 10 questions | 100 ค่าประสบการณ์ |
+
+Rules:
+- Applies whether the Attempt is passed or failed.
+- Access status does not automatically double the base reward.
+- Once the user confirms the 100 reward, that Attempt cannot later receive retroactive x2.
+
+## 3. Free User — Immediate Post-Stage Decision
+At Quick Result, when Insight is locked:
+
+| Action | Final Reward | Insight Outcome |
+|---|---:|---|
+| `รับ 100 ค่าประสบการณ์` | 100 | Remains locked |
+| `ดูโฆษณา รับ x2 + ปลดล็อก Insight` | 200 | Permanently unlocked for that Attempt |
+
+Approved UI copy:
+- Card title: `รับเพิ่มพร้อมเปิดบทวิเคราะห์`
+- Description: `ดูโฆษณา 1 ครั้ง เพื่อรับ 200 ค่าประสบการณ์ และปลดล็อก Insight พร้อมเฉลยครบทุกข้อถาวร`
+- Primary button: `ดูโฆษณา รับ x2 + ปลดล็อก Insight`
+- Secondary button: `รับ 100 ค่าประสบการณ์`
+
+When the immediate Rewarded Ad completes successfully:
+- Set `final_reward = 200`.
+- Set `x2_used = true`.
+- Set `x2_source = rewarded_ad`.
+- Unlock Insight permanently.
+- Set `insight_unlock_source = rewarded_ad_immediate`.
+
+## 4. Claiming 100 Then Opening Locked Insight
+If a Free User selects `รับ 100 ค่าประสบการณ์`:
+- Set `final_reward = 100`.
+- Finalize the reward decision.
+- Keep Insight locked.
+- Allow the user to enter Locked Summary & Insight immediately.
+
+Locked Insight action:
+- `ดูโฆษณาเพื่อเปิด Insight`
+
+Copy:
+- Heading: `ปลดล็อก Insight ของด่านนี้`
+- Description: `ดูโฆษณา 1 ครั้ง เพื่อเปิดเฉลยและบทวิเคราะห์ครบทุกข้อถาวร`
+- Notice: `การปลดล็อกครั้งนี้ไม่เพิ่มค่าประสบการณ์ย้อนหลัง`
+
+Success outcome:
+- Insight becomes permanently unlocked.
+- Final reward remains `100`.
+- Set `insight_unlock_source = rewarded_ad_locked_screen`.
+- Do not grant retroactive x2.
+
+## 5. Unlocking a Previous Locked Attempt
+A previous locked Attempt opened from Stage Path or History may offer:
+- `ดูโฆษณาเพื่อเปิด Insight`
+
+After successful Rewarded Ad completion:
+- Insight becomes permanently unlocked.
+- Original final reward remains unchanged.
+- Set `insight_unlock_source = rewarded_ad_history`.
+- Do not grant retroactive x2.
+
+## 6. Permanent Unlock Rule
+Once Insight is unlocked for an Attempt:
+- It remains unlocked permanently.
+- It can be reopened for free.
+- It must not require another unlock ad.
+- Its unlocked state is not removed when an external entitlement expires.
+
+## 7. Failed Attempt Reward Rule
+The same reward and Insight unlock choices apply to failed Attempts.
+- Failing affects progression, not reward-choice eligibility.
+- Unlocking Insight does not convert failure into a pass.
+- A new passing Attempt is required to open the next stage.
+
+## 8. Rewarded Ad Failure / Cancellation
+If an optional Rewarded Ad fails, is interrupted, or is not completed:
+- Do not award 200.
+- Do not unlock Insight through that action.
+- Return the user to the previous choice state.
+- Allow retry or the non-ad option where applicable.
+
+## 9. Reward Outcome Matrix
+| Situation | Final Reward | Insight |
+|---|---:|---|
+| Free User accepts base reward | 100 | Locked |
+| Free User watches immediate x2 + unlock ad | 200 | Permanently unlocked |
+| Free User accepts 100 then unlocks from current Locked screen | 100 | Permanently unlocked |
+| Free User unlocks later from review/history | Original value | Permanently unlocked |
+| External entitlement opens Insight | Reward determined by selected reward action | Permanently unlocked |
+
+## 10. Required Reward Data
+| Field | Allowed Values / Description |
+|---|---|
+| `base_reward` | `100` |
+| `final_reward` | `100` or `200` |
+| `reward_finalized` | `true` / `false` |
+| `x2_used` | `true` / `false` |
+| `x2_source` | `rewarded_ad`, `vip_subscription_ticket`, or `none` |
+| `insight_status` | `locked` / `unlocked` |
+| `insight_unlock_source` | `rewarded_ad_immediate`, `rewarded_ad_locked_screen`, `rewarded_ad_history`, `vip_reward_active`, `vip_subscription_active`, or `none` |
+
+## 11. Locked Decisions
+- Completion reward starts at 100 ค่าประสบการณ์.
+- Optional immediate Rewarded Ad grants 200 ค่าประสบการณ์ and permanent Insight unlock.
+- Accepting 100 finalizes reward value for that Attempt.
+- Insight may still be unlocked after accepting 100, but x2 is not granted retroactively.
+- Failed users receive the same reward/Insight choices.
+- Insight unlock is permanent per Attempt.
+
+2026-06-04T11:53:36.107970Z  WARN codex_core_plugins::manifest: ignoring interface.defaultPrompt[0]: prompt must be at most 128 characters path=/Users/Pae/.codex/.tmp/plugins/plugins/ngs-analysis/.codex-plugin/plugin.json
+2026-06-04T11:53:36.117158Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:36.117164Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:36.117449Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:36.117452Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:36.117748Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:36.117751Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:36.118051Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:36.118054Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:36.118340Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:36.118343Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:36.118990Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:36.118992Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+codex
+ตอนนี้ Mini Game canon ชัดเจนว่า progression ถูกผูกกับ pass/fail เท่านั้น ส่วน reward/Insight แยกจาก progression. จุดที่ต้องจับตาคือเอกสาร flow มี daily soft reward decay แต่ reward logic ยังระบุ base reward เป็น 100 คงที่ จึงเป็นความเสี่ยงเชิง source-of-truth ที่ควรมี guardrail เพิ่ม.
+exec
+/bin/zsh -lc "sed -n '260,620p' product_bible/01_game_flow/mini_game_flow.md" in /Users/Pae/Developer/PIP/PIP-Public-Bible
+ succeeded in 0ms:
+
+- Total score and pass/fail status
+- Correct and incorrect counts
+- Final claimed reward for the Attempt
+- All 10 questions
+- User-selected answer and correct answer for each question
+- Explanation for every question
+- Missed-topic / weak-area analysis
+- PIP guidance on what to review next
+
+### Permanent Attempt Access
+
+If an Attempt has `insight_status = unlocked`, opening it again always displays the unlocked Summary & Insight experience.
+
+---
+
+## 10. Reviewing Previous Attempts
+
+### Already Unlocked Attempt
+
+- Open Summary & Insight immediately.
+- Do not change reward, score, result, or progression.
+- Do not create a new Attempt.
+
+### Locked Attempt
+
+- Open Locked Summary & Insight.
+- Show any unlock action currently available from external logic.
+- If access is granted, update the selected Attempt to unlocked and open Insight.
+
+### External Access Hook
+
+The flow must support an entitlement that can unlock a locked Attempt immediately. Entitlement rules belong outside this file.
+
+### Review Is Not Replay
+
+| Review Action | New Reward | New Progression | New Attempt |
+|---|---:|---:|---:|
+| Open unlocked Insight | No | No | No |
+| Unlock and open previous Insight | No | No | No |
+| Review a failed Attempt | No | No | No |
+
+---
+
+## 11. Navigation
+
+Passed Attempt actions, when applicable:
+
+- `ดู Insight`
+- `ไปด่านถัดไป`
+- `กลับหน้าหลัก`
+
+Failed Attempt actions:
+
+- `ดู Insight`
+- `เล่นใหม่`
+- `กลับหน้าหลัก`
+
+Forbidden for Failed Attempt:
+
+- `ไปด่านถัดไป`
+
+Forbidden wording:
+
+- `กลับหน้า Practice`
+
+---
+
+## 12. Required Game Data
+
+### Stage Data
+
+| Field | Description |
+|---|---|
+| `stage_id` | Unique stage identifier |
+| `stage_number` | Displayed stage order |
+| `stage_access_status` | `locked`, `available`, or `completed` |
+| `latest_attempt_id` | Most recent completed Attempt, if any |
+| `latest_attempt_result` | `passed` or `failed`, if any |
+| `latest_attempt_score` | Latest score, if any |
+| `latest_attempt_insight_status` | `locked` or `unlocked` |
+| `attempt_count` | Completed Attempt count for this Stage |
+| `next_stage_unlocked` | Whether progression has opened the next Stage |
+
+### Attempt Data Needed by Game UI
+
+| Field | Description |
+|---|---|
+| `attempt_id` | Unique Attempt identifier |
+| `stage_id` | Stage associated with the Attempt |
+| `completed_at` | Completion timestamp |
+| `correct_count` | Correct answer count |
+| `wrong_count` | Incorrect answer count |
+| `result_status` | `passed` or `failed` |
+| `daily_reward_attempt_index` | Server-authoritative daily completed Mini Game index used for reward tier display |
+| `base_reward_amount` | Current base reward amount for this Attempt before rewarded-ad choice |
+| `rewarded_ad_reward_amount` | Rewarded-ad reward amount shown when available |
+| `reward_claim_status` | `unclaimed`, `claimed_base`, or `claimed_rewarded_ad` |
+| `final_reward_display` | Final claimed reward display value supplied by reward logic |
+| `final_reward_amount` | Final reward amount confirmed by reward logic |
+| `insight_status` | `locked` or `unlocked` |
+| `insight_unlocked_at` | Timestamp, if unlocked |
+
+### Daily Reward State Needed by Game UI
+
+| Field | Description |
+|---|---|
+| `daily_mini_game_completed_count` | Completed Mini Game Attempts counted for the current reset window |
+| `current_reward_tier` | `full`, `soft_decay_75`, or `soft_decay_50` |
+| `remaining_full_reward_attempts` | Number of remaining daily Attempts that still grant 100 base reward |
+| `daily_reward_reset_at` | Timestamp supplied by reward/system logic |
+| `reward_state_source` | Indicates whether reward state came from server/source of truth |
+
+---
+
+## 13. Approved UI Terms
+
+Use:
+
+- `เริ่มตะลุยโจทย์`
+- `ผ่านเกณฑ์`
+- `ยังไม่ผ่าน`
+- `ดู Insight`
+- `ปลดล็อก Insight`
+- `คำตอบที่ถูก`
+- `คำอธิบาย`
+- `ไปด่านถัดไป`
+- `เล่นใหม่`
+- `กลับหน้าหลัก`
+- `ค่าประสบการณ์`
+- `รับ 100 ค่าประสบการณ์`
+- `รับ 75 ค่าประสบการณ์`
+- `รับ 50 ค่าประสบการณ์`
+- `ดูโฆษณา รับ 200 ค่าประสบการณ์`
+- `วันนี้รับค่าประสบการณ์เต็มครบแล้ว`
+- `ยังฝึกต่อได้ตามปกติ`
+
+Do not use:
+
+- `EXP`
+- `XP`
+- `กลับหน้า Practice`
+- `รางวัลของคุณถูกลดลง`
+- `ต้องดูโฆษณาเพื่อรับรางวัล`
+
+---
+
+## 14. Locked Mini Game Decisions
+
+- Mini Game is separate from Practice.
+- One Stage contains exactly 10 questions.
+- Passing requires at least 8/10.
+- Quick Result is shown immediately after Question 10.
+- A failed Attempt cannot open the next Stage but remains reviewable.
+- Stage Path supports revisiting previous Attempts.
+- Summary & Insight has Locked and Unlocked states.
+- Unlocked Insight remains viewable permanently for its Attempt.
+- Reviewing an Attempt does not grant progression or change the prior result.
+- Commercial Reward, VIP, Subscription, and Advertisement rules are maintained in separate system documents.
+- Free User Mini Game base reward uses Daily Soft Reward Decay for game-facing reward display: Attempts 1–7 = 100, Attempts 8–10 = 75, Attempts 11+ = 50.
+- Rewarded-ad Mini Game option remains 200 ค่าประสบการณ์ when available.
+- Mini Game must remain playable after daily base reward decay begins.
+
+---
+
+## 15. Open Decisions / Must Be Confirmed Outside This File
+
+The following are intentionally not finalized in this flow document:
+
+- Exact daily reset boundary for `daily_mini_game_completed_count`
+- Whether reset is calendar-day based, rolling 24-hour based, or server-event based
+- Whether VIP, paid membership, reward tickets, or campaigns modify the daily reward tiers
+- Whether rewarded-ad reward also unlocks Insight in specific product states
+- Whether a claimed base reward can ever be upgraded later
+- Ad availability, cooldown, fill failure handling, and commercial ad frequency
+- Detailed backend API contract for reward claiming
+
+
+exec
+/bin/zsh -lc "sed -n '1,260p' agents/pip_development_guild/README.html" in /Users/Pae/Developer/PIP/PIP-Public-Bible
+ succeeded in 0ms:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PIP Development Guild - Visual System Entry</title>
+<style>
+  :root {
+    --paper:#f6efe5;
+    --paper-2:#fffaf2;
+    --ink:#2f241d;
+    --muted:#6f5a4f;
+    --line:#d8c7b3;
+    --shadow:0 18px 44px rgba(56, 40, 24, .12);
+    --lead:#315b8f;
+    --build:#557a45;
+    --quality:#a94336;
+    --modes:#72539b;
+    --money:#b97d25;
+  }
+  * { box-sizing:border-box; }
+  html, body { margin:0; min-height:100%; }
+  body {
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 8% 0%, rgba(81, 124, 74, .11), transparent 25%),
+      radial-gradient(circle at 92% 14%, rgba(49, 91, 143, .12), transparent 23%),
+      linear-gradient(180deg, #fbf5ee 0%, #f1e4d5 100%);
+  }
+  body::before {
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+      linear-gradient(90deg, rgba(255,255,255,.18) 0 1px, transparent 1px 100%),
+      linear-gradient(180deg, rgba(255,255,255,.16) 0 1px, transparent 1px 100%);
+    background-size:38px 38px;
+    opacity:.16;
+    pointer-events:none;
+    mix-blend-mode:screen;
+  }
+  .wrap {
+    width:min(1480px, calc(100vw - 32px));
+    margin:0 auto;
+    padding:28px 0 34px;
+  }
+  .hero, .section, .card {
+    background:rgba(255,250,244,.95);
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+  }
+  .hero {
+    border-radius:30px;
+    padding:30px;
+    margin-bottom:18px;
+    background:
+      linear-gradient(135deg, rgba(255,251,246,.98), rgba(255,247,239,.94)),
+      radial-gradient(circle at top right, rgba(122,83,155,.06), transparent 32%);
+  }
+  .eyebrow {
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 12px;
+    border-radius:999px;
+    background:#f0e7ff;
+    border:1px solid #dfd1f5;
+    color:#5b4387;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  h1 {
+    margin:14px 0 8px;
+    font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif;
+    font-size:46px;
+    line-height:1;
+    letter-spacing:-.05em;
+  }
+  .subtitle {
+    margin:0 0 10px;
+    font-size:18px;
+    font-weight:900;
+    color:#5b4387;
+    letter-spacing:-.02em;
+  }
+  p, li {
+    color:var(--muted);
+    line-height:1.58;
+  }
+  .hero p {
+    margin:0;
+    max-width:1040px;
+    font-size:16px;
+  }
+  .hero-actions {
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:18px;
+  }
+  .button {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:42px;
+    padding:10px 14px;
+    border-radius:999px;
+    border:1px solid #c9d8ef;
+    background:#edf4ff;
+    color:#2d568f;
+    font-size:13px;
+    font-weight:900;
+    text-decoration:none;
+  }
+  .button.secondary {
+    border-color:#dccbb8;
+    background:#fffaf4;
+    color:var(--ink);
+  }
+  .section {
+    border-radius:26px;
+    padding:18px;
+    margin-bottom:18px;
+  }
+  .section-head {
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:14px;
+    margin-bottom:14px;
+  }
+  h2 {
+    margin:0;
+    font-size:24px;
+    letter-spacing:-.03em;
+    line-height:1.05;
+  }
+  .section-head p {
+    margin:5px 0 0;
+    font-size:13px;
+  }
+  .pill {
+    align-self:flex-start;
+    padding:8px 11px;
+    border-radius:999px;
+    color:#fff;
+    background:var(--lead);
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    white-space:nowrap;
+  }
+  .grid-2 { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:14px; }
+  .grid-3 { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:14px; }
+  .grid-4 { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:14px; }
+  .card {
+    position:relative;
+    border-radius:22px;
+    overflow:hidden;
+    background:linear-gradient(180deg, rgba(255,255,255,.98), rgba(251,245,239,.98));
+    box-shadow:0 10px 20px rgba(56,40,24,.06);
+  }
+  .card-inner {
+    position:relative;
+    z-index:1;
+    padding:16px;
+  }
+  .card::after {
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.20), transparent 28%),
+      radial-gradient(circle at top right, rgba(255,255,255,.45), transparent 24%);
+    pointer-events:none;
+  }
+  .card h3 {
+    margin:0 0 7px;
+    font-size:18px;
+    line-height:1.08;
+    letter-spacing:-.02em;
+  }
+  .card p {
+    margin:0 0 12px;
+    font-size:13px;
+  }
+  .link-card {
+    display:block;
+    min-height:150px;
+    color:inherit;
+    text-decoration:none;
+  }
+  .file {
+    display:inline-block;
+    max-width:100%;
+    padding:6px 8px;
+    border-radius:10px;
+    background:#f2e6da;
+    border:1px solid #e1cfbd;
+    color:#5b3e32;
+    font-size:12px;
+    font-weight:800;
+    word-break:break-word;
+  }
+  .status-row {
+    display:grid;
+    grid-template-columns:repeat(3, minmax(0, 1fr));
+    gap:12px;
+    margin-top:18px;
+  }
+  .status {
+    padding:12px 14px;
+    border-radius:18px;
+    background:#fbf5ef;
+    border:1px solid #eadac8;
+  }
+  .status span {
+    display:block;
+    margin-bottom:6px;
+    color:#95796c;
+    font-size:11px;
+    font-weight:900;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  .status strong {
+    display:block;
+    font-size:14px;
+    line-height:1.35;
+  }
+  .image-card img {
+    display:block;
+    width:100%;
+    height:auto;
+    border-radius:16px;
+    border:1px solid #ead7cf;
+    background:#fff;
+  }
+  .image-card .card-inner {
+    padding:14px;
+  }
+  .image-card h3 {
+    margin-bottom:10px;
+  }
+  ul {
+    margin:0;
+    padding-left:20px;
+  }
+  li {
+    margin:7px 0;
+  }
+  code {
+    background:#f2e6da;
+    border:1px solid #e1cfbd;
+    padding:2px 6px;
+    border-radius:8px;
+
+exec
+/bin/zsh -lc "sed -n '1,260p' agents/pip_development_guild/codex_bridge/README.html" in /Users/Pae/Developer/PIP/PIP-Public-Bible
+ succeeded in 0ms:
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Codex Bridge สำหรับ PIP Agent Dashboard</title>
+<style>
+  :root {
+    --paper:#fffaf2;
+    --ink:#2f251f;
+    --muted:#69594c;
+    --line:#dfcbb3;
+    --gold:#c99036;
+    --green:#577848;
+    --red:#9d4636;
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0;
+    min-height:100vh;
+    padding:30px;
+    color:var(--ink);
+    background:linear-gradient(180deg, #fbf4e9, #efe1cd);
+    font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    line-height:1.65;
+  }
+  main {
+    width:min(920px, 100%);
+    margin:0 auto;
+  }
+  section {
+    margin:0 0 16px;
+    padding:22px;
+    border:1px solid var(--line);
+    border-radius:18px;
+    background:rgba(255, 250, 242, .96);
+  }
+  h1, h2 { margin:0 0 10px; line-height:1.12; }
+  h1 { font-size:36px; letter-spacing:-.04em; }
+  h2 { color:#6f4728; font-size:22px; }
+  p { margin:0 0 10px; color:var(--muted); }
+  ul { margin:8px 0 0; padding-left:22px; color:var(--muted); }
+  li { margin:6px 0; }
+  code, pre {
+    border:1px solid #e4d1b9;
+    border-radius:10px;
+    background:#f4e6d5;
+    color:#563820;
+    font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+  code { padding:2px 6px; }
+  pre {
+    overflow:auto;
+    padding:14px;
+    white-space:pre-wrap;
+  }
+  .ok { border-left:5px solid var(--green); }
+  .warn { border-left:5px solid var(--red); }
+</style>
+</head>
+<body>
+<main>
+  <section>
+    <h1>Codex Bridge สำหรับ PIP Agent Dashboard</h1>
+    <p>Codex Bridge เป็นเซิร์ฟเวอร์ Node.js แบบ local-only ที่รับงานจาก <code>agent_dashboard.html</code> แล้วสั่ง <code>codex exec</code> ในเครื่องนี้เท่านั้น</p>
+    <p>เส้นทางการทำงานคือ Dashboard ส่ง JSON ไปที่ bridge จากนั้น bridge สร้างคำสั่ง Codex เอง จัดคิวงาน เก็บ log และรายงานสถานะกลับไปที่หน้า dashboard</p>
+  </section>
+
+  <section class="ok">
+    <h2>วิธีเริ่มใช้งาน</h2>
+    <pre>cd /Users/Pae/Developer/PIP/PIP-Public-Bible/agents/pip_development_guild/codex_bridge
+node codex_bridge.js</pre>
+    <p>เมื่อเริ่มสำเร็จ bridge จะฟังที่ <code>http://127.0.0.1:8787</code></p>
+  </section>
+
+  <section>
+    <h2>วิธีหยุด</h2>
+    <p>กลับไปที่ terminal ที่รัน bridge แล้วกด <code>Control+C</code></p>
+  </section>
+
+  <section>
+    <h2>Endpoint หลัก</h2>
+    <ul>
+      <li><code>GET /health</code> ตรวจว่า bridge พร้อมใช้งานหรือไม่</li>
+      <li><code>POST /tasks</code> ส่งงานแบบ structured payload จาก dashboard</li>
+      <li><code>GET /tasks</code> ดูรายการงานทั้งหมดในหน่วยความจำของ bridge รอบนี้</li>
+      <li><code>GET /tasks/:id</code> ดูสถานะงานเดียว</li>
+    </ul>
+  </section>
+
+  <section class="warn">
+    <h2>กฎความปลอดภัย</h2>
+    <ul>
+      <li>ระบบนี้เป็น local-only เท่านั้น</li>
+      <li>ห้าม expose port <code>8787</code> ขึ้น internet</li>
+      <li>ห้ามรันด้วย <code>danger-full-access</code></li>
+      <li>bridge ไม่รับ shell command จาก browser และไม่ให้ browser เปลี่ยน working directory</li>
+      <li>working directory ถูกล็อกไว้ที่ <code>/Users/Pae/Developer/PIP/PIP-Public-Bible</code></li>
+      <li>ควร commit ก่อนรันงานใหญ่</li>
+      <li>หลัง Codex รันเสร็จ ให้ตรวจ <code>git diff</code> ทุกครั้ง</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Logs และ Tasks</h2>
+    <p>ไฟล์ log ของแต่ละงานจะอยู่ใน <code>logs/</code> และสถานะงานจะถูกบันทึกใน <code>tasks/</code></p>
+    <p>bridge รันงานทีละหนึ่งงานเท่านั้น งานใหม่จะเข้าคิวและรอจนกว่างานก่อนหน้าจะจบ</p>
+  </section>
+
+  <section>
+    <h2>Troubleshooting</h2>
+    <ul>
+      <li>ถ้า dashboard แสดงว่ายังไม่ได้เปิด Codex Bridge ให้ตรวจว่า terminal ยังรัน <code>node codex_bridge.js</code> อยู่</li>
+      <li>ถ้า task เป็น <code>failed</code> ให้เปิดไฟล์ log ใน <code>logs/</code></li>
+      <li>ถ้า Codex start ไม่ได้ ให้ตรวจว่า <code>codex</code> CLI อยู่ใน PATH ของ terminal ที่รัน bridge</li>
+      <li>ถ้า port ถูกใช้อยู่ ให้ปิด process เดิมก่อน เพราะ bridge นี้ตั้งใจใช้ port <code>8787</code> เท่านั้น</li>
+    </ul>
+  </section>
+</main>
+</body>
+</html>
+
+exec
+/bin/zsh -lc "sed -n '1,260p' agents/pip_development_guild/codex_bridge/codex_bridge.js" in /Users/Pae/Developer/PIP/PIP-Public-Bible
+ succeeded in 0ms:
+const http = require("http");
+const fs = require("fs");
+const path = require("path");
+const childProcess = require("child_process");
+const crypto = require("crypto");
+
+const HOST = "127.0.0.1";
+const PORT = 8787;
+const WORKING_DIRECTORY = "/Users/Pae/Developer/PIP/PIP-Public-Bible";
+const MAX_PROMPT_LENGTH = 20000;
+const TASK_TIMEOUT_MS = 5 * 60 * 1000;
+const ROOT = __dirname;
+const LOG_DIR = path.join(ROOT, "logs");
+const TASK_DIR = path.join(ROOT, "tasks");
+
+fs.mkdirSync(LOG_DIR, { recursive: true });
+fs.mkdirSync(TASK_DIR, { recursive: true });
+
+const tasks = new Map();
+const queue = [];
+let runningTaskId = null;
+
+function now() {
+  return new Date().toISOString();
+}
+
+function safeJson(task) {
+  return {
+    id: task.id,
+    agentId: task.agentId,
+    agentName: task.agentName,
+    taskType: task.taskType,
+    taskDetails: task.taskDetails,
+    status: task.status,
+    createdAt: task.createdAt,
+    startedAt: task.startedAt,
+    completedAt: task.completedAt,
+    exitCode: task.exitCode,
+    error: task.error,
+    result: task.result,
+    logFile: path.basename(task.logFile)
+  };
+}
+
+function corsOrigin(request) {
+  const origin = request.headers.origin;
+  if (!origin || origin === "null" || origin === `http://${HOST}:${PORT}` || origin.startsWith("http://127.0.0.1:")) {
+    return origin || "null";
+  }
+  return "null";
+}
+
+function sendJson(request, response, statusCode, body) {
+  response.writeHead(statusCode, {
+    "Content-Type": "application/json; charset=utf-8",
+    "Access-Control-Allow-Origin": corsOrigin(request),
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type"
+  });
+  response.end(JSON.stringify(body, null, 2));
+}
+
+function saveTask(task) {
+  fs.writeFileSync(path.join(TASK_DIR, `${task.id}.json`), JSON.stringify(safeJson(task), null, 2));
+}
+
+function readBody(request) {
+  return new Promise((resolve, reject) => {
+    let body = "";
+    request.on("data", (chunk) => {
+      body += chunk;
+      if (body.length > MAX_PROMPT_LENGTH + 10000) {
+        reject(new Error("payload too large"));
+        request.destroy();
+      }
+    });
+    request.on("end", () => resolve(body));
+    request.on("error", reject);
+  });
+}
+
+function validateTaskPayload(payload) {
+  const prompt = typeof payload.prompt === "string" ? payload.prompt.trim() : "";
+  const taskDetails = typeof payload.taskDetails === "string" ? payload.taskDetails.trim() : "";
+
+  if (!taskDetails) return "taskDetails is required";
+  if (!prompt) return "prompt is required";
+  if (prompt.length > MAX_PROMPT_LENGTH) return `prompt must be ${MAX_PROMPT_LENGTH} characters or fewer`;
+
+  return null;
+}
+
+function appendLog(task, text) {
+  fs.appendFileSync(task.logFile, text);
+}
+
+function finalizeTask(task, status, details = {}) {
+  task.status = status;
+  task.completedAt = task.completedAt || now();
+  if (typeof details.exitCode !== "undefined") task.exitCode = details.exitCode;
+  if (typeof details.error !== "undefined") task.error = details.error;
+  if (typeof details.result !== "undefined") task.result = details.result;
+  saveTask(task);
+}
+
+function runNextTask() {
+  if (runningTaskId || queue.length === 0) return;
+
+  const task = tasks.get(queue.shift());
+  if (!task) {
+    runNextTask();
+    return;
+  }
+
+  runningTaskId = task.id;
+  task.status = "running";
+  task.startedAt = now();
+  saveTask(task);
+  appendLog(task, `Task ${task.id} started at ${task.startedAt}\n`);
+  appendLog(task, `Agent: ${task.agentName}\nTask type: ${task.taskType}\n\n`);
+
+  const child = childProcess.spawn("codex", ["exec", "--sandbox", "workspace-write", task.prompt], {
+    cwd: WORKING_DIRECTORY,
+    stdio: ["ignore", "pipe", "pipe"],
+    shell: false,
+    env: process.env
+  });
+
+  child.stdout.on("data", (data) => appendLog(task, data.toString()));
+  child.stderr.on("data", (data) => appendLog(task, data.toString()));
+
+  const timeoutTimer = setTimeout(() => {
+    appendLog(task, `\nTask timed out after 5 minutes\n`);
+    task.error = "Task timed out after 5 minutes";
+    try {
+      child.kill("SIGTERM");
+    } catch (error) {
+      appendLog(task, `Failed to send SIGTERM: ${error.message}\n`);
+    }
+    setTimeout(() => {
+      try {
+        if (!child.killed) child.kill("SIGKILL");
+      } catch (error) {
+        appendLog(task, `Failed to send SIGKILL: ${error.message}\n`);
+      }
+    }, 5000).unref();
+  }, TASK_TIMEOUT_MS);
+  timeoutTimer.unref();
+
+  child.on("error", (error) => {
+    clearTimeout(timeoutTimer);
+    task.completedAt = now();
+    task.error = error.message;
+    task.result = "Codex process could not start.";
+    appendLog(task, `\nTask failed to start: ${error.message}\n`);
+    finalizeTask(task, "failed", {
+      exitCode: typeof task.exitCode === "number" ? task.exitCode : null,
+      error: task.error,
+      result: task.result
+    });
+    runningTaskId = null;
+    runNextTask();
+  });
+
+  child.on("close", (code) => {
+    clearTimeout(timeoutTimer);
+    task.exitCode = code;
+    task.completedAt = now();
+    task.status = code === 0 ? "completed" : "failed";
+    task.result = code === 0 ? "Codex task completed." : (task.error || `Codex task failed with exit code ${code}.`);
+    appendLog(task, `\nTask ${task.status} at ${task.completedAt} with exit code ${code}\n`);
+    finalizeTask(task, task.status, {
+      exitCode: code,
+      error: task.error,
+      result: task.result
+    });
+    runningTaskId = null;
+    runNextTask();
+  });
+}
+
+function createTask(payload) {
+  const id = `task-${Date.now()}-${crypto.randomBytes(4).toString("hex")}`;
+  const task = {
+    id,
+    agentId: String(payload.agentId || ""),
+    agentName: String(payload.agentName || ""),
+    taskType: String(payload.taskType || ""),
+    taskDetails: String(payload.taskDetails || "").trim(),
+    prompt: String(payload.prompt || "").trim(),
+    status: "queued",
+    createdAt: now(),
+    startedAt: null,
+    completedAt: null,
+    exitCode: null,
+    error: null,
+    result: "",
+    logFile: path.join(LOG_DIR, `${id}.log`)
+  };
+
+  tasks.set(id, task);
+  queue.push(id);
+  appendLog(task, `Task ${id} queued at ${task.createdAt}\n`);
+  saveTask(task);
+  runNextTask();
+  return task;
+}
+
+async function handleRequest(request, response) {
+  const url = new URL(request.url, `http://${HOST}:${PORT}`);
+
+  if (request.method === "OPTIONS") {
+    sendJson(request, response, 204, {});
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/health") {
+    sendJson(request, response, 200, { ok: true });
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/tasks") {
+    sendJson(request, response, 200, Array.from(tasks.values()).map(safeJson));
+    return;
+  }
+
+  const taskMatch = url.pathname.match(/^\/tasks\/([^/]+)$/);
+  if (request.method === "GET" && taskMatch) {
+    const task = tasks.get(taskMatch[1]);
+    sendJson(request, response, task ? 200 : 404, task ? safeJson(task) : { error: "task not found" });
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/tasks") {
+    try {
+      const rawBody = await readBody(request);
+      const payload = JSON.parse(rawBody || "{}");
+      const validationError = validateTaskPayload(payload);
+      if (validationError) {
+        sendJson(request, response, 400, { error: validationError });
+        return;
+      }
+      const task = createTask(payload);
+      sendJson(request, response, 202, safeJson(task));
+    } catch (error) {
+      sendJson(request, response, 400, { error: error.message });
+    }
+    return;
+  }
+
+  sendJson(request, response, 404, { error: "not found" });
+}
+
+const server = http.createServer((request, response) => {
+  handleRequest(request, response).catch((error) => {
+    sendJson(request, response, 500, { error: error.message });
+  });
+});
+
+server.listen(PORT, HOST, () => {
+
+2026-06-04T11:53:44.439806Z  WARN codex_core_plugins::manifest: ignoring interface.defaultPrompt[0]: prompt must be at most 128 characters path=/Users/Pae/.codex/.tmp/plugins/plugins/ngs-analysis/.codex-plugin/plugin.json
+2026-06-04T11:53:44.449238Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:44.449244Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:44.449688Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:44.449692Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:44.450109Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:44.450114Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:44.450548Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:44.450551Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:44.450965Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:44.450968Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:44.451810Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:44.451813Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+exec
+/bin/zsh -lc "sed -n '260,360p' agents/pip_development_guild/codex_bridge/codex_bridge.js" in /Users/Pae/Developer/PIP/PIP-Public-Bible
+ succeeded in 0ms:
+server.listen(PORT, HOST, () => {
+  console.log(`Codex Bridge listening at http://${HOST}:${PORT}`);
+  console.log(`Working directory: ${WORKING_DIRECTORY}`);
+});
+
+2026-06-04T11:53:48.339847Z  WARN codex_core_plugins::manifest: ignoring interface.defaultPrompt[0]: prompt must be at most 128 characters path=/Users/Pae/.codex/.tmp/plugins/plugins/ngs-analysis/.codex-plugin/plugin.json
+2026-06-04T11:53:48.348888Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:48.348895Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:48.349273Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:48.349279Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:48.349678Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:48.349682Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:48.350060Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:48.350063Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:48.350455Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:48.350461Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:48.351308Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:48.351312Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+codex
+Bridge ฝั่ง Node มี queue จริงและมี `runningTaskId` กันไม่ให้รันซ้อน แต่ task state อยู่ใน memory ของ process ปัจจุบัน ส่วนไฟล์ JSON เป็น snapshot สำหรับตรวจย้อนหลัง ไม่ได้ reload กลับเข้า queue หลัง restart. ผมจะตรวจ dashboard ต่อว่ามีการสร้าง child task แยก 02-11 และส่ง POST ทีละงานจริงไหม.
+exec
+/bin/zsh -lc 'wc -l agents/pip_development_guild/agent_dashboard.html agents/pip_development_guild/codex_bridge/codex_bridge.js README.html AGENTS.html product_bible/01_game_flow/mini_game_flow.md product_bible/02_reward_system/mini_game_reward_logic.md' in /Users/Pae/Developer/PIP/PIP-Public-Bible
+ succeeded in 0ms:
+    2471 agents/pip_development_guild/agent_dashboard.html
+     263 agents/pip_development_guild/codex_bridge/codex_bridge.js
+     455 README.html
+      86 AGENTS.html
+     436 product_bible/01_game_flow/mini_game_flow.md
+     127 product_bible/02_reward_system/mini_game_reward_logic.md
+    3838 total
+
+exec
+/bin/zsh -lc 'rg -n "Agent 0|agentId|guild|dispatcher|Codex|Bridge|POST|/tasks|sequential|Mini Game|Product Modes|reward|VIP|monetization|07|Knight|ไนท์|Gunslinger|กันสลิงเกอร์|Sniper|สไนเปอร์" agents/pip_development_guild/agent_dashboard.html' in /Users/Pae/Developer/PIP/PIP-Public-Bible
+ succeeded in 0ms:
+631:    border-color:rgba(240, 198, 107, .95);
+632:    background:rgba(240, 198, 107, .20);
+654:    box-shadow:0 0 0 3px rgba(240, 198, 107, .13);
+659:    border:1px solid rgba(240, 198, 107, .62);
+707:    border-color:rgba(240, 198, 107, .62);
+1017:      <img class="background" src="backgrounds/01_guild_hall_ro_style_clean.png" alt="พื้นหลังห้องกิลด์ PIP ที่อนุมัติแล้ว">
+1028:        <p class="command-mode">คิว Codex Bridge ในเครื่อง</p>
+1106:                <button class="generate-button" type="button" id="sendAgentTaskButton">ส่งให้ Codex</button>
+1111:              <div class="bridge-state offline" id="bridgeStatusText" aria-live="polite">ยังไม่ได้เปิด Codex Bridge</div>
+1139:    zone:"เวทีกลาง", spritePath:"cropped_sprites/front_cutouts/01_guild_master_front.png", idlePrototypePath:"animations/01_guild_master_idle_css_prototype.html",
+1216:    id:"07", number:"07", name:"Knight", role:"ผู้ดูแลมินิเกม", group:"โหมดสินค้า",
+1217:    zone:"ขวาของเวที", spritePath:"cropped_sprites/front_cutouts/07_knight_front.png", idlePrototypePath:"animations/07_knight_idle_css_prototype.html",
+1220:    thaiName:"ไนท์",
+1223:    thaiDescription:"ไนท์คือผู้ดูแลลำดับการเล่นมินิเกม ทำหน้าที่คุมด่าน การผ่านหรือไม่ผ่าน ความคืบหน้า เส้นทางด่าน สรุปและอินไซต์ และประสบการณ์การเล่นแบบภารกิจ",
+1242:    id:"09", number:"09", name:"Sniper", role:"ผู้ดูแลโหมดฝึก", group:"โหมดสินค้า",
+1246:    thaiName:"สไนเปอร์",
+1249:    thaiDescription:"สไนเปอร์คือผู้ดูแลโหมดฝึกและความแม่นยำ ทำหน้าที่คุมลำดับการฝึกทำข้อสอบ โหมด 100 ข้อ การสอบจำลอง การวัดความแม่นยำ และการทบทวนผลการฝึก",
+1268:    id:"11", number:"11", name:"Gunslinger", role:"ผู้ดูแลรางวัล / วีไอพี", group:"รางวัลและรายได้",
+1272:    thaiName:"กันสลิงเกอร์",
+1275:    thaiDescription:"กันสลิงเกอร์คือผู้ดูแลรางวัลและวีไอพี และตรรกะรายได้ ทำหน้าที่คุมรางวัล บัตรคูณสอง โฆษณาแลกรางวัล ลำดับวีไอพี และความสมดุลของระบบรายได้โดยไม่ทำลายประสบการณ์ผู้ใช้",
+1285:    codexRole:"Guild Master / Codex Lead",
+1295:    readFirst:["README.html", "AGENTS.html", "product_bible/", "agents/pip_development_guild/README.html"],
+1308:    prompt:"Act as the Guild Master / Codex Lead. Read the current project canon first. Break the requested work into a safe implementation plan, identify which files should be read or modified, list risks, and propose the next steps before making changes. Do not modify files until the plan is approved."
+1322:    readFirst:["README.html", "AGENTS.html", "product_bible/", "agents/pip_development_guild/README.html"],
+1348:    readFirst:["README.html", "AGENTS.html", "agents/pip_development_guild/README.html"],
+1374:    readFirst:["README.html", "AGENTS.html", "agents/pip_development_guild/README.html", "agents/pip_development_guild/agent_dashboard.html", "skills_external/taste_skill/README.html"],
+1418:    presetsEnglish:["Security audit", "Client trust audit", "Duplicate reward audit", "Server authority audit"],
+1426:    readFirst:["README.html", "AGENTS.html", "product_bible/02_reward_system/", "product_bible/03_vip_and_subscription/", "product_bible/04_monetization/"],
+1438:    prompt:"Act as the Crusader / Security Agent. Audit the requested flow for security and system integrity risks. Check client trust, duplicate actions, reward duplication, tampering, validation, auth, rate limits, and server authority. Do not implement. Report risks and required safeguards."
+1440:  "07": {
+1442:    codexRole:"Knight / Mini Game Agent",
+1443:    presets:["ตรวจ Mini Game Flow", "ตรวจ Stage Progression", "ตรวจ Summary & Insight", "ตรวจ Pass / Fail Logic"],
+1444:    presetsEnglish:["Audit Mini Game flow", "Audit stage progression", "Audit Summary & Insight", "Audit pass/fail logic"],
+1451:    presetHelpDefault:"ใช้วางหรือทบทวน flow ของ Mini Game",
+1452:    readFirst:["README.html", "AGENTS.html", "product_bible/01_game_flow/mini_game_flow.md", "product_bible/02_reward_system/mini_game_reward_logic.md"],
+1453:    expectedOutput:"Review or plan the Mini Game flow, stage progression, pass/fail behavior, Summary & Insight states, and navigation impact.",
+1465:    prompt:"Act as the Knight / Mini Game Agent. Review or implement the Mini Game flow while preserving the approved game rules. Check stage progression, pass/fail behavior, Summary & Insight states, revisit behavior, and navigation. Do not mix reward/subscription rules unless required by the task."
+1479:    readFirst:["README.html", "AGENTS.html", "product_bible/", "agents/pip_development_guild/agent_dashboard.html"],
+1495:    codexRole:"Sniper / Practice Mode Agent",
+1518:    prompt:"Act as the Sniper / Practice Mode Agent. Review or plan the Practice Mode flow with focus on accuracy, mock exam behavior, question sessions, progress feedback, and result review. Keep Practice separate from Mini Game unless explicitly requested."
+1532:    readFirst:["README.html", "AGENTS.html", "product_bible/", "agents/pip_development_guild/README.html"],
+1548:    codexRole:"Gunslinger / Reward and VIP Agent",
+1549:    presets:["ตรวจ Reward Logic", "ตรวจ VIP Flow", "ตรวจ x2 Ticket", "ตรวจ Rewarded Ads"],
+1550:    presetsEnglish:["Audit reward logic", "Audit VIP flow", "Audit x2 ticket", "Audit rewarded ads"],
+1553:      "ใช้ตรวจ flow ของ VIP",
+1558:    readFirst:["README.html", "AGENTS.html", "product_bible/02_reward_system/", "product_bible/03_vip_and_subscription/", "product_bible/04_monetization/"],
+1559:    expectedOutput:"Review or plan Reward/VIP/monetization logic while preventing duplicate rewards and separating Free, VIP, ticket, and ad-based flows.",
+1572:    prompt:"Act as the Gunslinger / Reward and VIP Agent. Review or plan the reward, VIP, monetization, x2 ticket, and rewarded ad logic. Preserve approved product rules, prevent duplicate rewards, and clearly separate Free, VIP, ticket, and ad-based flows."
+1637:  running:"Codex กำลังทำงาน",
+1719:  workflowInstruction.textContent = "เลือกงานที่ต้องการให้เอเจนต์ช่วย แล้วเขียนรายละเอียด จากนั้นกดส่งให้ Codex";
+1732:  bridgeHint.textContent = bridgeAvailable ? "ระบบจะส่งคำสั่งนี้ไปที่ Codex ผ่านเครื่องของคุณ" : "เปิด Codex Bridge ก่อน หรือใช้ Copy Prompt แทน";
+1734:  updateBridgeControls();
+1815:    agentId:agent.id,
+1833:function normalizeBridgeTask(task) {
+1836:    agentId:task.agentId,
+1854:function updateBridgeControls() {
+1859:  bridgeStatusText.textContent = bridgeAvailable ? "Codex Bridge พร้อมใช้งาน" : "ยังไม่ได้เปิด Codex Bridge";
+1864:      ? "ระบบจะส่งคำสั่งนี้ไปที่ Codex ผ่านเครื่องของคุณ"
+1865:      : "เปิด Codex Bridge ก่อน หรือใช้ Copy Prompt แทน";
+1869:async function checkBridgeHealth() {
+1877:  updateBridgeControls();
+1880:function startBridgePolling() {
+1882:  bridgePollTimer = setInterval(loadBridgeTasks, 3000);
+1885:function stopBridgePollingIfIdle() {
+1893:function mergeBridgeTasks(bridgeTasks) {
+1894:  bridgeTasks.map(normalizeBridgeTask).forEach((bridgeTask) => {
+1914:async function loadBridgeTasks() {
+1916:    const response = await fetch(`${BRIDGE_URL}/tasks`, { cache:"no-store" });
+1917:    if (!response.ok) throw new Error("ไม่สามารถอ่านคิวจาก Codex Bridge");
+1919:    mergeBridgeTasks(data);
+1922:    stopBridgePollingIfIdle();
+1925:    updateBridgeControls();
+1929:async function sendTaskToBridge(task) {
+1930:  const response = await fetch(`${BRIDGE_URL}/tasks`, {
+1931:    method:"POST",
+1934:      agentId:task.agentId,
+1943:  if (!response.ok) throw new Error(data.error || "ส่งงานเข้า Codex Bridge ไม่สำเร็จ");
+1944:  return normalizeBridgeTask(data);
+1961:  taskWarning.textContent = "เตรียมคำสั่งสำหรับ Codex แล้ว";
+1970:  taskWarning.textContent = shouldStart ? "งานเข้าคิวแล้ว" : "เตรียมคำสั่งสำหรับ Codex แล้ว";
+1979:async function submitSelectedTask(shouldSendToBridge) {
+1980:  if (shouldSendToBridge && selectedAgent && selectedAgent.id === "01") {
+1986:  if (!shouldSendToBridge) {
+1991:    taskWarning.textContent = "ยังไม่ได้เปิด Codex Bridge";
+1997:    const bridgeTask = await sendTaskToBridge(task);
+2004:    startBridgePolling();
+2009:    updateBridgeControls();
+2029:    taskWarning.textContent = "ยังไม่ได้เปิด Codex Bridge จึงยังไม่สามารถกระจายงานอัตโนมัติได้";
+2038:    `Break this goal into a safe sequential dispatch plan for agents 02-11: ${goal}`,
+2043:  parentTask.resultSummary = "กำลังกระจายงานให้เอเจนต์ทีละตัวผ่าน Codex Bridge";
+2057:  taskWarning.textContent = "กำลังรันทีละงานผ่าน Codex Bridge ไม่รันพร้อมกันเพื่อความปลอดภัย";
+2064:    startBridgePolling();
+2069:    updateBridgeControls();
+2075:    { agentId:"02", preset:"ตรวจ Source of Truth", presetEnglish:"Audit source of truth", detail:`Inspect source-of-truth, canon, rule conflicts, and unsafe assumptions for this goal. Inspection only. Goal: ${goal}` },
+2076:    { agentId:"03", preset:"ทำ Handoff", presetEnglish:"Create handoff", detail:`Prepare a handoff summary structure for this dispatched workflow, including decisions, open issues, and next-step reporting. Inspection only. Goal: ${goal}` },
+2077:    { agentId:"04", preset:"ตรวจ Design System", presetEnglish:"Audit design system", detail:`Audit UX clarity, design-system consistency, visual canon, spacing, typography, and interaction wording for this goal. Inspection only. Goal: ${goal}` },
+2078:    { agentId:"05", preset:"ตรวจ Build Error", presetEnglish:"Inspect implementation maintainability", detail:`Inspect HTML/CSS/JS maintainability, structure, brittle code paths, and implementation risks related to this goal. Inspection only. Goal: ${goal}` },
+2079:    { agentId:"06", preset:"ตรวจ Security", presetEnglish:"Security audit", detail:`Audit Codex Bridge safety, client trust boundaries, unsafe browser execution risk, and system integrity for this goal. Inspection only. Goal: ${goal}` },
+2080:    { agentId:"07", preset:"ตรวจ Mini Game Flow", presetEnglish:"Review product mode logic", detail:`Check Product Modes and Mini Game role logic for conflicts or missing guardrails related to this goal. Inspection only. Goal: ${goal}` },
+2081:    { agentId:"08", preset:"ทำ QA Checklist", presetEnglish:"Create QA checklist", detail:`Create a focused QA and regression checklist for this dispatched workflow. Inspection only. Goal: ${goal}` },
+2082:    { agentId:"09", preset:"ตรวจ Practice Mode", presetEnglish:"Review Practice and Mock Exam readiness", detail:`Check Practice Mode, Mock Exam, accuracy review, and 100-question session readiness where relevant to this goal. Inspection only. Goal: ${goal}` },
+2083:    { agentId:"10", preset:"Review Architecture", presetEnglish:"Review architecture and technical debt", detail:`Review architecture, technical debt, maintainability, coupling, and long-term structure risks for this goal. Inspection only. Goal: ${goal}` },
+2084:    { agentId:"11", preset:"ตรวจ Reward Logic", presetEnglish:"Review reward and monetization guardrails", detail:`Check Reward, VIP, monetization, x2 ticket, and rewarded ad guardrails for conflicts or duplicate-reward risk related to this goal. Inspection only. Goal: ${goal}` }
+2088:    const agent = agents.find((item) => item.id === step.agentId);
+2113:  const waitingForBridge = children.find((task) => task.bridgeTaskId && task.status === "queued");
+2114:  if (waitingForBridge) return;
+2121:    const bridgeTask = await sendTaskToBridge(nextChild);
+2152:  latestTaskSummary.textContent = "งานกระจายครบทุกเอเจนต์แล้ว ตรวจ log ของแต่ละงานได้ใน Codex Bridge";
+2159:  return agents.find((agent) => agent.id === task.agentId);
+2175:  const active = tasks.find((task) => task.agentId === agent.id && task.status === "running");
+2177:  const queued = tasks.find((task) => task.agentId === agent.id && task.status === "queued");
+2179:  const latest = tasks.filter((task) => task.agentId === agent.id && (task.status === "completed" || task.status === "failed")).at(-1);
+2207:    dispatchNotice.textContent = "กำลังรันทีละงานผ่าน Codex Bridge ไม่รันพร้อมกันเพื่อความปลอดภัย";
+2209:    dispatchNotice.textContent = "งานกระจายครบทุกเอเจนต์แล้ว ตรวจ log ของแต่ละงานได้ใน Codex Bridge";
+2225:    loadBridgeTasks();
+2226:    startBridgePolling();
+2269:  nextTask.resultSummary = "จำลองการทำงาน: เตรียมคำสั่งสำหรับ Codex และรอเชื่อมต่อ Codex Bridge";
+2274:    nextTask.resultSummary = "เสร็จแล้วในโหมดจำลอง ยังไม่ได้รัน Codex จริง";
+2305:      node.dataset.agentId = agent.id;
+2464:updateBridgeControls();
+2466:checkBridgeHealth().then(() => {
+2467:  if (bridgeAvailable) loadBridgeTasks();
+
+exec
+/bin/zsh -lc 'ls -1 agents/pip_development_guild/codex_bridge/tasks agents/pip_development_guild/codex_bridge/logs' in /Users/Pae/Developer/PIP/PIP-Public-Bible
+ succeeded in 0ms:
+agents/pip_development_guild/codex_bridge/logs:
+task-1780542594096-29c8998b.log
+task-1780542594121-ec2c3c50.log
+task-1780542594123-aa47e9a7.log
+task-1780542594124-7b148826.log
+task-1780542594126-eed6e635.log
+task-1780542594128-7578cedf.log
+task-1780542594129-9cd16f47.log
+task-1780542600591-389e8572.log
+task-1780561086700-12f73ffd.log
+task-1780561643505-78c4dc17.log
+task-1780562428616-778e5b61.log
+task-1780562502406-bac2384f.log
+task-1780564820195-a9d2db42.log
+task-1780565666132-300651c4.log
+task-1780572249543-7fa7e7b7.log
+task-1780573506413-f0fe8258.log
+task-1780573605491-b92c5e10.log
+task-1780573689490-88a480bf.log
+task-1780573773493-29feb122.log
+task-1780573875494-5569c365.log
+task-1780573989282-33c1e989.log
+
+agents/pip_development_guild/codex_bridge/tasks:
+task-1780542594096-29c8998b.json
+task-1780542594121-ec2c3c50.json
+task-1780542594123-aa47e9a7.json
+task-1780542594124-7b148826.json
+task-1780542594126-eed6e635.json
+task-1780542594128-7578cedf.json
+task-1780542594129-9cd16f47.json
+task-1780542600591-389e8572.json
+task-1780561086700-12f73ffd.json
+task-1780561643505-78c4dc17.json
+task-1780562428616-778e5b61.json
+task-1780562502406-bac2384f.json
+task-1780564820195-a9d2db42.json
+task-1780565666132-300651c4.json
+task-1780572249543-7fa7e7b7.json
+task-1780573506413-f0fe8258.json
+task-1780573605491-b92c5e10.json
+task-1780573689490-88a480bf.json
+task-1780573773493-29feb122.json
+task-1780573875494-5569c365.json
+task-1780573989282-33c1e989.json
+
+2026-06-04T11:53:57.834140Z  WARN codex_core_plugins::manifest: ignoring interface.defaultPrompt[0]: prompt must be at most 128 characters path=/Users/Pae/.codex/.tmp/plugins/plugins/ngs-analysis/.codex-plugin/plugin.json
+2026-06-04T11:53:57.843650Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:57.843656Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:57.844020Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:57.844024Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:57.844355Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:57.844358Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:57.844682Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:57.844685Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:57.845010Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:57.845014Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:53:57.845801Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:53:57.845805Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+codex
+ใน dashboard พบ dispatcher logic สำหรับ Agent 02-11 โดยตรง และมี branch พิเศษเมื่อเลือก Agent 01 แล้วส่งเข้า Bridge. ผมจะอ่านช่วง code นี้ละเอียดเพื่อแยกว่าการส่งเป็น task แยกจริงหรือแค่ prompt รวม และดูว่าการรอต่อคิวอิง completed/failed ครบไหม.
+exec
+/bin/zsh -lc "sed -n '1120,1585p' agents/pip_development_guild/agent_dashboard.html" in /Users/Pae/Developer/PIP/PIP-Public-Bible
+ succeeded in 0ms:
+            <div class="prompt-card-head">
+              <p class="prompt-card-title">Step 3: ตรวจคำสั่งที่จะส่ง</p>
+              <button class="copy-icon icon-btn" type="button" id="copyPromptButton" title="Copy Prompt" aria-label="Copy Prompt">
+                <svg class="icon" aria-hidden="true"><use href="#icon-copy"></use></svg>
+              </button>
+            </div>
+            <textarea class="prompt-box" id="workflowPrompt" readonly placeholder="เลือกประเภทงานและเขียนรายละเอียดก่อน ระบบจะสร้างคำสั่งให้ที่นี่"></textarea>
+            <div class="copy-state" id="copyState" aria-live="polite"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+const agents = [
+  {
+    id:"01", number:"01", name:"Guild Master", role:"หัวหน้าทีมโค้ด", group:"ภาวะผู้นำและการกำกับดูแล",
+    zone:"เวทีกลาง", spritePath:"cropped_sprites/front_cutouts/01_guild_master_front.png", idlePrototypePath:"animations/01_guild_master_idle_css_prototype.html",
+    x:972, y:240, width:87.4, height:168, labelOffsetX:43.7, labelOffsetY:-8, hitboxWidth:92, hitboxHeight:150, highlightWidth:98, highlightHeight:156,
+    duration:"1.4s", scale:1.01, motion:"steady",
+    thaiName:"หัวหน้ากิลด์",
+    thaiRole:"หัวหน้าควบคุมงานโค้เด็กซ์",
+    thaiGroup:"ภาวะผู้นำและการกำกับดูแล",
+    thaiDescription:"หัวหน้ากิลด์คือผู้นำภาพรวมของทีม ทำหน้าที่กำหนดทิศทาง วางแผน ตัดสินใจขั้นสุดท้าย และประสานงานระหว่างทุกบทบาทเพื่อให้ลำดับงานเดินต่อได้อย่างมั่นคงและไม่หลุดเป้าหมายหลักของโปรเจกต์",
+    thaiResponsibility:"ควบคุมแผนงาน ประสานงานขั้นสุดท้าย และกำหนดทิศทางงาน",
+    thaiUsage:"ใช้เป็นผู้นำภาพรวม หรือจุดอำนาจหลักของฉาก",
+    thaiRule:"ควรแสดงบทผู้นำ ห้ามลดบทให้เป็นแค่มาสคอตหรือนักรบทั่วไป"
+  },
+  {
+    id:"02", number:"02", name:"High Priest", role:"ผู้พิทักษ์คัมภีร์ผลิตภัณฑ์", group:"ภาวะผู้นำและการกำกับดูแล",
+    zone:"ห้องสมุดซ้าย / พื้นที่เควสต์", spritePath:"cropped_sprites/front_cutouts/02_high_priest_front.png", idlePrototypePath:"animations/02_high_priest_idle_css_prototype.html",
+    x:592, y:458, width:79.1, height:166, labelOffsetX:39.5, labelOffsetY:-8, hitboxWidth:84, hitboxHeight:150, highlightWidth:90, highlightHeight:156,
+    duration:"1.6s", scale:1.008, motion:"steady",
+    thaiName:"ไฮพรีสต์",
+    thaiRole:"ผู้พิทักษ์คัมภีร์ผลิตภัณฑ์",
+    thaiGroup:"ภาวะผู้นำและการกำกับดูแล",
+    thaiDescription:"ไฮพรีสต์คือผู้พิทักษ์คัมภีร์ผลิตภัณฑ์และแหล่งความจริงหลักของโปรเจกต์ ทำหน้าที่คุมกฎหลัก ตรวจไม่ให้ตรรกะหลุด และช่วยป้องกันการเปลี่ยนแปลงที่ขัดกับคัมภีร์หรือระบบที่ล็อกไว้แล้ว",
+    thaiResponsibility:"ดูแลคัมภีร์ผลิตภัณฑ์ แหล่งความจริงหลัก และปกป้องกฎตรรกะหลัก",
+    thaiUsage:"วางใกล้หนังสือ เอกสาร กฎ หรือพื้นที่แหล่งความจริงหลัก",
+    thaiRule:"ควรแสดงเป็นผู้คุมกฎ ห้ามเปลี่ยนเป็นสายรายได้ นักออกแบบ หรือผู้ทดสอบ"
+  },
+  {
+    id:"03", number:"03", name:"Novice (Pip)", role:"ผู้ดูแลเอกสาร / มาสคอต", group:"งานออกแบบและสร้างระบบ",
+    zone:"ลานกลาง", spritePath:"cropped_sprites/front_cutouts/03_novice_pip_front.png", idlePrototypePath:"animations/03_novice_pip_idle_css_prototype.html",
+    x:914, y:514, width:90.1, height:154, labelOffsetX:45.1, labelOffsetY:-8, hitboxWidth:96, hitboxHeight:140, highlightWidth:102, highlightHeight:146,
+    duration:"1.32s", scale:1.012, motion:"lively",
+    thaiName:"โนวิซ (พิป)",
+    thaiRole:"ผู้ช่วยเอกสาร / มาสคอต",
+    thaiGroup:"ออกแบบและพัฒนา",
+    thaiDescription:"โนวิซ หรือ พิป คือมาสคอตและผู้ช่วยประจำกิลด์ ทำหน้าที่จดบันทึก สรุปงาน ส่งต่อข้อมูล และเป็นตัวแทนผู้ใช้หรือไกด์ผู้ชมที่ช่วยให้คนเข้าใจระบบทั้งหมดได้ง่ายขึ้น",
+    thaiResponsibility:"จดบันทึกงาน สรุปลำดับงาน และส่งต่อข้อมูลระหว่างขั้นตอน",
+    thaiUsage:"ใช้เป็นมาสคอต ไกด์ผู้ชม หรือจุดยึดสายตากลางฉาก",
+    thaiRule:"ควรให้พิปมองเห็นชัด ห้ามซ่อนพิปหรือเปลี่ยนให้เป็นหัวหน้าหลัก"
+  },
+  {
+    id:"04", number:"04", name:"Sage", role:"ผู้ตรวจระบบออกแบบ", group:"งานออกแบบและสร้างระบบ",
+    zone:"โซนวิจัยซ้ายกลาง", spritePath:"cropped_sprites/front_cutouts/04_sage_front.png", idlePrototypePath:"animations/04_sage_idle_css_prototype.html",
+    x:710, y:344, width:88.3, height:155, labelOffsetX:44.2, labelOffsetY:-8, hitboxWidth:94, hitboxHeight:140, highlightWidth:100, highlightHeight:146,
+    duration:"1.5s", scale:1.008, motion:"steady",
+    thaiName:"เซจ",
+    thaiRole:"ผู้ตรวจระบบออกแบบ",
+    thaiGroup:"ออกแบบและพัฒนา",
+    thaiDescription:"เซจคือผู้ตรวจระบบออกแบบของกิลด์ ทำหน้าที่เช็กตัวอักษร ระยะห่าง ไอคอน องค์ประกอบ พื้นผิวกระจก ความสม่ำเสมอทางภาพ และความถูกต้องของหน้าจอให้ตรงกับมาตรฐานการออกแบบ",
+    thaiResponsibility:"ตรวจมาตรฐานการออกแบบ ความแม่นยำของหน้าจอ และความสม่ำเสมอทางภาพ",
+    thaiUsage:"วางใกล้บอร์ดออกแบบ หนังสือ เอกสารรีวิว หรือพื้นที่ตรวจงาน",
+    thaiRule:"ควรแสดงเป็นผู้ตรวจง���นออกแบบ ห้ามเปลี่ยนเป็นผู้เขียนแอปหรือผู้ดูแลรางวัล"
+  },
+  {
+    id:"05", number:"05", name:"Blacksmith", role:"ผู้สร้างแอป", group:"งานออกแบบและสร้างระบบ",
+    zone:"เวิร์กช็อปล่างซ้าย", spritePath:"cropped_sprites/front_cutouts/05_blacksmith_front.png", idlePrototypePath:"animations/05_blacksmith_idle_css_prototype.html",
+    x:338, y:620, width:81.5, height:158, labelOffsetX:40.8, labelOffsetY:-8, hitboxWidth:88, hitboxHeight:144, highlightWidth:94, highlightHeight:150,
+    duration:"1.45s", scale:1.01, motion:"steady",
+    thaiName:"แบล็กสมิธ",
+    thaiRole:"ผู้พัฒนาเฟรมเวิร์กฟลัตเตอร์",
+    thaiGroup:"ออกแบบและพัฒนา",
+    thaiDescription:"แบล็กสมิธคือผู้สร้างระบบจริง ทำหน้าที่ลงมือสร้างแอป สร้างชิ้นส่วนหน้าจอ ปรับโครงสร้างองค์ประกอบ และทำให้สิ่งที่ออกแบบไว้กลายเป็นงานที่ใช้งานได้จริง",
+    thaiResponsibility:"สร้างแอป สร้างหน้าจอ สร้างองค์ประกอบ และปรับโครงสร้างงาน",
+    thaiUsage:"วางในเวิร์กช็อป สถานีสร้างงาน หรือพื้นที่ที่มีเครื่องมือ",
+    thaiRule:"ควรแสดงเป็นผู้สร้างงาน ห้ามเปลี่ยนเป็นผู้คุมคัมภีร์ผลิตภัณฑ์หรือผู้ตรวจทานเท่านั้น"
+  },
+  {
+    id:"06", number:"06", name:"Crusader", role:"ผู้ดูแลความปลอดภัย", group:"ความปลอดภัยและคุณภาพ",
+    zone:"ทางเข้าด้านหน้า", spritePath:"cropped_sprites/front_cutouts/06_crusader_front.png", idlePrototypePath:"animations/06_crusader_idle_css_prototype.html",
+    x:984, y:705, width:112.9, height:178, labelOffsetX:56.4, labelOffsetY:-8, hitboxWidth:118, hitboxHeight:160, highlightWidth:124, highlightHeight:166,
+    duration:"1.72s", scale:1.006, motion:"steady",
+    thaiName:"ครูเซเดอร์",
+    thaiRole:"ผู้ดูแลความปลอดภัยระบบ",
+    thaiGroup:"ความปลอดภัยและคุณภาพ",
+    thaiDescription:"ครูเซเดอร์คือผู้พิทักษ์ความปลอดภัยและความถูกต้องของระบบ ทำหน้าที่ป้องกันรางวัลซ้ำ ความไว้ใจฝั่งผู้ใช้เกินจำเป็น ช่องโหว่ การแก้ตรรกะผิดทาง และคุมให้อำนาจฝั่งเซิร์ฟเวอร์เป็นหลักในจุดสำคัญ",
+    thaiResponsibility:"ดูแลความปลอดภัย ความสมบูรณ์ของระบบ การกันรางวัลซ้ำ และอำนาจฝั่งเซิร์ฟเวอร์",
+    thaiUsage:"วางที่ประตู ทางเข้า หรือพื้นที่ป้องกันระบบ",
+    thaiRule:"ควรแสดงเป็นผู้พิทักษ์ ห้ามเปลี่ยนเป็นผู้ดูแลมินิเกมหรือผู้ดูแลรางวัล"
+  },
+  {
+    id:"07", number:"07", name:"Knight", role:"ผู้ดูแลมินิเกม", group:"โหมดสินค้า",
+    zone:"ขวาของเวที", spritePath:"cropped_sprites/front_cutouts/07_knight_front.png", idlePrototypePath:"animations/07_knight_idle_css_prototype.html",
+    x:1204, y:344, width:132.4, height:170, labelOffsetX:66.2, labelOffsetY:-8, hitboxWidth:136, hitboxHeight:154, highlightWidth:142, highlightHeight:160,
+    duration:"1.45s", scale:1.01, motion:"steady",
+    thaiName:"ไนท์",
+    thaiRole:"ผู้ดูแลมินิเกม",
+    thaiGroup:"โหมดการใช้งาน",
+    thaiDescription:"ไนท์คือผู้ดูแลลำดับการเล่นมินิเกม ทำหน้าที่คุมด่าน การผ่านหรือไม่ผ่าน ความคืบหน้า เส้นทางด่าน สรุปและอินไซต์ และประสบการณ์การเล่นแบบภารกิจ",
+    thaiResponsibility:"ดูแลลำดับการเล่นมินิเกม ความคืบหน้าของด่าน การผ่านหรือไม่ผ่าน และสรุปผล",
+    thaiUsage:"วางใกล้พื้นที่ภารกิจ เวที หรือเส้นทางความคืบหน้า",
+    thaiRule:"ควรแสดงเป็นผู้คุมด่านภารกิจ ห้ามเปลี่ยนเป็นผู้ดูแลโหมดฝึกหรือเจ้าของระบบรายได้"
+  },
+  {
+    id:"08", number:"08", name:"Assassin Cross", role:"ผู้ตรวจคุณภาพ", group:"ความปลอดภัยและคุณภาพ",
+    zone:"พื้นที่ตรวจสอบล่างซ้าย", spritePath:"cropped_sprites/front_cutouts/08_assassin_cross_front.png", idlePrototypePath:"animations/08_assassin_cross_idle_css_prototype.html",
+    x:630, y:808, width:98.9, height:154, labelOffsetX:49.4, labelOffsetY:-8, hitboxWidth:104, hitboxHeight:138, highlightWidth:110, highlightHeight:144,
+    duration:"1.54s", scale:1.006, motion:"lively",
+    thaiName:"แอสซาซินครอส",
+    thaiRole:"ผู้ทดสอบและล่าบั๊ก",
+    thaiGroup:"ความปลอดภัยและคุณภาพ",
+    thaiDescription:"แอสซาซินครอสคือผู้ล่าบั๊กและตรวจการถดถอย ทำหน้าที่จับปัญหาที่ซ่อนอยู่ ตรวจประตูคุณภาพ วิเคราะห์และทดสอบระบบ และช่วยยืนยันว่าการแก้ไขไม่ทำให้ระบบส่วนอื่นพัง",
+    thaiResponsibility:"ล่าบั๊ก ตรวจการถดถอย ตรวจประตูคุณภาพ วิเคราะห์ระบบ และทดสอบระบบ",
+    thaiUsage:"วางในพื้นที่ตรวจสอบ มุมเงา หรือโซนตรวจคุณภาพ",
+    thaiRule:"ควรแสดงเป็นผู้ทดสอบและผู้ล่าบั๊ก ห้ามเปลี่ยนเป็นเจ้าของความปลอดภัยหรือผู้พิทักษ์คัมภีร์ผลิตภัณฑ์"
+  },
+  {
+    id:"09", number:"09", name:"Sniper", role:"ผู้ดูแลโหมดฝึก", group:"โหมดสินค้า",
+    zone:"ระเบียงซ้ายบน", spritePath:"cropped_sprites/front_cutouts/09_sniper_front.png", idlePrototypePath:"animations/09_sniper_idle_css_prototype.html",
+    x:534, y:62, width:71.9, height:146, labelOffsetX:36, labelOffsetY:-8, hitboxWidth:78, hitboxHeight:132, highlightWidth:84, highlightHeight:138,
+    duration:"1.6s", scale:1.006, motion:"lively",
+    thaiName:"สไนเปอร์",
+    thaiRole:"ผู้ดูแลโหมดฝึก",
+    thaiGroup:"โหมดการใช้งาน",
+    thaiDescription:"สไนเปอร์คือผู้ดูแลโหมดฝึกและความแม่นยำ ทำหน้าที่คุมลำดับการฝึกทำข้อสอบ โหมด 100 ข้อ การสอบจำลอง การวัดความแม่นยำ และการทบทวนผลการฝึก",
+    thaiResponsibility:"ดูแลโหมดฝึก การสอบจำลอง ลำดับ 100 ข้อ และการทบทวนความแม่นยำ",
+    thaiUsage:"วางบนจุดมองการณ์ ระเบียง หรือพื้นที่ที่สื่อถึงความแม่นยำ",
+    thaiRule:"ควรแสดงเป็นสายฝึกและความแม่นยำ ห้ามเปลี่ยนเป็นผู้ดูแลรางวัลหรือวีไอพี"
+  },
+  {
+    id:"10", number:"10", name:"Professor", role:"ผู้ตรวจทาน", group:"ภาวะผู้นำและการกำกับดูแล",
+    zone:"โต๊ะรีวิวขวากลาง", spritePath:"cropped_sprites/front_cutouts/10_professor_front.png", idlePrototypePath:"animations/10_professor_idle_css_prototype.html",
+    x:1337, y:515, width:72.2, height:156, labelOffsetX:36.1, labelOffsetY:-8, hitboxWidth:78, hitboxHeight:142, highlightWidth:84, highlightHeight:148,
+    duration:"1.72s", scale:1.006, motion:"steady",
+    thaiName:"โปรเฟสเซอร์",
+    thaiRole:"ผู้ตรวจทานระบบ",
+    thaiGroup:"ภาวะผู้นำและการกำกับดูแล",
+    thaiDescription:"โปรเฟสเซอร์คือผู้ตรวจทานเชิงลึก ทำหน้าที่ตรวจโค้ด โครงสร้างระบบ และคุณภาพการตัดสินใจ ช่วยให้การตัดสินใจของทีมมีเหตุผลและไม่ขัดกับโครงสร้างระบบระยะยาว",
+    thaiResponsibility:"ตรวจโค้ด โครงสร้างระบบ และคุณภาพการตัดสินใจ",
+    thaiUsage:"วางใกล้โต๊ะ เอกสารวิจัย บันทึก หรือพื้นที่ตรวจทาน",
+    thaiRule:"ควรแสดงเป็นผู้ตรวจทาน ห้ามเปลี่ยนเป็นหัวหน้าหลักหรือนักออกแบบภาพเท่านั้น"
+  },
+  {
+    id:"11", number:"11", name:"Gunslinger", role:"ผู้ดูแลรางวัล / วีไอพี", group:"รางวัลและรายได้",
+    zone:"บาร์ด้านขวา", spritePath:"cropped_sprites/front_cutouts/11_gunslinger_front.png", idlePrototypePath:"animations/11_gunslinger_idle_css_prototype.html",
+    x:1470, y:315, width:108.1, height:166, labelOffsetX:54.1, labelOffsetY:-8, hitboxWidth:114, hitboxHeight:150, highlightWidth:120, highlightHeight:156,
+    duration:"1.5s", scale:1.008, motion:"steady",
+    thaiName:"กันสลิงเกอร์",
+    thaiRole:"ผู้ดูแลรางวัล / วีไอพี",
+    thaiGroup:"รางวัลและรายได้",
+    thaiDescription:"กันสลิงเกอร์คือผู้ดูแลรางวัลและวีไอพี และตรรกะรายได้ ทำหน้าที่คุมรางวัล บัตรคูณสอง โฆษณาแลกรางวัล ลำดับวีไอพี และความสมดุลของระบบรายได้โดยไม่ทำลายประสบการณ์ผู้ใช้",
+    thaiResponsibility:"ดูแลรางวัลและวีไอพี ระบบรายได้ บัตรคูณสอง และโฆษณาแลกรางวัล",
+    thaiUsage:"วางใกล้บาร์ เคาน์เตอร์รางวัล พื้นที่ร้านค้า หรือจุดแลกเปลี่ยนมูลค่า",
+    thaiRule:"ควรแสดงเป็นผู้ดูแลรางวัลและวีไอพี ห้ามเปลี่ยนเป็นผู้ดูแลโหมดฝึกหรือผู้พิทักษ์คัมภีร์ผลิตภัณฑ์"
+  }
+];
+
+const workflowTemplates = {
+  "01": {
+    name:"วางแผนงาน / คุมทิศทาง",
+    codexRole:"Guild Master / Codex Lead",
+    presets:["วางแผนงาน", "แตกงานเป็นขั้นตอน", "ตรวจลำดับการทำงาน", "สรุป Next Step"],
+    presetsEnglish:["Planning control", "Break work into steps", "Check work sequence", "Summarize next steps"],
+    presetHelp:[
+      "เหมาะสำหรับเริ่มงานใหญ่ แยกเป็นแผนที่ชัดเจนก่อนลงมือ",
+      "เหมาะสำหรับงานที่ต้องแตกเป็นขั้นตอนและวางลำดับก่อนทำ",
+      "ใช้เมื่ออยากตรวจว่าลำดับงานยังไม่ข้ามขั้น",
+      "ใช้เมื่ออยากสรุปทางเดินถัดไปให้ทีมตามต่อได้"
+    ],
+    presetHelpDefault:"เลือกงานที่ต้องการให้เอเจนต์ช่วยวางแผนและคุมทิศทาง",
+    readFirst:["README.html", "AGENTS.html", "product_bible/", "agents/pip_development_guild/README.html"],
+    expectedOutput:"Produce a safe implementation plan, ordered next steps, risks, and which files should be read or modified before any changes.",
+    useFor:[
+      "แตกงานใหญ่เป็นงานย่อย",
+      "ตรวจลำดับการทำงาน",
+      "ตัดสินใจว่าใครควรทำอะไรต่อ"
+    ],
+    checklist:[
+      "ระบุเป้าหมายของงาน",
+      "ระบุไฟล์ที่เกี่ยวข้อง",
+      "ระบุข้อห้าม",
+      "ระบุผลลัพธ์ที่ต้องการ"
+    ],
+    prompt:"Act as the Guild Master / Codex Lead. Read the current project canon first. Break the requested work into a safe implementation plan, identify which files should be read or modified, list risks, and propose the next steps before making changes. Do not modify files until the plan is approved."
+  },
+  "02": {
+    name:"ตรวจคัมภีร์ผลิตภัณฑ์ / แหล่งความจริง",
+    codexRole:"High Priest / Product Bible Guardian",
+    presets:["ตรวจ Source of Truth", "ตรวจ Product Bible", "ตรวจกฎที่ขัดกัน", "ตรวจว่า logic หลุด canon ไหม"],
+    presetsEnglish:["Audit source of truth", "Audit Product Bible", "Check conflicting rules", "Check logic drift from canon"],
+    presetHelp:[
+      "ใช้ตรวจไฟล์แหล่งความจริงและ rule ที่ต้องยึด",
+      "ใช้ตรวจว่าเนื้อหายังตรงกับ Product Bible",
+      "ใช้เมื่อสงสัยว่ากฎหลายชุดขัดกัน",
+      "ใช้เช็กว่าตรรกะหลุดจาก canon หรือไม่"
+    ],
+    presetHelpDefault:"ใช้เพื่อเช็กความถูกต้องของกฎและแหล่งความจริง",
+    readFirst:["README.html", "AGENTS.html", "product_bible/", "agents/pip_development_guild/README.html"],
+    expectedOutput:"Report pass/fail against source-of-truth files, exact mismatches, unsafe assumptions, and any rule conflicts. Do not implement changes.",
+    useFor:[
+      "ตรวจว่าตรรกะหลุดคัมภีร์ไหม",
+      "ตรวจว่าข้อมูลขัดกันไหม",
+      "ตรวจบทบาท กฎ และคานอน"
+    ],
+    checklist:[
+      "ระบุคัมภีร์หรือไฟล์คานอนที่ต้องอ่าน",
+      "ระบุกฎที่ต้องตรวจ",
+      "ระบุสิ่งที่ห้ามเปลี่ยน"
+    ],
+    prompt:"Act as the High Priest / Product Bible Guardian. Audit the requested change against the current source-of-truth files. Identify conflicts, outdated rules, missing rules, and unsafe assumptions. Do not implement changes. Report pass/fail and exact mismatches."
+  },
+  "03": {
+    name:"สรุปงาน / ทำเอกสารส่งต่อ",
+    codexRole:"Novice (Pip) / Documentation Agent",
+    presets:["สรุปงาน", "ทำ Handoff", "ทำ Changelog", "สร้าง Prompt ส่งต่อ"],
+    presetsEnglish:["Summarize work", "Create handoff", "Create changelog", "Create follow-up prompt"],
+    presetHelp:[
+      "เหมาะกับการสรุปสถานะงานให้เข้าใจเร็ว",
+      "ใช้ทำเอกสารส่งต่อให้เอเจนต์หรือคนอื่น",
+      "ใช้บันทึกสิ่งที่เปลี่ยนแปลงอย่างเป็นระบบ",
+      "ใช้เตรียมข้อความส่งต่อสำหรับรอบถัดไป"
+    ],
+    presetHelpDefault:"งานนี้เหมาะกับการสรุปสถานะและส่งต่อให้เอเจนต์หรือ AI ตัวอื่น",
+    readFirst:["README.html", "AGENTS.html", "agents/pip_development_guild/README.html"],
+    expectedOutput:"Produce a concise handoff with completed work, changed files, approved decisions, open issues, next steps, and guardrails.",
+    useFor:[
+      "สรุปสิ่งที่ทำไปแล้ว",
+      "ทำคำสั่งส่งต่อ",
+      "ทำบันทึกการเปลี่ยนแปลง"
+    ],
+    checklist:[
+      "ระบุช่วงงานที่ต้องสรุป",
+      "ระบุไฟล์ที่เกี่ยวข้อง",
+      "ระบุผู้รับต่อ เช่น โค้เด็กซ์ คลอด หรือดีไซเนอร์"
+    ],
+    prompt:"Act as Novice (Pip), the Documentation Agent. Summarize the current work clearly, list changed files, approved decisions, open issues, next steps, and guardrails. Produce a concise handoff that another agent can continue from safely."
+  },
+  "04": {
+    name:"ตรวจระบบออกแบบ",
+    codexRole:"Sage / Design Auditor",
+    presets:["ตรวจ Design System", "ตรวจ UI Consistency", "ตรวจ Spacing / Typography", "ตรวจ Icon / Component"],
+    presetsEnglish:["Audit design system", "Audit UI consistency", "Audit spacing and typography", "Audit icons and components"],
+    presetHelp:[
+      "ใช้ตรวจมาตรฐานดีไซน์และ token ที่ใช้ร่วมกัน",
+      "ใช้ตรวจความกลมกลืนของหน้าจอและ component",
+      "ใช้เช็กระยะห่างและตัวอักษร",
+      "ใช้ตรวจไอคอน ปุ่ม และองค์ประกอบย่อย"
+    ],
+    presetHelpDefault:"ใช้ตรวจความสวยงาม ความสม่ำเสมอ และความถูกต้องของ UI",
+    readFirst:["README.html", "AGENTS.html", "agents/pip_development_guild/README.html", "agents/pip_development_guild/agent_dashboard.html", "skills_external/taste_skill/README.html"],
+    expectedOutput:"Report UI/design mismatches, spacing and typography issues, component inconsistencies, and recommended fixes without redesigning unless requested.",
+    useFor:[
+      "ตรวจหน้าจอ ระยะห่าง ตัวอักษร ไอคอน และองค์ประกอบ",
+      "ตรวจว่าเลย์เอาต์ตรงระบบออกแบบไหม"
+    ],
+    checklist:[
+      "ระบุหน้าหรือองค์ประกอบที่ต้องตรวจ",
+      "ระบุแหล่งอ้างอิงระบบออกแบบ",
+      "ระบุภาพหน้าจอหรือพฤติกรรมที่คาดหวัง"
+    ],
+    prompt:"Act as the Sage / Design Auditor. Inspect the target UI against the approved design system. Check typography, spacing, color, icon style, button hierarchy, glass surfaces, layout consistency, and accessibility. Do not redesign unless explicitly requested. Report mismatches and recommended fixes."
+  },
+  "05": {
+    name:"ทำงานพัฒนาฟลัตเตอร์",
+    codexRole:"Blacksmith / Flutter Implementation Agent",
+    presets:["ทำ Flutter Implementation", "แก้ Bug Flutter", "Refactor Component", "ตรวจ Build Error"],
+    presetsEnglish:["Flutter implementation", "Fix Flutter bug", "Refactor component", "Check build error"],
+    presetHelp:[
+      "ใช้เมื่อจะลงมือเขียนหรืออัปเดตหน้าจอจริง",
+      "ใช้เมื่อมีบั๊กเฉพาะที่ต้องแก้",
+      "ใช้เมื่อ component ซ้ำหรือโครงสร้างเริ่มรก",
+      "ใช้เมื่อ build หรือ compile มีปัญหา"
+    ],
+    presetHelpDefault:"ใช้สำหรับงานพัฒนา Flutter และการแก้บั๊กที่เกี่ยวข้อง",
+    readFirst:["README.html", "AGENTS.html", "product_bible/"],
+    expectedOutput:"Implement or plan the Flutter work using existing structure, then report files changed, risks, and verification steps.",
+    useFor:[
+      "เขียนวิดเจ็ตหรือหน้าจอ",
+      "ปรับโครงสร้างองค์ประกอบ",
+      "แก้บั๊กในฟลัตเตอร์"
+    ],
+    checklist:[
+      "ระบุพาธโปรเจกต์",
+      "ระบุไฟล์ที่ต้องแก้",
+      "ระบุหน้าจอหรือพฤติกรรมที่คาดหวัง",
+      "ระบุคำสั่งทดสอบหรือคำสั่งรัน"
+    ],
+    prompt:"Act as the Blacksmith / Flutter Implementation Agent. Implement the requested Flutter change using existing project structure and design system components. Avoid creating duplicate components. Preserve current behavior unless explicitly changed. After implementation, report files changed, risks, and verification steps."
+  },
+  "06": {
+    name:"ตรวจความปลอดภัย / ความสมบูรณ์ของระบบ",
+    codexRole:"Crusader / Security Agent",
+    presets:["ตรวจ Security", "ตรวจ Client Trust", "ตรวจ Duplicate Reward", "ตรวจ Server Authority"],
+    presetsEnglish:["Security audit", "Client trust audit", "Duplicate reward audit", "Server authority audit"],
+    presetHelp:[
+      "ใช้ตรวจความเสี่ยงด้านความปลอดภัยรวม",
+      "ใช้เช็กข้อมูลที่ไม่ควรเชื่อฝั่งผู้ใช้",
+      "ใช้ตรวจการได้รางวัลซ้ำ",
+      "ใช้ตรวจว่าฝั่งเซิร์ฟเวอร์เป็นผู้มีอำนาจจริง"
+    ],
+    presetHelpDefault:"ใช้ตรวจความปลอดภัยและความสมบูรณ์ของระบบ",
+    readFirst:["README.html", "AGENTS.html", "product_bible/02_reward_system/", "product_bible/03_vip_and_subscription/", "product_bible/04_monetization/"],
+    expectedOutput:"Report security risks, duplicate-action risks, unsafe client trust, missing validation, and required safeguards. Do not implement unless explicitly requested.",
+    useFor:[
+      "ตรวจความไว้ใจฝั่งผู้ใช้",
+      "ตรวจรางวัลซ้ำ",
+      "ตรวจความเสี่ยงจากช่องโหว่หรือการแก้ตรรกะ"
+    ],
+    checklist:[
+      "ระบุลำดับงานที่เกี่ยวข้อง",
+      "ระบุข้อมูลสำคัญที่ห้ามไว้ใจฝั่งผู้ใช้",
+      "ระบุอำนาจฝั่งเซิร์ฟเวอร์ที่ต้องมี"
+    ],
+    prompt:"Act as the Crusader / Security Agent. Audit the requested flow for security and system integrity risks. Check client trust, duplicate actions, reward duplication, tampering, validation, auth, rate limits, and server authority. Do not implement. Report risks and required safeguards."
+  },
+  "07": {
+    name:"ลำดับงานมินิเกม",
+    codexRole:"Knight / Mini Game Agent",
+    presets:["ตรวจ Mini Game Flow", "ตรวจ Stage Progression", "ตรวจ Summary & Insight", "ตรวจ Pass / Fail Logic"],
+    presetsEnglish:["Audit Mini Game flow", "Audit stage progression", "Audit Summary & Insight", "Audit pass/fail logic"],
+    presetHelp:[
+      "ใช้ตรวจภาพรวม flow ของมินิเกม",
+      "ใช้ดูว่าด่านและความคืบหน้ายังถูกต้อง",
+      "ใช้ตรวจหน้าสรุปและ insight",
+      "ใช้ตรวจตรรกะผ่านหรือไม่ผ่าน"
+    ],
+    presetHelpDefault:"ใช้วางหรือทบทวน flow ของ Mini Game",
+    readFirst:["README.html", "AGENTS.html", "product_bible/01_game_flow/mini_game_flow.md", "product_bible/02_reward_system/mini_game_reward_logic.md"],
+    expectedOutput:"Review or plan the Mini Game flow, stage progression, pass/fail behavior, Summary & Insight states, and navigation impact.",
+    useFor:[
+      "ลำดับด่าน",
+      "กฎผ่านหรือไม่ผ่าน",
+      "สรุปและอินไซต์",
+      "ความคืบหน้าของผู้เล่น"
+    ],
+    checklist:[
+      "ระบุลำดับด่านหรือรอบการเล่น",
+      "ระบุกฎผ่านหรือไม่ผ่าน",
+      "ระบุการเชื่อมกับรางวัลหรืออินไซต์ที่เกี่ยวข้อง"
+    ],
+    prompt:"Act as the Knight / Mini Game Agent. Review or implement the Mini Game flow while preserving the approved game rules. Check stage progression, pass/fail behavior, Summary & Insight states, revisit behavior, and navigation. Do not mix reward/subscription rules unless required by the task."
+  },
+  "08": {
+    name:"ตรวจคุณภาพ / ทดสอบการถดถอย",
+    codexRole:"Assassin Cross / QA Tester",
+    presets:["ทำ QA Checklist", "ตรวจ Regression", "ตรวจ Broken Flow", "ตรวจ Functional Test"],
+    presetsEnglish:["Create QA checklist", "Regression audit", "Broken flow audit", "Functional test audit"],
+    presetHelp:[
+      "ใช้สร้างรายการทดสอบที่ต้องเช็ก",
+      "ใช้ตรวจผลกระทบจากการแก้ก่อนหน้า",
+      "ใช้ตามหาจุด flow ที่พัง",
+      "ใช้ตรวจพฤติกรรมหลักของฟังก์ชัน"
+    ],
+    presetHelpDefault:"ใช้ตรวจบั๊กและ regression อย่างเป็นระบบ",
+    readFirst:["README.html", "AGENTS.html", "product_bible/", "agents/pip_development_guild/agent_dashboard.html"],
+    expectedOutput:"Produce and run a focused QA checklist where possible, then report pass/fail evidence, edge cases, and regression risks.",
+    useFor:[
+      "ตรวจบั๊ก",
+      "เขียนรายการทดสอบ",
+      "ตรวจว่าแก้แล้วไม่พังจุดอื่น"
+    ],
+    checklist:[
+      "ระบุสิ่งที่เพิ่งแก้",
+      "ระบุผลลัพธ์ที่คาดหวัง",
+      "ระบุจุดเสี่ยงการถดถอย"
+    ],
+    prompt:"Act as the Assassin Cross / QA Tester. Create and run a focused QA checklist for the requested change. Verify expected behavior, edge cases, visual regressions, broken links, and related flows. Report pass/fail with evidence and do not modify files unless explicitly asked."
+  },
+  "09": {
+    name:"โหมดฝึก / ตรวจความแม่นยำ",
+    codexRole:"Sniper / Practice Mode Agent",
+    presets:["ตรวจ Practice Mode", "ตรวจ Mock Exam", "ตรวจ Accuracy Flow", "ตรวจ 100-question Session"],
+    presetsEnglish:["Audit Practice Mode", "Audit mock exam", "Audit accuracy flow", "Audit 100-question session"],
+    presetHelp:[
+      "ใช้ตรวจ flow ของ Practice Mode",
+      "ใช้ตรวจการสอบจำลอง",
+      "ใช้ตรวจการวัดความแม่นยำ",
+      "ใช้ตรวจเซสชัน 100 ข้อ"
+    ],
+    presetHelpDefault:"ใช้สำหรับโหมดฝึกและการวัดความแม่นยำ",
+    readFirst:["README.html", "AGENTS.html", "product_bible/"],
+    expectedOutput:"Review or plan Practice Mode behavior with focus on accuracy, mock exams, 100-question sessions, progress feedback, and result review.",
+    useFor:[
+      "ลำดับโหมดฝึก",
+      "การสอบจำลอง",
+      "โหมด 100 ข้อ",
+      "การติดตามความแม่นยำ"
+    ],
+    checklist:[
+      "ระบุโหมดฝึกที่เกี่ยวข้อง",
+      "ระบุข้อมูลผลลัพธ์ที่ต้องวัด",
+      "ระบุพฤติกรรมการทบทวนหรือความแม่นยำ"
+    ],
+    prompt:"Act as the Sniper / Practice Mode Agent. Review or plan the Practice Mode flow with focus on accuracy, mock exam behavior, question sessions, progress feedback, and result review. Keep Practice separate from Mini Game unless explicitly requested."
+  },
+  "10": {
+    name:"ตรวจโค้ด / โครงสร้างระบบ",
+    codexRole:"Professor / Reviewer",
+    presets:["Review Code", "Review Architecture", "ตรวจ Maintainability", "ตรวจ Technical Debt"],
+    presetsEnglish:["Review code", "Review architecture", "Audit maintainability", "Audit technical debt"],
+    presetHelp:[
+      "ใช้ตรวจโค้ดที่เขียนไปแล้ว",
+      "ใช้ทบทวนสถาปัตยกรรมและการจัดโครงสร้าง",
+      "ใช้ดูว่าดูแลต่อได้ง่ายไหม",
+      "ใช้เช���กหนี้ทางเทคนิคที่ควรลด"
+    ],
+    presetHelpDefault:"ใช้สำหรับ review โค้ดและโครงสร้างระบบ",
+    readFirst:["README.html", "AGENTS.html", "product_bible/", "agents/pip_development_guild/README.html"],
+    expectedOutput:"Report findings by severity, including maintainability, coupling, duplication, naming, architecture, and safe improvement recommendations.",
+    useFor:[
+      "ตรวจโค้ด",
+      "ตรวจโครงสร้างระบบ",
+      "ตรวจความดูแลรักษาระยะยาว"
+    ],
+    checklist:[
+      "ระบุไฟล์ที่ต้องตรวจทาน",
+      "ระบุประเด็นกังวลหลัก",
+      "ระบุว่าต้องการตรวจอย่างเดียวหรือให้แก้ด้วย"
+    ],
+    prompt:"Act as the Professor / Reviewer. Review the target code or architecture for maintainability, clarity, duplication, coupling, naming, scalability, and long-term structure. Do not rewrite unless explicitly requested. Report findings by severity and recommend safe improvements."
+  },
+  "11": {
+    name:"รางวัล / วีไอพี / รายได้",
+    codexRole:"Gunslinger / Reward and VIP Agent",
+    presets:["ตรวจ Reward Logic", "ตรวจ VIP Flow", "ตรวจ x2 Ticket", "ตรวจ Rewarded Ads"],
+    presetsEnglish:["Audit reward logic", "Audit VIP flow", "Audit x2 ticket", "Audit rewarded ads"],
+    presetHelp:[
+      "ใช้ตรวจ logic ของรางวัล",
+      "ใช้ตรวจ flow ของ VIP",
+      "ใช้ตรวจบัตรคูณสอง",
+      "ใช้ตรวจโฆษณาแลกรางวัล"
+    ],
+    presetHelpDefault:"ใช้ตรวจระบบรางวัล วีไอพี และรายได้",
+    readFirst:["README.html", "AGENTS.html", "product_bible/02_reward_system/", "product_bible/03_vip_and_subscription/", "product_bible/04_monetization/"],
+    expectedOutput:"Review or plan Reward/VIP/monetization logic while preventing duplicate rewards and separating Free, VIP, ticket, and ad-based flows.",
+    useFor:[
+      "ตรรกะรางวัล",
+      "ลำดับงานวีไอพี",
+      "บัตรคูณสอง",
+      "โฆษณาแลกรางวัล"
+    ],
+    checklist:[
+      "ระบุลำดับงานรางวัล",
+      "ระบุสถานะผู้ใช้ เช่น ฟรี วีไอพี หรือมีบัตร",
+      "ระบุสิ่งที่ต้องบันทึกคงอยู่",
+      "ระบุความเสี่ยงรางวัลซ้ำ"
+    ],
+    prompt:"Act as the Gunslinger / Reward and VIP Agent. Review or plan the reward, VIP, monetization, x2 ticket, and rewarded ad logic. Preserve approved product rules, prevent duplicate rewards, and clearly separate Free, VIP, ticket, and ad-based flows."
+  }
+};
+
+const agentLayer = document.getElementById("agentLayer");
+const scene = document.getElementById("scene");
+const sceneScale = document.getElementById("sceneScale");
+const dialogue = document.getElementById("dialogue");
+const tip = document.getElementById("tip");
+const expandDialogueButton = document.getElementById("expandDialogue");
+const workflowPanel = document.getElementById("workflowPanel");
+const workflowPanelTitle = document.getElementById("workflowPanelTitle");
+const workflowPanelRole = document.getElementById("workflowPanelRole");
+const workflowInstruction = document.getElementById("workflowInstruction");
+
+exec
+/bin/zsh -lc "sed -n '1700,2165p' agents/pip_development_guild/agent_dashboard.html" in /Users/Pae/Developer/PIP/PIP-Public-Bible
+ succeeded in 0ms:
+      selectedTaskPresetHelp = button.dataset.presetHelp || workflow.presetHelpDefault || "";
+      taskPresetList.querySelectorAll(".preset-button").forEach((item) => {
+        item.classList.toggle("active", item.dataset.preset === preset);
+      });
+      presetHint.textContent = selectedTaskPresetHelp;
+      taskWarning.textContent = "";
+      taskWarning.classList.remove("warning");
+    });
+    taskPresetList.appendChild(button);
+  });
+}
+
+function renderWorkflow(agent) {
+  const workflow = workflowTemplates[agent.id];
+  if (!workflow) {
+    debugLog("[AgentClick] missing workflow template", agent.id, agent.name);
+    return;
+  }
+  workflowAgentContext.textContent = `${agent.thaiName} · ${agent.thaiRole}`;
+  workflowInstruction.textContent = "เลือกงานที่ต้องการให้เอเจนต์ช่วย แล้วเขียนรายละเอียด จากนั้นกดส่งให้ Codex";
+  renderTaskPresets(agent, workflow);
+  if (workflowChecklist) {
+    renderList(workflowChecklist, workflow.checklist);
+  }
+  taskDetailInput.value = "";
+  taskWarning.textContent = "";
+  taskWarning.classList.remove("warning");
+  workflowPrompt.value = "";
+  workflowPrompt.placeholder = "เลือกประเภทงานและเขียนรายละเอียดก่อน ระบบจะสร้างคำสั่งให้ที่นี่";
+  copyState.textContent = "";
+  copyPromptButton.disabled = true;
+  fullAutomateButton.hidden = agent.id !== "01";
+  bridgeHint.textContent = bridgeAvailable ? "ระบบจะส่งคำสั่งนี้ไปที่ Codex ผ่านเครื่องของคุณ" : "เปิด Codex Bridge ก่อน หรือใช้ Copy Prompt แทน";
+  latestTaskSummary.textContent = "ยังไม่มีงานล่าสุด";
+  updateBridgeControls();
+}
+
+function formatPromptList(items) {
+  return items.map((item) => `- ${item}`).join("\n");
+}
+
+function buildGeneratedPrompt(agent, workflow, taskPreset, taskPresetEnglish, taskDetails) {
+  const readFirst = workflow.readFirst || ["README.html", "AGENTS.html"];
+  const baseRules = [
+    "Do not use archive/ files.",
+    "Preserve approved canon unless explicitly requested.",
+    "Do not modify unrelated files.",
+    "Do not turn this into a visual redesign task.",
+    "Follow the current Product Bible and approved role mapping.",
+    "Keep user-facing UI Thai if UI copy is involved.",
+    "Do not call external APIs unless explicitly requested.",
+    "Do not modify approved images, sprites, backgrounds, character coordinates, hitboxes, hover/ring logic, or scene scaling unless explicitly requested."
+  ];
+
+  return `Start from README.html and AGENTS.html.
+Act as ${workflow.codexRole}.
+
+Agent role instruction:
+${workflow.prompt}
+
+Task:
+${taskDetails}
+
+Task type:
+${taskPresetEnglish} (${taskPreset})
+
+Read first:
+${formatPromptList(readFirst)}
+
+Scope:
+- Work only on the files and behavior directly related to the requested task.
+- Use existing project structure, canon files, and approved UI/system rules.
+- Treat Product Bible, Guild canon, and approved role mapping as source-of-truth constraints.
+
+Rules:
+${formatPromptList(baseRules)}
+
+Expected output:
+${workflow.expectedOutput}
+
+Report requirements:
+- Files read.
+- Files changed, if any.
+- What was implemented or audited.
+- Verification steps and results.
+- Any risks, mismatches, or follow-up items.
+`;
+}
+
+function createCommandPayload(agent, workflow, taskPreset, taskPresetEnglish, taskDetails) {
+  return {
+    mode:"local-codex-bridge",
+    bridge:"http://127.0.0.1:8787",
+    targetAgent:agent.id,
+    agentName:`${agent.number} ${agent.thaiName}`,
+    agentRole:workflow.codexRole,
+    taskType:taskPreset,
+    taskTypeEnglish:taskPresetEnglish,
+    taskDetails,
+    filesToRead:workflow.readFirst || ["README.html", "AGENTS.html"],
+    guardrails:[
+      "Do not use archive/ files.",
+      "Preserve approved canon unless explicitly requested.",
+      "Do not modify unrelated files.",
+      "Do not modify approved images, sprites, backgrounds, character coordinates, hitboxes, hover/ring logic, or scene scaling unless explicitly requested."
+    ],
+    expectedOutput:workflow.expectedOutput
+  };
+}
+
+function createTask(agent, taskPreset, taskPresetEnglish, taskDetails, extra = {}) {
+  const workflow = workflowTemplates[agent.id];
+  const generatedPrompt = buildGeneratedPrompt(agent, workflow, taskPreset, taskPresetEnglish, taskDetails);
+  return {
+    id:`task-${String(taskSequence++).padStart(3, "0")}`,
+    agentId:agent.id,
+    agentName:`${agent.number} ${agent.thaiName}`,
+    taskType:taskPreset,
+    taskTitle:taskPreset,
+    taskDetails,
+    status:"queued",
+    createdAt:new Date().toISOString(),
+    startedAt:null,
+    completedAt:null,
+    generatedPrompt,
+    resultSummary:"",
+    commandPayload:createCommandPayload(agent, workflow, taskPreset, taskPresetEnglish, taskDetails),
+    parentTaskId:extra.parentTaskId || null,
+    bridgeTaskId:extra.bridgeTaskId || null,
+    dispatchRole:extra.dispatchRole || null
+  };
+}
+
+function normalizeBridgeTask(task) {
+  return {
+    id:task.id,
+    agentId:task.agentId,
+    agentName:task.agentName,
+    taskType:task.taskType,
+    taskTitle:task.taskType,
+    taskDetails:task.taskDetails,
+    status:task.status,
+    createdAt:task.createdAt,
+    startedAt:task.startedAt,
+    completedAt:task.completedAt,
+    generatedPrompt:"",
+    resultSummary:task.result || "",
+    commandPayload:null,
+    parentTaskId:task.parentTaskId || null,
+    bridgeTaskId:task.bridgeTaskId || task.id,
+    dispatchRole:task.dispatchRole || null
+  };
+}
+
+function updateBridgeControls() {
+  if (!bridgeStatusText) return;
+  const dispatchRunning = Boolean(activeDispatch && activeDispatch.status === "running");
+  sendAgentTaskButton.disabled = !bridgeAvailable && !(selectedAgent && selectedAgent.id === "01");
+  fullAutomateButton.disabled = dispatchRunning;
+  bridgeStatusText.textContent = bridgeAvailable ? "Codex Bridge พร้อมใช้งาน" : "ยังไม่ได้เปิด Codex Bridge";
+  bridgeStatusText.classList.toggle("offline", !bridgeAvailable);
+  bridgeStatusText.classList.toggle("ready", bridgeAvailable);
+  if (bridgeHint) {
+    bridgeHint.textContent = bridgeAvailable
+      ? "ระบบจะส่งคำสั่งนี้ไปที่ Codex ผ่านเครื่องของคุณ"
+      : "เปิด Codex Bridge ก่อน หรือใช้ Copy Prompt แทน";
+  }
+}
+
+async function checkBridgeHealth() {
+  try {
+    const response = await fetch(`${BRIDGE_URL}/health`, { cache:"no-store" });
+    const data = await response.json();
+    bridgeAvailable = Boolean(response.ok && data.ok);
+  } catch (error) {
+    bridgeAvailable = false;
+  }
+  updateBridgeControls();
+}
+
+function startBridgePolling() {
+  if (bridgePollTimer) return;
+  bridgePollTimer = setInterval(loadBridgeTasks, 3000);
+}
+
+function stopBridgePollingIfIdle() {
+  if (!bridgePollTimer) return;
+  if (activeDispatch && activeDispatch.status === "running") return;
+  if (tasks.some((task) => task.status === "queued" || task.status === "running")) return;
+  clearInterval(bridgePollTimer);
+  bridgePollTimer = null;
+}
+
+function mergeBridgeTasks(bridgeTasks) {
+  bridgeTasks.map(normalizeBridgeTask).forEach((bridgeTask) => {
+    const existing = tasks.find((task) => task.id === bridgeTask.id || task.bridgeTaskId === bridgeTask.id);
+    if (existing) {
+      const generatedPrompt = existing.generatedPrompt;
+      const commandPayload = existing.commandPayload;
+      const parentTaskId = existing.parentTaskId || bridgeTask.parentTaskId;
+      const dispatchRole = existing.dispatchRole || bridgeTask.dispatchRole;
+      Object.assign(existing, bridgeTask, {
+        generatedPrompt,
+        commandPayload,
+        parentTaskId,
+        dispatchRole,
+        bridgeTaskId:bridgeTask.id
+      });
+    } else {
+      tasks.push(bridgeTask);
+    }
+  });
+}
+
+async function loadBridgeTasks() {
+  try {
+    const response = await fetch(`${BRIDGE_URL}/tasks`, { cache:"no-store" });
+    if (!response.ok) throw new Error("ไม่สามารถอ่านคิวจาก Codex Bridge");
+    const data = await response.json();
+    mergeBridgeTasks(data);
+    await advanceActiveDispatch();
+    renderCommandPanel();
+    stopBridgePollingIfIdle();
+  } catch (error) {
+    bridgeAvailable = false;
+    updateBridgeControls();
+  }
+}
+
+async function sendTaskToBridge(task) {
+  const response = await fetch(`${BRIDGE_URL}/tasks`, {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body:JSON.stringify({
+      agentId:task.agentId,
+      agentName:task.agentName,
+      taskType:task.taskType,
+      taskDetails:task.taskDetails,
+      prompt:task.generatedPrompt,
+      parentTaskId:task.parentTaskId || null
+    })
+  });
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error || "ส่งงานเข้า Codex Bridge ไม่สำเร็จ");
+  return normalizeBridgeTask(data);
+}
+
+function prepareSelectedTaskPrompt() {
+  if (!selectedAgent) return null;
+  const taskDetails = taskDetailInput.value.trim();
+  copyState.textContent = "";
+  if (!taskDetails) {
+    taskWarning.textContent = "กรุณากรอกรายละเอียดงานก่อน";
+    taskWarning.classList.add("warning");
+    workflowPrompt.value = "";
+    workflowPrompt.placeholder = "เลือกประเภทงานและเขียนรายละเอียดก่อน ระบบจะสร้างคำสั่งให้ที่นี่";
+    copyPromptButton.disabled = true;
+    return null;
+  }
+
+  const task = createTask(selectedAgent, selectedTaskPreset, selectedTaskPresetEnglish, taskDetails);
+  taskWarning.textContent = "เตรียมคำสั่งสำหรับ Codex แล้ว";
+  taskWarning.classList.remove("warning");
+  workflowPrompt.value = task.generatedPrompt;
+  copyPromptButton.disabled = false;
+  return task;
+}
+
+function queueTask(task, shouldStart) {
+  tasks.push(task);
+  taskWarning.textContent = shouldStart ? "งานเข้าคิวแล้ว" : "เตรียมคำสั่งสำหรับ Codex แล้ว";
+  taskWarning.classList.remove("warning");
+  latestTaskSummary.textContent = `${task.agentName} · ${task.taskTitle} · ${statusThai[task.status]}`;
+  workflowPrompt.value = task.generatedPrompt;
+  copyPromptButton.disabled = false;
+  renderCommandPanel();
+  if (shouldStart) startLocalQueue();
+}
+
+async function submitSelectedTask(shouldSendToBridge) {
+  if (shouldSendToBridge && selectedAgent && selectedAgent.id === "01") {
+    await createFullAutomatePlan();
+    return;
+  }
+  const task = prepareSelectedTaskPrompt();
+  if (!task) return;
+  if (!shouldSendToBridge) {
+    queueTask(task, false);
+    return;
+  }
+  if (!bridgeAvailable) {
+    taskWarning.textContent = "ยังไม่ได้เปิด Codex Bridge";
+    taskWarning.classList.add("warning");
+    return;
+  }
+  try {
+    sendAgentTaskButton.disabled = true;
+    const bridgeTask = await sendTaskToBridge(task);
+    tasks = tasks.filter((item) => item.id !== bridgeTask.id);
+    tasks.push(bridgeTask);
+    taskWarning.textContent = bridgeStatusMessage[bridgeTask.status] || "งานเข้าคิวแล้ว";
+    taskWarning.classList.remove("warning");
+    renderCommandPanel();
+    latestTaskSummary.textContent = `${bridgeTask.agentName} · ${bridgeTask.taskTitle} · ${statusThai[bridgeTask.status]}`;
+    startBridgePolling();
+  } catch (error) {
+    taskWarning.textContent = "งานติดปัญหา";
+    taskWarning.classList.add("warning");
+  } finally {
+    updateBridgeControls();
+  }
+}
+
+async function createFullAutomatePlan() {
+  if (!selectedAgent || selectedAgent.id !== "01") return;
+  if (activeDispatch && activeDispatch.status === "running") {
+    taskWarning.textContent = "กำลังกระจายงานอัตโนมัติอยู่ รอคิวนี้จบก่อน";
+    taskWarning.classList.add("warning");
+    return;
+  }
+  const goal = taskDetailInput.value.trim();
+  copyState.textContent = "";
+  if (!goal) {
+    taskWarning.textContent = "กรุณากรอกรายละเอียดงานก่อน";
+    taskWarning.classList.add("warning");
+    return;
+  }
+
+  if (!bridgeAvailable) {
+    taskWarning.textContent = "ยังไม่ได้เปิด Codex Bridge จึงยังไม่สามารถกระจายงานอัตโนมัติได้";
+    taskWarning.classList.add("warning");
+    return;
+  }
+
+  const parentTask = createTask(
+    selectedAgent,
+    "วางแผนอัตโนมัติ",
+    "Sequential multi-agent dispatch",
+    `Break this goal into a safe sequential dispatch plan for agents 02-11: ${goal}`,
+    { dispatchRole:"parent" }
+  );
+  parentTask.status = "running";
+  parentTask.startedAt = new Date().toISOString();
+  parentTask.resultSummary = "กำลังกระจายงานให้เอเจนต์ทีละตัวผ่าน Codex Bridge";
+
+  const plannedTasks = createDispatchChildTasks(goal, parentTask.id);
+  workflowPrompt.value = plannedTasks.map((task, index) => `${index + 1}. ${task.agentName} - ${task.taskTitle}\n${task.generatedPrompt}`).join("\n\n---\n\n");
+  copyPromptButton.disabled = false;
+  activeDispatch = {
+    id:parentTask.id,
+    parentTaskId:parentTask.id,
+    status:"running",
+    childTaskIds:plannedTasks.map((task) => task.id),
+    activeChildId:null,
+    finalNoteShown:false
+  };
+  tasks.push(parentTask, ...plannedTasks);
+  taskWarning.textContent = "กำลังรันทีละงานผ่าน Codex Bridge ไม่รันพร้อมกันเพื่อความปลอดภัย";
+  taskWarning.classList.remove("warning");
+  latestTaskSummary.textContent = `วางแผนอัตโนมัติ · ${plannedTasks.length} งานรอคิว`;
+  renderCommandPanel();
+  try {
+    fullAutomateButton.disabled = true;
+    await advanceActiveDispatch();
+    startBridgePolling();
+  } catch (error) {
+    taskWarning.textContent = "งานติดปัญหา";
+    taskWarning.classList.add("warning");
+  } finally {
+    updateBridgeControls();
+  }
+}
+
+function createDispatchChildTasks(goal, parentTaskId) {
+  const plan = [
+    { agentId:"02", preset:"ตรวจ Source of Truth", presetEnglish:"Audit source of truth", detail:`Inspect source-of-truth, canon, rule conflicts, and unsafe assumptions for this goal. Inspection only. Goal: ${goal}` },
+    { agentId:"03", preset:"ทำ Handoff", presetEnglish:"Create handoff", detail:`Prepare a handoff summary structure for this dispatched workflow, including decisions, open issues, and next-step reporting. Inspection only. Goal: ${goal}` },
+    { agentId:"04", preset:"ตรวจ Design System", presetEnglish:"Audit design system", detail:`Audit UX clarity, design-system consistency, visual canon, spacing, typography, and interaction wording for this goal. Inspection only. Goal: ${goal}` },
+    { agentId:"05", preset:"ตรวจ Build Error", presetEnglish:"Inspect implementation maintainability", detail:`Inspect HTML/CSS/JS maintainability, structure, brittle code paths, and implementation risks related to this goal. Inspection only. Goal: ${goal}` },
+    { agentId:"06", preset:"ตรวจ Security", presetEnglish:"Security audit", detail:`Audit Codex Bridge safety, client trust boundaries, unsafe browser execution risk, and system integrity for this goal. Inspection only. Goal: ${goal}` },
+    { agentId:"07", preset:"ตรวจ Mini Game Flow", presetEnglish:"Review product mode logic", detail:`Check Product Modes and Mini Game role logic for conflicts or missing guardrails related to this goal. Inspection only. Goal: ${goal}` },
+    { agentId:"08", preset:"ทำ QA Checklist", presetEnglish:"Create QA checklist", detail:`Create a focused QA and regression checklist for this dispatched workflow. Inspection only. Goal: ${goal}` },
+    { agentId:"09", preset:"ตรวจ Practice Mode", presetEnglish:"Review Practice and Mock Exam readiness", detail:`Check Practice Mode, Mock Exam, accuracy review, and 100-question session readiness where relevant to this goal. Inspection only. Goal: ${goal}` },
+    { agentId:"10", preset:"Review Architecture", presetEnglish:"Review architecture and technical debt", detail:`Review architecture, technical debt, maintainability, coupling, and long-term structure risks for this goal. Inspection only. Goal: ${goal}` },
+    { agentId:"11", preset:"ตรวจ Reward Logic", presetEnglish:"Review reward and monetization guardrails", detail:`Check Reward, VIP, monetization, x2 ticket, and rewarded ad guardrails for conflicts or duplicate-reward risk related to this goal. Inspection only. Goal: ${goal}` }
+  ];
+
+  return plan.map((step) => {
+    const agent = agents.find((item) => item.id === step.agentId);
+    return createTask(agent, step.preset, step.presetEnglish, step.detail, {
+      parentTaskId,
+      dispatchRole:"child"
+    });
+  });
+}
+
+function getActiveDispatchChildren() {
+  if (!activeDispatch) return [];
+  return activeDispatch.childTaskIds
+    .map((taskId) => tasks.find((task) => task.id === taskId || task.bridgeTaskId === taskId))
+    .filter(Boolean);
+}
+
+function isTerminalStatus(status) {
+  return status === "completed" || status === "failed";
+}
+
+async function advanceActiveDispatch() {
+  if (!activeDispatch || activeDispatch.status !== "running") return;
+  const children = getActiveDispatchChildren();
+  const activeChild = children.find((task) => task.status === "running");
+  if (activeChild) return;
+
+  const waitingForBridge = children.find((task) => task.bridgeTaskId && task.status === "queued");
+  if (waitingForBridge) return;
+
+  const nextChild = children.find((task) => !task.bridgeTaskId && task.status === "queued");
+  if (nextChild) {
+    const originalId = nextChild.id;
+    const originalPrompt = nextChild.generatedPrompt;
+    const originalPayload = nextChild.commandPayload;
+    const bridgeTask = await sendTaskToBridge(nextChild);
+    Object.assign(nextChild, bridgeTask, {
+      id:bridgeTask.id,
+      bridgeTaskId:bridgeTask.id,
+      parentTaskId:activeDispatch.parentTaskId,
+      dispatchRole:"child",
+      generatedPrompt:originalPrompt,
+      commandPayload:originalPayload
+    });
+    activeDispatch.childTaskIds = activeDispatch.childTaskIds.map((taskId) => taskId === originalId ? nextChild.id : taskId);
+    activeDispatch.activeChildId = nextChild.id;
+    latestTaskSummary.textContent = `${nextChild.agentName} · ${nextChild.taskTitle} · ${statusThai[nextChild.status]}`;
+    renderCommandPanel();
+    return;
+  }
+
+  if (children.length > 0 && children.every((task) => isTerminalStatus(task.status))) {
+    finishActiveDispatch();
+  }
+}
+
+function finishActiveDispatch() {
+  const parentTask = tasks.find((task) => task.id === activeDispatch.parentTaskId);
+  if (parentTask) {
+    parentTask.status = "completed";
+    parentTask.completedAt = new Date().toISOString();
+    parentTask.resultSummary = "สรุปรวมเสร็จแล้ว";
+    parentTask.taskTitle = "สรุปรวมเสร็จแล้ว";
+  }
+  activeDispatch.status = "completed";
+  activeDispatch.finalNoteShown = true;
+  latestTaskSummary.textContent = "งานกระจายครบทุกเอเจนต์แล้ว ตรวจ log ของแต่ละงานได้ใน Codex Bridge";
+  taskWarning.textContent = "สรุปรวมเสร็จแล้ว";
+  taskWarning.classList.remove("warning");
+  renderCommandPanel();
+}
+
+function getTaskAgent(task) {
+  return agents.find((agent) => agent.id === task.agentId);
+}
+
+function formatTaskLine(task) {
+  const agent = getTaskAgent(task);
+  return `<p class="command-item"><strong>${task.agentName}</strong><br>${task.taskTitle}<br>${agent ? agent.thaiRole : ""}</p>`;
+}
+
+exec
+/bin/zsh -lc "sed -n '2165,2325p' agents/pip_development_guild/agent_dashboard.html" in /Users/Pae/Developer/PIP/PIP-Public-Bible
+ succeeded in 0ms:
+}
+
+function renderTaskList(container, items, emptyText, limit) {
+  const visibleItems = typeof limit === "number" ? items.slice(0, limit) : items;
+  container.innerHTML = visibleItems.length
+    ? visibleItems.map(formatTaskLine).join("")
+    : `<p class="command-empty">${emptyText}</p>`;
+}
+
+function getAgentStatus(agent) {
+  const active = tasks.find((task) => task.agentId === agent.id && task.status === "running");
+  if (active) return { status:"running", task:active };
+  const queued = tasks.find((task) => task.agentId === agent.id && task.status === "queued");
+  if (queued) return { status:"queued", task:queued };
+  const latest = tasks.filter((task) => task.agentId === agent.id && (task.status === "completed" || task.status === "failed")).at(-1);
+  if (latest) return { status:latest.status, task:latest };
+  return { status:"idle", task:null };
+}
+
+function renderAgentStatuses() {
+  agentStatusTable.innerHTML = agents.map((agent) => {
+    const state = getAgentStatus(agent);
+    const taskText = state.task ? state.task.taskTitle : "ไม่มีงานค้าง";
+    return `
+      <div class="agent-status-row">
+        <div class="agent-status-number">${agent.number}</div>
+        <div>
+          <p class="agent-status-name">${agent.thaiName}</p>
+          <p class="agent-status-role">${agent.thaiRole}</p>
+          <p class="agent-status-task">${taskText}</p>
+        </div>
+        <div class="status-pill status-${state.status}">${statusThai[state.status]}</div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderCommandPanel() {
+  const activeTasks = tasks.filter((task) => task.status === "running");
+  const queuedTasks = tasks.filter((task) => task.status === "queued");
+  const completedTasks = tasks.filter((task) => task.status === "completed" || task.status === "failed").slice(-3).reverse();
+  if (activeDispatch && activeDispatch.status === "running") {
+    dispatchNotice.textContent = "กำลังรันทีละงานผ่าน Codex Bridge ไม่รันพร้อมกันเพื่อความปลอดภัย";
+  } else if (activeDispatch && activeDispatch.status === "completed") {
+    dispatchNotice.textContent = "งานกระจายครบทุกเอเจนต์แล้ว ตรวจ log ของแต่ละงานได้ใน Codex Bridge";
+  } else {
+    dispatchNotice.textContent = "ยังไม่มีงานกระจายอัตโนมัติ";
+  }
+  renderTaskList(activeTaskView, activeTasks, "ยังไม่มีงานที่กำลังทำ", 1);
+  renderTaskList(queuedTaskView, queuedTasks, "ยังไม่มีงานรอคิว", 5);
+  renderTaskList(completedTaskView, completedTasks, "ยังไม่มีงานที่เสร็จแล้ว", 3);
+  renderAgentStatuses();
+  const latestTask = tasks.at(-1);
+  latestTaskSummary.textContent = latestTask
+    ? `${latestTask.agentName} · ${latestTask.taskTitle} · ${statusThai[latestTask.status]}`
+    : "ยังไม่มีงานล่าสุด";
+}
+
+function startNextTask() {
+  if (bridgeAvailable) {
+    loadBridgeTasks();
+    startBridgePolling();
+    return;
+  }
+  startLocalQueue();
+}
+
+function stopQueue() {
+  queueRunning = false;
+  if (activeTaskTimer) {
+    clearTimeout(activeTaskTimer);
+    activeTaskTimer = null;
+  }
+  if (bridgePollTimer) {
+    clearInterval(bridgePollTimer);
+    bridgePollTimer = null;
+  }
+  renderCommandPanel();
+}
+
+function clearCompletedTasks() {
+  tasks = tasks.filter((task) => task.status !== "completed" && task.status !== "failed");
+  renderCommandPanel();
+}
+
+function startLocalQueue() {
+  if (bridgeAvailable) return;
+  if (queueRunning) return;
+  queueRunning = true;
+  processLocalQueue();
+}
+
+function processLocalQueue() {
+  if (!queueRunning) return;
+  if (tasks.some((task) => task.status === "running")) return;
+  const nextTask = tasks.find((task) => task.status === "queued");
+  if (!nextTask) {
+    queueRunning = false;
+    renderCommandPanel();
+    return;
+  }
+
+  nextTask.status = "running";
+  nextTask.startedAt = new Date().toISOString();
+  nextTask.resultSummary = "จำลองการทำงาน: เตรียมคำสั่งสำหรับ Codex และรอเชื่อมต่อ Codex Bridge";
+  renderCommandPanel();
+  activeTaskTimer = setTimeout(() => {
+    nextTask.status = "completed";
+    nextTask.completedAt = new Date().toISOString();
+    nextTask.resultSummary = "เสร็จแล้วในโหมดจำลอง ยังไม่ได้รัน Codex จริง";
+    activeTaskTimer = null;
+    renderCommandPanel();
+    processLocalQueue();
+  }, 1800);
+}
+
+async function copyWorkflowPrompt() {
+  const promptText = workflowPrompt.value;
+  if (!promptText.trim()) {
+    copyState.textContent = "ยังไม่มี Prompt ให้คัดลอก";
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(promptText);
+  } catch (error) {
+    workflowPrompt.focus();
+    workflowPrompt.select();
+    document.execCommand("copy");
+  }
+  copyState.textContent = "คัดลอก Prompt แล้ว";
+}
+
+function renderAgents() {
+  agentLayer.innerHTML = "";
+  agents
+    .slice()
+    .sort((a, b) => (a.y + a.height) - (b.y + b.height))
+    .forEach((agent, index) => {
+      const node = document.createElement("div");
+      node.className = "agent-node";
+      node.dataset.agentId = agent.id;
+      node.style.setProperty("--x", `${agent.x}px`);
+      node.style.setProperty("--y", `${agent.y}px`);
+      node.style.setProperty("--w", `${agent.width}px`);
+      node.style.setProperty("--h", `${agent.height}px`);
+      node.style.setProperty("--label-x", `${agent.labelOffsetX}px`);
+      node.style.setProperty("--label-y", `${agent.labelOffsetY}px`);
+      node.style.setProperty("--hit-w", `${agent.hitboxWidth}px`);
+      node.style.setProperty("--hit-h", `${agent.hitboxHeight}px`);
+      node.style.setProperty("--ring-w", `${agent.highlightWidth}px`);
+      node.style.setProperty("--ring-h", `${agent.highlightHeight}px`);
+      node.style.setProperty("--duration", agent.duration);
+      node.style.setProperty("--scale", agent.scale);
+
+      const z = 20 + index;
+      node.innerHTML = `
+        <div class="agent" style="z-index:${z};">
+          <div class="sprite-motion ${agent.motion}">
+            <img class="agent-sprite" src="${agent.spritePath}" alt="${agent.number} ${agent.name}">
+          </div>
+        </div>
+
+2026-06-04T11:54:10.362590Z  WARN codex_core_plugins::manifest: ignoring interface.defaultPrompt[0]: prompt must be at most 128 characters path=/Users/Pae/.codex/.tmp/plugins/plugins/ngs-analysis/.codex-plugin/plugin.json
+2026-06-04T11:54:10.376345Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:54:10.376352Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:54:10.377328Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:54:10.377332Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:54:10.377699Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:54:10.377702Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:54:10.378030Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:54:10.378033Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:54:10.378391Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:54:10.378394Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:54:10.379226Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:54:10.379228Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+codex
+Logic หลักตรงตามแนวคิด sequential: dashboard สร้าง `plannedTasks` แยก 10 รายการ และ `advanceActiveDispatch()` จะส่งงานถัดไปหลังไม่มีงาน running/queued บน Bridge แล้วเท่านั้น. แต่ผมยังต้องตรวจไฟล์ task/log ที่มีอยู่เพื่อยืนยันว่ารอบที่เกิดขึ้นจริงครบ 02-11 หรือไม่.
+exec
+/bin/zsh -lc "node -e 'const fs=require(\"fs\"),p=\"agents/pip_development_guild/codex_bridge/tasks\"; for (const f of fs.readdirSync(p).filter(f=>f.endsWith(\".json\")).sort()) { const t=JSON.parse(fs.readFileSync("'`${p}/${f}`)); console.log([f,t.agentId,t.agentName,t.taskType,t.status,t.createdAt,t.startedAt,t.completedAt,t.exitCode,t.logFile].join("'"\\t\")); }'" in /Users/Pae/Developer/PIP/PIP-Public-Bible
+ succeeded in 0ms:
+task-1780542594096-29c8998b.json	01	01 หัวหน้ากิลด์	วางแผนงาน	running	2026-06-04T03:09:54.108Z	2026-06-04T03:09:54.110Z			task-1780542594096-29c8998b.log
+task-1780542594121-ec2c3c50.json	02	02 ไฮพรีสต์	ตรวจ Source of Truth	queued	2026-06-04T03:09:54.121Z				task-1780542594121-ec2c3c50.log
+task-1780542594123-aa47e9a7.json	04	04 เซจ	ตรวจ Design System	queued	2026-06-04T03:09:54.123Z				task-1780542594123-aa47e9a7.log
+task-1780542594124-7b148826.json	05	05 แบล็กสมิธ	ทำ Flutter Implementation	queued	2026-06-04T03:09:54.124Z				task-1780542594124-7b148826.log
+task-1780542594126-eed6e635.json	08	08 แอสซาซินครอส	ทำ QA Checklist	queued	2026-06-04T03:09:54.126Z				task-1780542594126-eed6e635.log
+task-1780542594128-7578cedf.json	10	10 โปรเฟสเซอร์	Review Code	queued	2026-06-04T03:09:54.128Z				task-1780542594128-7578cedf.log
+task-1780542594129-9cd16f47.json	03	03 โนวิซ (พิป)	ทำ Handoff	queued	2026-06-04T03:09:54.129Z				task-1780542594129-9cd16f47.log
+task-1780542600591-389e8572.json	01	01 หัวหน้ากิลด์	วางแผนงาน	queued	2026-06-04T03:10:00.591Z				task-1780542600591-389e8572.log
+task-1780561086700-12f73ffd.json	03	โนวิซ (พิป)	สรุปงาน	queued	2026-06-04T08:18:06.711Z				task-1780561086700-12f73ffd.log
+task-1780561643505-78c4dc17.json	03	โนวิซ (พิป)	สรุปงาน	running	2026-06-04T08:27:23.505Z	2026-06-04T08:27:23.507Z			task-1780561643505-78c4dc17.log
+task-1780562428616-778e5b61.json	03	โนวิซ (Pip)	สรุปงาน	queued	2026-06-04T08:40:28.617Z				task-1780562428616-778e5b61.log
+task-1780562502406-bac2384f.json	03	โนวิซ (Pip)	สรุปงาน	completed	2026-06-04T08:41:42.406Z	2026-06-04T08:41:42.407Z	2026-06-04T08:42:02.562Z	0	task-1780562502406-bac2384f.log
+task-1780564820195-a9d2db42.json	03	03 โนวิซ (พิป)	สรุปงาน	completed	2026-06-04T09:20:20.196Z	2026-06-04T09:20:20.201Z	2026-06-04T09:20:56.873Z	0	task-1780564820195-a9d2db42.log
+task-1780565666132-300651c4.json	01	01 หัวหน้ากิลด์	วางแผนงาน	completed	2026-06-04T09:34:26.133Z	2026-06-04T09:34:26.134Z	2026-06-04T09:35:31.707Z	0	task-1780565666132-300651c4.log
+task-1780572249543-7fa7e7b7.json	01	01 หัวหน้ากิลด์	วางแผนงาน	completed	2026-06-04T11:24:09.544Z	2026-06-04T11:24:09.545Z	2026-06-04T11:25:28.750Z	0	task-1780572249543-7fa7e7b7.log
+task-1780573506413-f0fe8258.json	02	02 ไฮพรีสต์	ตรวจ Source of Truth	completed	2026-06-04T11:45:06.414Z	2026-06-04T11:45:06.417Z	2026-06-04T11:46:44.884Z	0	task-1780573506413-f0fe8258.log
+task-1780573605491-b92c5e10.json	03	03 โนวิซ (พิป)	ทำ Handoff	completed	2026-06-04T11:46:45.491Z	2026-06-04T11:46:45.493Z	2026-06-04T11:48:07.825Z	0	task-1780573605491-b92c5e10.log
+task-1780573689490-88a480bf.json	04	04 เซจ	ตรวจ Design System	completed	2026-06-04T11:48:09.491Z	2026-06-04T11:48:09.493Z	2026-06-04T11:49:31.172Z	0	task-1780573689490-88a480bf.log
+task-1780573773493-29feb122.json	05	05 แบล็กสมิธ	ตรวจ Build Error	completed	2026-06-04T11:49:33.494Z	2026-06-04T11:49:33.496Z	2026-06-04T11:51:15.091Z	0	task-1780573773493-29feb122.log
+task-1780573875494-5569c365.json	06	06 ครูเซเดอร์	ตรวจ Security	completed	2026-06-04T11:51:15.495Z	2026-06-04T11:51:15.496Z	2026-06-04T11:52:57.125Z	0	task-1780573875494-5569c365.log
+task-1780573989282-33c1e989.json	07	07 ไนท์	ตรวจ Mini Game Flow	running	2026-06-04T11:53:09.282Z	2026-06-04T11:53:09.283Z			task-1780573989282-33c1e989.log
+
+exec
+/bin/zsh -lc "for f in agents/pip_development_guild/codex_bridge/logs/*.log; do printf '%s\\t' \""'$(basename "$f")"; tail -n 3 "$f" | tr '"'\\n' ' ' | sed 's/[[:space:]]\\+/ /g'; printf '\\n'; done" in /Users/Pae/Developer/PIP/PIP-Public-Bible
+ succeeded in 0ms:
+task-1780542594096-29c8998b.log	Task type: วางแผนงาน  Reading additional input from stdin... 
+task-1780542594121-ec2c3c50.log	Task task-1780542594121-ec2c3c50 queued at 2026-06-04T03:09:54.121Z 
+task-1780542594123-aa47e9a7.log	Task task-1780542594123-aa47e9a7 queued at 2026-06-04T03:09:54.123Z 
+task-1780542594124-7b148826.log	Task task-1780542594124-7b148826 queued at 2026-06-04T03:09:54.124Z 
+task-1780542594126-eed6e635.log	Task task-1780542594126-eed6e635 queued at 2026-06-04T03:09:54.126Z 
+task-1780542594128-7578cedf.log	Task task-1780542594128-7578cedf queued at 2026-06-04T03:09:54.128Z 
+task-1780542594129-9cd16f47.log	Task task-1780542594129-9cd16f47 queued at 2026-06-04T03:09:54.129Z 
+task-1780542600591-389e8572.log	Task task-1780542600591-389e8572 queued at 2026-06-04T03:10:00.591Z 
+task-1780561086700-12f73ffd.log	Task task-1780561086700-12f73ffd queued at 2026-06-04T08:18:06.711Z 
+task-1780561643505-78c4dc17.log	Task type: สรุปงาน  Reading additional input from stdin... 
+task-1780562428616-778e5b61.log	Task task-1780562428616-778e5b61 queued at 2026-06-04T08:40:28.617Z 
+task-1780562502406-bac2384f.log	Confirmed stdin status: `closed_or_eof`.  Task completed at 2026-06-04T08:42:02.562Z with exit code 0 
+task-1780564820195-a9d2db42.log	- Preserve approved canon and Thai UI copy rules.  Task completed at 2026-06-04T09:20:56.873Z with exit code 0 
+task-1780565666132-300651c4.log	ถ้าอนุมัติแผนนี้ ผมจะเริ่ม audit ตามลำดับ 01 → 11 และส่งรายงานรวมภาษาไทยโดยไม่แก้ไฟล์ใด ๆ.  Task completed at 2026-06-04T09:35:31.707Z with exit code 0 
+task-1780572249543-7fa7e7b7.log	ถ้าต้องการ “รันผ่าน Codex Bridge จริง” ต้องอนุมัติข้อยกเว้นก่อนว่าอนุญาตให้ Bridge สร้าง/เขียนไฟล์ log/task ใน `agents/pip_development_guild/codex_bridge/logs/` และ `tasks/` ได้.  Task completed at 2026-06-04T11:25:28.750Z with exit code 0 
+task-1780573506413-f0fe8258.log	ยืนยัน: ผมไม่ได้แก้ไฟล์ ไม่ได้สร้างไฟล์ใหม่ ไม่ได้ลบไฟล์ และไม่ได้ใช้ `archive/` เป็นแหล่งอ้างอิงในการตรวจครั้งนี้.  Task completed at 2026-06-04T11:46:44.884Z with exit code 0 
+task-1780573605491-b92c5e10.log	ยืนยัน: งานนี้เป็น inspection only และผมไม่ได้แก้ไฟล์ใด ๆ.  Task completed at 2026-06-04T11:48:07.825Z with exit code 0 
+task-1780573689490-88a480bf.log	Dispatcher code มีเจตนาและโครงสร้างสำหรับสร้าง child task แยก Agent 02-11 และส่งเข้า Codex Bridge แบบ sequential แต่จากหลักฐาน task/log ปัจจุบันยัง “ไม่ครบ 02-11” ในรอบจริง: พบ 02 และ 03 completed, 04 running, ยังไม่พบ 05-11 ของรอบล่าสุด ไม่มี Agent failed ที่ยืนยันจาก task ล่าสุดที่อ่านได้ แต่ Agent 04 ยังต้องตรวจ log ต่อเมื่อจบงาน.  Task completed at 2026-06-04T11:49:31.172Z with exit code 0 
+task-1780573773493-29feb122.log	- Files changed by me: **ไม่มี**  Task completed at 2026-06-04T11:51:15.091Z with exit code 0 
+task-1780573875494-5569c365.log	สถานะ worktree ก่อน/ระหว่างตรวจพบ dirty อยู่แล้ว: `agent_dashboard.html` modified และมี `codex_bridge/logs/`, `codex_bridge/tasks/` untracked หลายไฟล์ ซึ่งผมไม่ได้แก้หรือ revert.  Task completed at 2026-06-04T11:52:57.125Z with exit code 0 
+task-1780573989282-33c1e989.log	task-1780573875494-5569c365.json	06	06 ครูเซเดอร์	ตรวจ Security	completed	2026-06-04T11:51:15.495Z	2026-06-04T11:51:15.496Z	2026-06-04T11:52:57.125Z	0	task-1780573875494-5569c365.log task-1780573989282-33c1e989.json	07	07 ไนท์	ตรวจ Mini Game Flow	running	2026-06-04T11:53:09.282Z	2026-06-04T11:53:09.283Z			task-1780573989282-33c1e989.log  
+
+2026-06-04T11:54:20.262177Z  WARN codex_core_plugins::manifest: ignoring interface.defaultPrompt[0]: prompt must be at most 128 characters path=/Users/Pae/.codex/.tmp/plugins/plugins/ngs-analysis/.codex-plugin/plugin.json
+2026-06-04T11:54:20.275865Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:54:20.275874Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:54:20.276890Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:54:20.276894Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:54:20.277248Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:54:20.277251Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:54:20.277656Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:54:20.277659Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:54:20.277996Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:54:20.277999Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:54:20.278804Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:54:20.278807Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+codex
+หลักฐาน task รอบล่าสุดตอนนี้มี 02-06 completed และ 07 running; ยังไม่เห็น task ของ 08-11 ในไฟล์ task ปัจจุบัน. นั่นแปลว่าโค้ดรองรับ sequential dispatch แต่ผลรันจริงยังไม่ครบ 02-11 ณ เวลาที่ตรวจ ไม่ควรสรุปว่า “ครบแล้ว” จนกว่า 07 จบและ dashboard/bridge ส่ง 08 ต่อ.
+exec
+/bin/zsh -lc "nl -ba agents/pip_development_guild/agent_dashboard.html | sed -n '1210,1280p'" in /Users/Pae/Developer/PIP/PIP-Public-Bible
+exec
+/bin/zsh -lc "nl -ba agents/pip_development_guild/agent_dashboard.html | sed -n '1440,1468p'" in /Users/Pae/Developer/PIP/PIP-Public-Bible
+ succeeded in 0ms:
+  1440	  "07": {
+  1441	    name:"ลำดับงานมินิเกม",
+  1442	    codexRole:"Knight / Mini Game Agent",
+  1443	    presets:["ตรวจ Mini Game Flow", "ตรวจ Stage Progression", "ตรวจ Summary & Insight", "ตรวจ Pass / Fail Logic"],
+  1444	    presetsEnglish:["Audit Mini Game flow", "Audit stage progression", "Audit Summary & Insight", "Audit pass/fail logic"],
+  1445	    presetHelp:[
+  1446	      "ใช้ตรวจภาพรวม flow ของมินิเกม",
+  1447	      "ใช้ดูว่าด่านและความคืบหน้ายังถูกต้อง",
+  1448	      "ใช้ตรวจหน้าสรุปและ insight",
+  1449	      "ใช้ตรวจตรรกะผ่านหรือไม่ผ่าน"
+  1450	    ],
+  1451	    presetHelpDefault:"ใช้วางหรือทบทวน flow ของ Mini Game",
+  1452	    readFirst:["README.html", "AGENTS.html", "product_bible/01_game_flow/mini_game_flow.md", "product_bible/02_reward_system/mini_game_reward_logic.md"],
+  1453	    expectedOutput:"Review or plan the Mini Game flow, stage progression, pass/fail behavior, Summary & Insight states, and navigation impact.",
+  1454	    useFor:[
+  1455	      "ลำดับด่าน",
+  1456	      "กฎผ่านหรือไม่ผ่าน",
+  1457	      "สรุปและอินไซต์",
+  1458	      "ความคืบหน้าของผู้เล่น"
+  1459	    ],
+  1460	    checklist:[
+  1461	      "ระบุลำดับด่านหรือรอบการเล่น",
+  1462	      "ระบุกฎผ่านหรือไม่ผ่าน",
+  1463	      "ระบุการเชื่อมกับรางวัลหรืออินไซต์ที่เกี่ยวข้อง"
+  1464	    ],
+  1465	    prompt:"Act as the Knight / Mini Game Agent. Review or implement the Mini Game flow while preserving the approved game rules. Check stage progression, pass/fail behavior, Summary & Insight states, revisit behavior, and navigation. Do not mix reward/subscription rules unless required by the task."
+  1466	  },
+  1467	  "08": {
+  1468	    name:"ตรวจคุณภาพ / ทดสอบการถดถอย",
+
+ succeeded in 0ms:
+  1210	    thaiDescription:"ครูเซเดอร์คือผู้พิทักษ์ความปลอดภัยและความถูกต้องของระบบ ทำหน้าที่ป้องกันรางวัลซ้ำ ความไว้ใจฝั่งผู้ใช้เกินจำเป็น ช่องโหว่ การแก้ตรรกะผิดทาง และคุมให้อำนาจฝั่งเซิร์ฟเวอร์เป็นหลักในจุดสำคัญ",
+  1211	    thaiResponsibility:"ดูแลความปลอดภัย ความสมบูรณ์ของระบบ การกันรางวัลซ้ำ และอำนาจฝั่งเซิร์ฟเวอร์",
+  1212	    thaiUsage:"วางที่ประตู ทางเข้า หรือพื้นที่ป้องกันระบบ",
+  1213	    thaiRule:"ควรแสดงเป็นผู้พิทักษ์ ห้ามเปลี่ยนเป็นผู้ดูแลมินิเกมหรือผู้ดูแลรางวัล"
+  1214	  },
+  1215	  {
+  1216	    id:"07", number:"07", name:"Knight", role:"ผู้ดูแลมินิเกม", group:"โหมดสินค้า",
+  1217	    zone:"ขวาของเวที", spritePath:"cropped_sprites/front_cutouts/07_knight_front.png", idlePrototypePath:"animations/07_knight_idle_css_prototype.html",
+  1218	    x:1204, y:344, width:132.4, height:170, labelOffsetX:66.2, labelOffsetY:-8, hitboxWidth:136, hitboxHeight:154, highlightWidth:142, highlightHeight:160,
+  1219	    duration:"1.45s", scale:1.01, motion:"steady",
+  1220	    thaiName:"ไนท์",
+  1221	    thaiRole:"ผู้ดูแลมินิเกม",
+  1222	    thaiGroup:"โหมดการใช้งาน",
+  1223	    thaiDescription:"ไนท์คือผู้ดูแลลำดับการเล่นมินิเกม ทำหน้าที่คุมด่าน การผ่านหรือไม่ผ่าน ความคืบหน้า เส้นทางด่าน สรุปและอินไซต์ และประสบการณ์การเล่นแบบภารกิจ",
+  1224	    thaiResponsibility:"ดูแลลำดับการเล่นมินิเกม ความคืบหน้าของด่าน การผ่านหรือไม่ผ่าน และสรุปผล",
+  1225	    thaiUsage:"วางใกล้พื้นที่ภารกิจ เวที หรือเส้นทางความคืบหน้า",
+  1226	    thaiRule:"ควรแสดงเป็นผู้คุมด่านภารกิจ ห้ามเปลี่ยนเป็นผู้ดูแลโหมดฝึกหรือเจ้าของระบบรายได้"
+  1227	  },
+  1228	  {
+  1229	    id:"08", number:"08", name:"Assassin Cross", role:"ผู้ตรวจคุณภาพ", group:"ความปลอดภัยและคุณภาพ",
+  1230	    zone:"พื้นที่ตรวจสอบล่างซ้าย", spritePath:"cropped_sprites/front_cutouts/08_assassin_cross_front.png", idlePrototypePath:"animations/08_assassin_cross_idle_css_prototype.html",
+  1231	    x:630, y:808, width:98.9, height:154, labelOffsetX:49.4, labelOffsetY:-8, hitboxWidth:104, hitboxHeight:138, highlightWidth:110, highlightHeight:144,
+  1232	    duration:"1.54s", scale:1.006, motion:"lively",
+  1233	    thaiName:"แอสซาซินครอส",
+  1234	    thaiRole:"ผู้ทดสอบและล่าบั๊ก",
+  1235	    thaiGroup:"ความปลอดภัยและคุณภาพ",
+  1236	    thaiDescription:"แอสซาซินครอสคือผู้ล่าบั๊กและตรวจการถดถอย ทำหน้าที่จับปัญหาที่ซ่อนอยู่ ตรวจประตูคุณภาพ วิเคราะห์และทดสอบระบบ และช่วยยืนยันว่าการแก้ไขไม่ทำให้ระบบส่วนอื่นพัง",
+  1237	    thaiResponsibility:"ล่าบั๊ก ตรวจการถดถอย ตรวจประตูคุณภาพ วิเคราะห์ระบบ และทดสอบระบบ",
+  1238	    thaiUsage:"วางในพื้นที่ตรวจสอบ มุมเงา หรือโซนตรวจคุณภาพ",
+  1239	    thaiRule:"ควรแสดงเป็นผู้ทดสอบและผู้ล่าบั๊ก ห้ามเปลี่ยนเป็นเจ้าของความปลอดภัยหรือผู้พิทักษ์คัมภีร์ผลิตภัณฑ์"
+  1240	  },
+  1241	  {
+  1242	    id:"09", number:"09", name:"Sniper", role:"ผู้ดูแลโหมดฝึก", group:"โหมดสินค้า",
+  1243	    zone:"ระเบียงซ้ายบน", spritePath:"cropped_sprites/front_cutouts/09_sniper_front.png", idlePrototypePath:"animations/09_sniper_idle_css_prototype.html",
+  1244	    x:534, y:62, width:71.9, height:146, labelOffsetX:36, labelOffsetY:-8, hitboxWidth:78, hitboxHeight:132, highlightWidth:84, highlightHeight:138,
+  1245	    duration:"1.6s", scale:1.006, motion:"lively",
+  1246	    thaiName:"สไนเปอร์",
+  1247	    thaiRole:"ผู้ดูแลโหมดฝึก",
+  1248	    thaiGroup:"โหมดการใช้งาน",
+  1249	    thaiDescription:"สไนเปอร์คือผู้ดูแลโหมดฝึกและความแม่นยำ ทำหน้าที่คุมลำดับการฝึกทำข้อสอบ โหมด 100 ข้อ การสอบจำลอง การวัดความแม่นยำ และการทบทวนผลการฝึก",
+  1250	    thaiResponsibility:"ดูแลโหมดฝึก การสอบจำลอง ลำดับ 100 ข้อ และการทบทวนความแม่นยำ",
+  1251	    thaiUsage:"วางบนจุดมองการณ์ ระเบียง หรือพื้นที่ที่สื่อถึงความแม่นยำ",
+  1252	    thaiRule:"ควรแสดงเป็นสายฝึกและความแม่นยำ ห้ามเปลี่ยนเป็นผู้ดูแลรางวัลหรือวีไอพี"
+  1253	  },
+  1254	  {
+  1255	    id:"10", number:"10", name:"Professor", role:"ผู้ตรวจทาน", group:"ภาวะผู้นำและการกำกับดูแล",
+  1256	    zone:"โต๊ะรีวิวขวากลาง", spritePath:"cropped_sprites/front_cutouts/10_professor_front.png", idlePrototypePath:"animations/10_professor_idle_css_prototype.html",
+  1257	    x:1337, y:515, width:72.2, height:156, labelOffsetX:36.1, labelOffsetY:-8, hitboxWidth:78, hitboxHeight:142, highlightWidth:84, highlightHeight:148,
+  1258	    duration:"1.72s", scale:1.006, motion:"steady",
+  1259	    thaiName:"โปรเฟสเซอร์",
+  1260	    thaiRole:"ผู้ตรวจทานระบบ",
+  1261	    thaiGroup:"ภาวะผู้นำและการกำกับดูแล",
+  1262	    thaiDescription:"โปรเฟสเซอร์คือผู้ตรวจทานเชิงลึก ทำหน้าที่ตรวจโค้ด โครงสร้างระบบ และคุณภาพการตัดสินใจ ช่วยให้การตัดสินใจของทีมมีเหตุผลและไม่ขัดกับโครงสร้างระบบระยะยาว",
+  1263	    thaiResponsibility:"ตรวจโค้ด โครงสร้างระบบ และคุณภาพการตัดสินใจ",
+  1264	    thaiUsage:"วางใกล้โต๊ะ เอกสารวิจัย บันทึก หรือพื้นที่ตรวจทาน",
+  1265	    thaiRule:"ควรแสดงเป็นผู้ตรวจทาน ห้ามเปลี่ยนเป็นหัวหน้าหลักหรือนักออกแบบภาพเท่านั้น"
+  1266	  },
+  1267	  {
+  1268	    id:"11", number:"11", name:"Gunslinger", role:"ผู้ดูแลรางวัล / วีไอพี", group:"รางวัลและรายได้",
+  1269	    zone:"บาร์ด้านขวา", spritePath:"cropped_sprites/front_cutouts/11_gunslinger_front.png", idlePrototypePath:"animations/11_gunslinger_idle_css_prototype.html",
+  1270	    x:1470, y:315, width:108.1, height:166, labelOffsetX:54.1, labelOffsetY:-8, hitboxWidth:114, hitboxHeight:150, highlightWidth:120, highlightHeight:156,
+  1271	    duration:"1.5s", scale:1.008, motion:"steady",
+  1272	    thaiName:"กันสลิงเกอร์",
+  1273	    thaiRole:"ผู้ดูแลรางวัล / วีไอพี",
+  1274	    thaiGroup:"รางวัลและรายได้",
+  1275	    thaiDescription:"กันสลิงเกอร์คือผู้ดูแลรางวัลและวีไอพี และตรรกะรายได้ ทำหน้าที่คุมรางวัล บัตรคูณสอง โฆษณาแลกรางวัล ลำดับวีไอพี และความสมดุลของระบบรายได้โดยไม่ทำลายประสบการณ์ผู้ใช้",
+  1276	    thaiResponsibility:"ดูแลรางวัลและวีไอพี ระบบรายได้ บัตรคูณสอง และโฆษณาแลกรางวัล",
+  1277	    thaiUsage:"วางใกล้บาร์ เคาน์เตอร์รางวัล พื้นที่ร้านค้า หรือจุดแลกเปลี่ยนมูลค่า",
+  1278	    thaiRule:"ควรแสดงเป็นผู้ดูแลรางวัลและวีไอพี ห้ามเปลี่ยนเป็นผู้ดูแลโหมดฝึกหรือผู้พิทักษ์คัมภีร์ผลิตภัณฑ์"
+  1279	  }
+  1280	];
+
+exec
+/bin/zsh -lc "nl -ba agents/pip_development_guild/agent_dashboard.html | sed -n '2029,2148p'" in /Users/Pae/Developer/PIP/PIP-Public-Bible
+ succeeded in 0ms:
+  2029	    taskWarning.textContent = "ยังไม่ได้เปิด Codex Bridge จึงยังไม่สามารถกระจายงานอัตโนมัติได้";
+  2030	    taskWarning.classList.add("warning");
+  2031	    return;
+  2032	  }
+  2033	
+  2034	  const parentTask = createTask(
+  2035	    selectedAgent,
+  2036	    "วางแผนอัตโนมัติ",
+  2037	    "Sequential multi-agent dispatch",
+  2038	    `Break this goal into a safe sequential dispatch plan for agents 02-11: ${goal}`,
+  2039	    { dispatchRole:"parent" }
+  2040	  );
+  2041	  parentTask.status = "running";
+  2042	  parentTask.startedAt = new Date().toISOString();
+  2043	  parentTask.resultSummary = "กำลังกระจายงานให้เอเจนต์ทีละตัวผ่าน Codex Bridge";
+  2044	
+  2045	  const plannedTasks = createDispatchChildTasks(goal, parentTask.id);
+  2046	  workflowPrompt.value = plannedTasks.map((task, index) => `${index + 1}. ${task.agentName} - ${task.taskTitle}\n${task.generatedPrompt}`).join("\n\n---\n\n");
+  2047	  copyPromptButton.disabled = false;
+  2048	  activeDispatch = {
+  2049	    id:parentTask.id,
+  2050	    parentTaskId:parentTask.id,
+  2051	    status:"running",
+  2052	    childTaskIds:plannedTasks.map((task) => task.id),
+  2053	    activeChildId:null,
+  2054	    finalNoteShown:false
+  2055	  };
+  2056	  tasks.push(parentTask, ...plannedTasks);
+  2057	  taskWarning.textContent = "กำลังรันทีละงานผ่าน Codex Bridge ไม่รันพร้อมกันเพื่อความปลอดภัย";
+  2058	  taskWarning.classList.remove("warning");
+  2059	  latestTaskSummary.textContent = `วางแผนอัตโนมัติ · ${plannedTasks.length} งานรอคิว`;
+  2060	  renderCommandPanel();
+  2061	  try {
+  2062	    fullAutomateButton.disabled = true;
+  2063	    await advanceActiveDispatch();
+  2064	    startBridgePolling();
+  2065	  } catch (error) {
+  2066	    taskWarning.textContent = "งานติดปัญหา";
+  2067	    taskWarning.classList.add("warning");
+  2068	  } finally {
+  2069	    updateBridgeControls();
+  2070	  }
+  2071	}
+  2072	
+  2073	function createDispatchChildTasks(goal, parentTaskId) {
+  2074	  const plan = [
+  2075	    { agentId:"02", preset:"ตรวจ Source of Truth", presetEnglish:"Audit source of truth", detail:`Inspect source-of-truth, canon, rule conflicts, and unsafe assumptions for this goal. Inspection only. Goal: ${goal}` },
+  2076	    { agentId:"03", preset:"ทำ Handoff", presetEnglish:"Create handoff", detail:`Prepare a handoff summary structure for this dispatched workflow, including decisions, open issues, and next-step reporting. Inspection only. Goal: ${goal}` },
+  2077	    { agentId:"04", preset:"ตรวจ Design System", presetEnglish:"Audit design system", detail:`Audit UX clarity, design-system consistency, visual canon, spacing, typography, and interaction wording for this goal. Inspection only. Goal: ${goal}` },
+  2078	    { agentId:"05", preset:"ตรวจ Build Error", presetEnglish:"Inspect implementation maintainability", detail:`Inspect HTML/CSS/JS maintainability, structure, brittle code paths, and implementation risks related to this goal. Inspection only. Goal: ${goal}` },
+  2079	    { agentId:"06", preset:"ตรวจ Security", presetEnglish:"Security audit", detail:`Audit Codex Bridge safety, client trust boundaries, unsafe browser execution risk, and system integrity for this goal. Inspection only. Goal: ${goal}` },
+  2080	    { agentId:"07", preset:"ตรวจ Mini Game Flow", presetEnglish:"Review product mode logic", detail:`Check Product Modes and Mini Game role logic for conflicts or missing guardrails related to this goal. Inspection only. Goal: ${goal}` },
+  2081	    { agentId:"08", preset:"ทำ QA Checklist", presetEnglish:"Create QA checklist", detail:`Create a focused QA and regression checklist for this dispatched workflow. Inspection only. Goal: ${goal}` },
+  2082	    { agentId:"09", preset:"ตรวจ Practice Mode", presetEnglish:"Review Practice and Mock Exam readiness", detail:`Check Practice Mode, Mock Exam, accuracy review, and 100-question session readiness where relevant to this goal. Inspection only. Goal: ${goal}` },
+  2083	    { agentId:"10", preset:"Review Architecture", presetEnglish:"Review architecture and technical debt", detail:`Review architecture, technical debt, maintainability, coupling, and long-term structure risks for this goal. Inspection only. Goal: ${goal}` },
+  2084	    { agentId:"11", preset:"ตรวจ Reward Logic", presetEnglish:"Review reward and monetization guardrails", detail:`Check Reward, VIP, monetization, x2 ticket, and rewarded ad guardrails for conflicts or duplicate-reward risk related to this goal. Inspection only. Goal: ${goal}` }
+  2085	  ];
+  2086	
+  2087	  return plan.map((step) => {
+  2088	    const agent = agents.find((item) => item.id === step.agentId);
+  2089	    return createTask(agent, step.preset, step.presetEnglish, step.detail, {
+  2090	      parentTaskId,
+  2091	      dispatchRole:"child"
+  2092	    });
+  2093	  });
+  2094	}
+  2095	
+  2096	function getActiveDispatchChildren() {
+  2097	  if (!activeDispatch) return [];
+  2098	  return activeDispatch.childTaskIds
+  2099	    .map((taskId) => tasks.find((task) => task.id === taskId || task.bridgeTaskId === taskId))
+  2100	    .filter(Boolean);
+  2101	}
+  2102	
+  2103	function isTerminalStatus(status) {
+  2104	  return status === "completed" || status === "failed";
+  2105	}
+  2106	
+  2107	async function advanceActiveDispatch() {
+  2108	  if (!activeDispatch || activeDispatch.status !== "running") return;
+  2109	  const children = getActiveDispatchChildren();
+  2110	  const activeChild = children.find((task) => task.status === "running");
+  2111	  if (activeChild) return;
+  2112	
+  2113	  const waitingForBridge = children.find((task) => task.bridgeTaskId && task.status === "queued");
+  2114	  if (waitingForBridge) return;
+  2115	
+  2116	  const nextChild = children.find((task) => !task.bridgeTaskId && task.status === "queued");
+  2117	  if (nextChild) {
+  2118	    const originalId = nextChild.id;
+  2119	    const originalPrompt = nextChild.generatedPrompt;
+  2120	    const originalPayload = nextChild.commandPayload;
+  2121	    const bridgeTask = await sendTaskToBridge(nextChild);
+  2122	    Object.assign(nextChild, bridgeTask, {
+  2123	      id:bridgeTask.id,
+  2124	      bridgeTaskId:bridgeTask.id,
+  2125	      parentTaskId:activeDispatch.parentTaskId,
+  2126	      dispatchRole:"child",
+  2127	      generatedPrompt:originalPrompt,
+  2128	      commandPayload:originalPayload
+  2129	    });
+  2130	    activeDispatch.childTaskIds = activeDispatch.childTaskIds.map((taskId) => taskId === originalId ? nextChild.id : taskId);
+  2131	    activeDispatch.activeChildId = nextChild.id;
+  2132	    latestTaskSummary.textContent = `${nextChild.agentName} · ${nextChild.taskTitle} · ${statusThai[nextChild.status]}`;
+  2133	    renderCommandPanel();
+  2134	    return;
+  2135	  }
+  2136	
+  2137	  if (children.length > 0 && children.every((task) => isTerminalStatus(task.status))) {
+  2138	    finishActiveDispatch();
+  2139	  }
+  2140	}
+  2141	
+  2142	function finishActiveDispatch() {
+  2143	  const parentTask = tasks.find((task) => task.id === activeDispatch.parentTaskId);
+  2144	  if (parentTask) {
+  2145	    parentTask.status = "completed";
+  2146	    parentTask.completedAt = new Date().toISOString();
+  2147	    parentTask.resultSummary = "สรุปรวมเสร็จแล้ว";
+  2148	    parentTask.taskTitle = "สรุปรวมเสร็จแล้ว";
+
+exec
+/bin/zsh -lc "nl -ba agents/pip_development_guild/codex_bridge/codex_bridge.js | sed -n '1,230p'" in /Users/Pae/Developer/PIP/PIP-Public-Bible
+ succeeded in 0ms:
+     1	const http = require("http");
+     2	const fs = require("fs");
+     3	const path = require("path");
+     4	const childProcess = require("child_process");
+     5	const crypto = require("crypto");
+     6	
+     7	const HOST = "127.0.0.1";
+     8	const PORT = 8787;
+     9	const WORKING_DIRECTORY = "/Users/Pae/Developer/PIP/PIP-Public-Bible";
+    10	const MAX_PROMPT_LENGTH = 20000;
+    11	const TASK_TIMEOUT_MS = 5 * 60 * 1000;
+    12	const ROOT = __dirname;
+    13	const LOG_DIR = path.join(ROOT, "logs");
+    14	const TASK_DIR = path.join(ROOT, "tasks");
+    15	
+    16	fs.mkdirSync(LOG_DIR, { recursive: true });
+    17	fs.mkdirSync(TASK_DIR, { recursive: true });
+    18	
+    19	const tasks = new Map();
+    20	const queue = [];
+    21	let runningTaskId = null;
+    22	
+    23	function now() {
+    24	  return new Date().toISOString();
+    25	}
+    26	
+    27	function safeJson(task) {
+    28	  return {
+    29	    id: task.id,
+    30	    agentId: task.agentId,
+    31	    agentName: task.agentName,
+    32	    taskType: task.taskType,
+    33	    taskDetails: task.taskDetails,
+    34	    status: task.status,
+    35	    createdAt: task.createdAt,
+    36	    startedAt: task.startedAt,
+    37	    completedAt: task.completedAt,
+    38	    exitCode: task.exitCode,
+    39	    error: task.error,
+    40	    result: task.result,
+    41	    logFile: path.basename(task.logFile)
+    42	  };
+    43	}
+    44	
+    45	function corsOrigin(request) {
+    46	  const origin = request.headers.origin;
+    47	  if (!origin || origin === "null" || origin === `http://${HOST}:${PORT}` || origin.startsWith("http://127.0.0.1:")) {
+    48	    return origin || "null";
+    49	  }
+    50	  return "null";
+    51	}
+    52	
+    53	function sendJson(request, response, statusCode, body) {
+    54	  response.writeHead(statusCode, {
+    55	    "Content-Type": "application/json; charset=utf-8",
+    56	    "Access-Control-Allow-Origin": corsOrigin(request),
+    57	    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    58	    "Access-Control-Allow-Headers": "Content-Type"
+    59	  });
+    60	  response.end(JSON.stringify(body, null, 2));
+    61	}
+    62	
+    63	function saveTask(task) {
+    64	  fs.writeFileSync(path.join(TASK_DIR, `${task.id}.json`), JSON.stringify(safeJson(task), null, 2));
+    65	}
+    66	
+    67	function readBody(request) {
+    68	  return new Promise((resolve, reject) => {
+    69	    let body = "";
+    70	    request.on("data", (chunk) => {
+    71	      body += chunk;
+    72	      if (body.length > MAX_PROMPT_LENGTH + 10000) {
+    73	        reject(new Error("payload too large"));
+    74	        request.destroy();
+    75	      }
+    76	    });
+    77	    request.on("end", () => resolve(body));
+    78	    request.on("error", reject);
+    79	  });
+    80	}
+    81	
+    82	function validateTaskPayload(payload) {
+    83	  const prompt = typeof payload.prompt === "string" ? payload.prompt.trim() : "";
+    84	  const taskDetails = typeof payload.taskDetails === "string" ? payload.taskDetails.trim() : "";
+    85	
+    86	  if (!taskDetails) return "taskDetails is required";
+    87	  if (!prompt) return "prompt is required";
+    88	  if (prompt.length > MAX_PROMPT_LENGTH) return `prompt must be ${MAX_PROMPT_LENGTH} characters or fewer`;
+    89	
+    90	  return null;
+    91	}
+    92	
+    93	function appendLog(task, text) {
+    94	  fs.appendFileSync(task.logFile, text);
+    95	}
+    96	
+    97	function finalizeTask(task, status, details = {}) {
+    98	  task.status = status;
+    99	  task.completedAt = task.completedAt || now();
+   100	  if (typeof details.exitCode !== "undefined") task.exitCode = details.exitCode;
+   101	  if (typeof details.error !== "undefined") task.error = details.error;
+   102	  if (typeof details.result !== "undefined") task.result = details.result;
+   103	  saveTask(task);
+   104	}
+   105	
+   106	function runNextTask() {
+   107	  if (runningTaskId || queue.length === 0) return;
+   108	
+   109	  const task = tasks.get(queue.shift());
+   110	  if (!task) {
+   111	    runNextTask();
+   112	    return;
+   113	  }
+   114	
+   115	  runningTaskId = task.id;
+   116	  task.status = "running";
+   117	  task.startedAt = now();
+   118	  saveTask(task);
+   119	  appendLog(task, `Task ${task.id} started at ${task.startedAt}\n`);
+   120	  appendLog(task, `Agent: ${task.agentName}\nTask type: ${task.taskType}\n\n`);
+   121	
+   122	  const child = childProcess.spawn("codex", ["exec", "--sandbox", "workspace-write", task.prompt], {
+   123	    cwd: WORKING_DIRECTORY,
+   124	    stdio: ["ignore", "pipe", "pipe"],
+   125	    shell: false,
+   126	    env: process.env
+   127	  });
+   128	
+   129	  child.stdout.on("data", (data) => appendLog(task, data.toString()));
+   130	  child.stderr.on("data", (data) => appendLog(task, data.toString()));
+   131	
+   132	  const timeoutTimer = setTimeout(() => {
+   133	    appendLog(task, `\nTask timed out after 5 minutes\n`);
+   134	    task.error = "Task timed out after 5 minutes";
+   135	    try {
+   136	      child.kill("SIGTERM");
+   137	    } catch (error) {
+   138	      appendLog(task, `Failed to send SIGTERM: ${error.message}\n`);
+   139	    }
+   140	    setTimeout(() => {
+   141	      try {
+   142	        if (!child.killed) child.kill("SIGKILL");
+   143	      } catch (error) {
+   144	        appendLog(task, `Failed to send SIGKILL: ${error.message}\n`);
+   145	      }
+   146	    }, 5000).unref();
+   147	  }, TASK_TIMEOUT_MS);
+   148	  timeoutTimer.unref();
+   149	
+   150	  child.on("error", (error) => {
+   151	    clearTimeout(timeoutTimer);
+   152	    task.completedAt = now();
+   153	    task.error = error.message;
+   154	    task.result = "Codex process could not start.";
+   155	    appendLog(task, `\nTask failed to start: ${error.message}\n`);
+   156	    finalizeTask(task, "failed", {
+   157	      exitCode: typeof task.exitCode === "number" ? task.exitCode : null,
+   158	      error: task.error,
+   159	      result: task.result
+   160	    });
+   161	    runningTaskId = null;
+   162	    runNextTask();
+   163	  });
+   164	
+   165	  child.on("close", (code) => {
+   166	    clearTimeout(timeoutTimer);
+   167	    task.exitCode = code;
+   168	    task.completedAt = now();
+   169	    task.status = code === 0 ? "completed" : "failed";
+   170	    task.result = code === 0 ? "Codex task completed." : (task.error || `Codex task failed with exit code ${code}.`);
+   171	    appendLog(task, `\nTask ${task.status} at ${task.completedAt} with exit code ${code}\n`);
+   172	    finalizeTask(task, task.status, {
+   173	      exitCode: code,
+   174	      error: task.error,
+   175	      result: task.result
+   176	    });
+   177	    runningTaskId = null;
+   178	    runNextTask();
+   179	  });
+   180	}
+   181	
+   182	function createTask(payload) {
+   183	  const id = `task-${Date.now()}-${crypto.randomBytes(4).toString("hex")}`;
+   184	  const task = {
+   185	    id,
+   186	    agentId: String(payload.agentId || ""),
+   187	    agentName: String(payload.agentName || ""),
+   188	    taskType: String(payload.taskType || ""),
+   189	    taskDetails: String(payload.taskDetails || "").trim(),
+   190	    prompt: String(payload.prompt || "").trim(),
+   191	    status: "queued",
+   192	    createdAt: now(),
+   193	    startedAt: null,
+   194	    completedAt: null,
+   195	    exitCode: null,
+   196	    error: null,
+   197	    result: "",
+   198	    logFile: path.join(LOG_DIR, `${id}.log`)
+   199	  };
+   200	
+   201	  tasks.set(id, task);
+   202	  queue.push(id);
+   203	  appendLog(task, `Task ${id} queued at ${task.createdAt}\n`);
+   204	  saveTask(task);
+   205	  runNextTask();
+   206	  return task;
+   207	}
+   208	
+   209	async function handleRequest(request, response) {
+   210	  const url = new URL(request.url, `http://${HOST}:${PORT}`);
+   211	
+   212	  if (request.method === "OPTIONS") {
+   213	    sendJson(request, response, 204, {});
+   214	    return;
+   215	  }
+   216	
+   217	  if (request.method === "GET" && url.pathname === "/health") {
+   218	    sendJson(request, response, 200, { ok: true });
+   219	    return;
+   220	  }
+   221	
+   222	  if (request.method === "GET" && url.pathname === "/tasks") {
+   223	    sendJson(request, response, 200, Array.from(tasks.values()).map(safeJson));
+   224	    return;
+   225	  }
+   226	
+   227	  const taskMatch = url.pathname.match(/^\/tasks\/([^/]+)$/);
+   228	  if (request.method === "GET" && taskMatch) {
+   229	    const task = tasks.get(taskMatch[1]);
+   230	    sendJson(request, response, task ? 200 : 404, task ? safeJson(task) : { error: "task not found" });
+
+2026-06-04T11:54:31.201198Z  WARN codex_core_plugins::manifest: ignoring interface.defaultPrompt[0]: prompt must be at most 128 characters path=/Users/Pae/.codex/.tmp/plugins/plugins/ngs-analysis/.codex-plugin/plugin.json
+2026-06-04T11:54:31.214305Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:54:31.214312Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:54:31.215377Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:54:31.215381Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:54:31.215719Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:54:31.215722Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:54:31.216085Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:54:31.216088Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:54:31.216452Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:54:31.216455Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+2026-06-04T11:54:31.217310Z  WARN codex_core_skills::loader: ignoring interface.icon_small: icon path must not contain '..'
+2026-06-04T11:54:31.217313Z  WARN codex_core_skills::loader: ignoring interface.icon_large: icon path must not contain '..'
+codex
+**ผลตรวจ Mini Game / Product Modes / Dispatcher**
+
+Files read:
+`README.html`, `AGENTS.html`, `product_bible/01_game_flow/mini_game_flow.md`, `product_bible/02_reward_system/mini_game_reward_logic.md`, `agents/pip_development_guild/README.html`, `agents/pip_development_guild/agent_dashboard.html`, `agents/pip_development_guild/codex_bridge/README.html`, `agents/pip_development_guild/codex_bridge/codex_bridge.js`, และไฟล์ `codex_bridge/tasks/`, `codex_bridge/logs/` ที่เกี่ยวข้องกับสถานะงาน
+
+Files changed: ไม่มีจากผม  
+หมายเหตุ: worktree มีไฟล์ modified/untracked อยู่ก่อนตรวจ เช่น `agent_dashboard.html` และ task/log ของ Bridge แต่ผมไม่ได้แก้ สร้าง หรือลบไฟล์
+
+**สรุปสถานะ Agent 02-11**
+
+- Agent 02 ไฮพรีสต์: PASS  
+  Task แยกจริงพบใน Bridge และ completed แล้ว: `task-1780573506413-f0fe8258`, exit code 0
+
+- Agent 03 โนวิซ: PASS  
+  Task แยกจริงพบและ completed แล้ว: `task-1780573605491-b92c5e10`, exit code 0
+
+- Agent 04 เซจ: PASS  
+  Task แยกจริงพบและ completed แล้ว: `task-1780573689490-88a480bf`, exit code 0  
+  หมายเหตุ: preset ใน dispatcher ใช้ `ตรวจ Design System` แต่ detail ระบุ UX clarity ด้วย จึงยังพอครอบคลุม
+
+- Agent 05 แบล็กสมิธ: WARNING  
+  Task แยกจริงพบและ completed แล้ว: `task-1780573773493-29feb122`, exit code 0  
+  จุดขัดเล็กน้อย: preset เป็น `ตรวจ Build Error` แต่รายละเอียดงานจริงคือ maintainability inspection จึงควรเปลี่ยนชื่อ preset ภายหลังให้ตรงงาน
+
+- Agent 06 ครูเซเดอร์: PASS  
+  Task แยกจริงพบและ completed แล้ว: `task-1780573875494-5569c365`, exit code 0
+
+- Agent 07 ไนท์: WARNING  
+  Role mapping ชัดเจนและเหมาะสม: Knight ดูแล Mini Game, stage progression, pass/fail, Summary & Insight, revisit และ navigation ตาม [agent_dashboard.html](/Users/Pae/Developer/PIP/PIP-Public-Bible/agents/pip_development_guild/agent_dashboard.html:1216) และ workflow ที่ [agent_dashboard.html](/Users/Pae/Developer/PIP/PIP-Public-Bible/agents/pip_development_guild/agent_dashboard.html:1440)  
+  แต่ task ปัจจุบันของ Agent 07 ยังอยู่สถานะ running ใน snapshot ที่ตรวจ: `task-1780573989282-33c1e989`
+
+- Agent 08 แอสซาซินครอส: WARNING  
+  Code dispatcher มี child task สำหรับ Agent 08 แล้ว แต่ยังไม่พบ task file ของรอบล่าสุดหลัง Agent 07 ใน Bridge snapshot
+
+- Agent 09 สไนเปอร์: WARNING  
+  Role mapping แยก Practice/Mock Exam ออกจาก Mini Game ชัดเจน แต่ยังไม่พบ task file ของรอบล่าสุด
+
+- Agent 10 โปรเฟสเซอร์: WARNING  
+  Code dispatcher มี child task architecture review แล้ว แต่ยังไม่พบ task file ของรอบล่าสุด
+
+- Agent 11 กันสลิงเกอร์: WARNING  
+  Role guardrail แยก Reward/VIP/monetization จาก Mini Game ดีพอใน dashboard แต่ยังไม่พบ task file ของรอบล่าสุด
+
+**Dispatcher / Sequential Verdict**
+
+โค้ด Dashboard สร้าง child task แยกจริงสำหรับ Agent 02-11 ครบ 10 รายการที่ [agent_dashboard.html](/Users/Pae/Developer/PIP/PIP-Public-Bible/agents/pip_development_guild/agent_dashboard.html:2073). ไม่ใช่ prompt ก้อนเดียวของ Agent 01 เพราะ `createDispatchChildTasks()` สร้าง task แยกต่อ Agent แล้ว `advanceActiveDispatch()` ส่ง `POST /tasks` ทีละ child ที่ [agent_dashboard.html](/Users/Pae/Developer/PIP/PIP-Public-Bible/agents/pip_development_guild/agent_dashboard.html:2107).
+
+Bridge ฝั่ง Node มี queue sequential จริง: `runningTaskId` กันงานซ้อน, `runNextTask()` ส่งงานใหม่หลัง close/error แล้วเท่านั้นที่ [codex_bridge.js](/Users/Pae/Developer/PIP/PIP-Public-Bible/agents/pip_development_guild/codex_bridge/codex_bridge.js:106). ถ้า task failed ก็ finalize เป็น `failed` แล้วเรียก `runNextTask()` ต่อได้ที่ [codex_bridge.js](/Users/Pae/Developer/PIP/PIP-Public-Bible/agents/pip_development_guild/codex_bridge/codex_bridge.js:150).
+
+แต่ผลรันจริง ณ snapshot ที่อ่านได้ยัง “ไม่ครบ 02-11”: พบ completed ถึง Agent 06 และ Agent 07 ยัง running; ยังไม่พบ Agent 08-11 ของรอบล่าสุด จึงยังยืนยันไม่ได้ว่า dispatcher รันครบทุก Agent จริงแล้ว หรือว่า Agent 01 สรุปหลัง Agent 11 จบแล้ว
+
+**Product Modes / Mini Game Findings**
+
+PASS: Agent 07 responsibility ชัดและไม่ปนกับ Practice หรือ Reward owner  
+Mini Game canon ระบุชัดว่า Mini Game แยกจาก Practice, 10 questions ต่อ stage, pass ที่ 8/10, failed ห้ามไปด่านถัดไป, Summary & Insight มี locked/unlocked, revisit ไม่สร้าง reward/progression ใหม่
+
+WARNING: มี source-of-truth tension ระหว่าง `mini_game_flow.md` กับ `mini_game_reward_logic.md`  
+`mini_game_flow.md` รองรับ daily soft reward decay: 100/75/50 base reward ตามจำนวน attempt ต่อวัน แต่ `mini_game_reward_logic.md` ยังระบุ base reward เป็น 100 คงที่ ข้อนี้ควรให้ Agent 02/11 ตรวจและยืนยัน canon กลางก่อนใช้กับ implementation จริง
+
+WARNING: Dashboard dispatcher ยังไม่มี summary artifact จริงจาก Agent 01 หลัง Agent 11 ใน Bridge log/task  
+ใน UI parent task ถูก mark completed ด้วยข้อความ “สรุปรวมเสร็จแล้ว” เมื่อ child ทุกตัว terminal แต่ไม่ได้สร้าง POST task ใหม่ให้ Agent 01 สรุปผลรวมหลัง Agent 11 แบบ Codex task แยก
+
+**สิ่งที่ควรทำต่อ**
+
+- รอ `task-1780573989282-33c1e989` จบ แล้วตรวจว่า Bridge สร้าง Agent 08, 09, 10, 11 ต่อครบหรือไม่
+- ถ้า Agent 07 failed ให้ตรวจ log: `agents/pip_development_guild/codex_bridge/logs/task-1780573989282-33c1e989.log`
+- ปรับชื่อ preset ภายหลังให้ตรงงาน inspection เช่น Agent 05 จาก `ตรวจ Build Error` เป็น maintainability audit
+- เคลียร์ความขัดกันเรื่อง base reward 100 vs daily soft reward decay 100/75/50 ใน Product Bible
+- เพิ่ม guardrail ภายหลังว่าเมื่อ Agent 11 จบ ต้องมี Agent 01 summary step ที่ตรวจผลรวมจริง ไม่ใช่แค่ UI parent status
+
+ยืนยัน: ไม่มีการแก้ไฟล์ ไม่มีการสร้างไฟล์ใหม่ ไม่มีการลบไฟล์ และไม่ได้ใ���้ `archive/`.
+tokens used
+121,799
+**ผลตรวจ Mini Game / Product Modes / Dispatcher**
+
+Files read:
+`README.html`, `AGENTS.html`, `product_bible/01_game_flow/mini_game_flow.md`, `product_bible/02_reward_system/mini_game_reward_logic.md`, `agents/pip_development_guild/README.html`, `agents/pip_development_guild/agent_dashboard.html`, `agents/pip_development_guild/codex_bridge/README.html`, `agents/pip_development_guild/codex_bridge/codex_bridge.js`, และไฟล์ `codex_bridge/tasks/`, `codex_bridge/logs/` ที่เกี่ยวข้องกับสถานะงาน
+
+Files changed: ไม่มีจากผม  
+หมายเหตุ: worktree มีไฟล์ modified/untracked อยู่ก่อนตรวจ เช่น `agent_dashboard.html` และ task/log ของ Bridge แต่ผมไม่ได้แก้ สร้าง หรือลบไฟล์
+
+**สรุปสถานะ Agent 02-11**
+
+- Agent 02 ไฮพรีสต์: PASS  
+  Task แยกจริงพบใน Bridge และ completed แล้ว: `task-1780573506413-f0fe8258`, exit code 0
+
+- Agent 03 โนวิซ: PASS  
+  Task แยกจริงพบและ completed แล้ว: `task-1780573605491-b92c5e10`, exit code 0
+
+- Agent 04 เซจ: PASS  
+  Task แยกจริงพบและ completed แล้ว: `task-1780573689490-88a480bf`, exit code 0  
+  หมายเหตุ: preset ใน dispatcher ใช้ `ตรวจ Design System` แต่ detail ระบุ UX clarity ด้วย จึงยังพอครอบคลุม
+
+- Agent 05 แบล็กสมิธ: WARNING  
+  Task แยกจริงพบและ completed แล้ว: `task-1780573773493-29feb122`, exit code 0  
+  จุดขัดเล็กน้อย: preset เป็น `ตรวจ Build Error` แต่รายละเอียดงานจริงคือ maintainability inspection จึงควรเปลี่ยนชื่อ preset ภายหลังให้ตรงงาน
+
+- Agent 06 ครูเซเดอร์: PASS  
+  Task แยกจริงพบและ completed แล้ว: `task-1780573875494-5569c365`, exit code 0
+
+- Agent 07 ไนท์: WARNING  
+  Role mapping ชัดเจนและเหมาะสม: Knight ดูแล Mini Game, stage progression, pass/fail, Summary & Insight, revisit และ navigation ตาม [agent_dashboard.html](/Users/Pae/Developer/PIP/PIP-Public-Bible/agents/pip_development_guild/agent_dashboard.html:1216) และ workflow ที่ [agent_dashboard.html](/Users/Pae/Developer/PIP/PIP-Public-Bible/agents/pip_development_guild/agent_dashboard.html:1440)  
+  แต่ task ปัจจุบันของ Agent 07 ยังอยู่สถานะ running ใน snapshot ที่ตรวจ: `task-1780573989282-33c1e989`
+
+- Agent 08 แอสซาซินครอส: WARNING  
+  Code dispatcher มี child task สำหรับ Agent 08 แล้ว แต่ยังไม่พบ task file ของรอบล่าสุดหลัง Agent 07 ใน Bridge snapshot
+
+- Agent 09 สไนเปอร์: WARNING  
+  Role mapping แยก Practice/Mock Exam ออกจาก Mini Game ชัดเจน แต่ยังไม่พบ task file ของรอบล่าสุด
+
+- Agent 10 โปรเฟสเซอร์: WARNING  
+  Code dispatcher มี child task architecture review แล้ว แต่ยังไม่พบ task file ของรอบล่าสุด
+
+- Agent 11 กันสลิงเกอร์: WARNING  
+  Role guardrail แยก Reward/VIP/monetization จาก Mini Game ดีพอใน dashboard แต่ยังไม่พบ task file ของรอบล่าสุด
+
+**Dispatcher / Sequential Verdict**
+
+โค้ด Dashboard สร้าง child task แยกจริงสำหรับ Agent 02-11 ครบ 10 รายการที่ [agent_dashboard.html](/Users/Pae/Developer/PIP/PIP-Public-Bible/agents/pip_development_guild/agent_dashboard.html:2073). ไม่ใช่ prompt ก้อนเดียวของ Agent 01 เพราะ `createDispatchChildTasks()` สร้าง task แยกต่อ Agent แล้ว `advanceActiveDispatch()` ส่ง `POST /tasks` ทีละ child ที่ [agent_dashboard.html](/Users/Pae/Developer/PIP/PIP-Public-Bible/agents/pip_development_guild/agent_dashboard.html:2107).
+
+Bridge ฝั่ง Node มี queue sequential จริง: `runningTaskId` กันงานซ้อน, `runNextTask()` ส่งงานใหม่หลัง close/error แล้วเท่านั้นที่ [codex_bridge.js](/Users/Pae/Developer/PIP/PIP-Public-Bible/agents/pip_development_guild/codex_bridge/codex_bridge.js:106). ถ้า task failed ก็ finalize เป็น `failed` แล้วเรียก `runNextTask()` ต่อได้ที่ [codex_bridge.js](/Users/Pae/Developer/PIP/PIP-Public-Bible/agents/pip_development_guild/codex_bridge/codex_bridge.js:150).
+
+แต่ผลรันจริง ณ snapshot ที่อ่านได้ยัง “ไม่ครบ 02-11”: พบ completed ถึง Agent 06 และ Agent 07 ยัง running; ยังไม่พบ Agent 08-11 ของรอบล่าสุด จึงยังยืนยันไม่ได้ว่า dispatcher รันครบทุก Agent จริงแล้ว หรือว่า Agent 01 สรุปหลัง Agent 11 จบแล้ว
+
+**Product Modes / Mini Game Findings**
+
+PASS: Agent 07 responsibility ชัดและไม่ปนกับ Practice หรือ Reward owner  
+Mini Game canon ระบุชัดว่า Mini Game แยกจาก Practice, 10 questions ต่อ stage, pass ที่ 8/10, failed ห้ามไปด่านถัดไป, Summary & Insight มี locked/unlocked, revisit ไม่สร้าง reward/progression ใหม่
+
+WARNING: มี source-of-truth tension ระหว่าง `mini_game_flow.md` กับ `mini_game_reward_logic.md`  
+`mini_game_flow.md` รองรับ daily soft reward decay: 100/75/50 base reward ตามจำนวน attempt ต่อวัน แต่ `mini_game_reward_logic.md` ยังระบุ base reward เป็น 100 คงที่ ข้อนี้ควรให้ Agent 02/11 ตรวจและยืนยัน canon กลางก่อนใช้กับ implementation จริง
+
+WARNING: Dashboard dispatcher ยังไม่มี summary artifact จริงจาก Agent 01 หลัง Agent 11 ใน Bridge log/task  
+ใน UI parent task ถูก mark completed ด้วยข้อความ “สรุปรวมเสร็จแล้ว” เมื่อ child ทุกตัว terminal แต่ไม่ได้สร้าง POST task ใหม่ให้ Agent 01 สรุปผลรวมหลัง Agent 11 แบบ Codex task แยก
+
+**สิ่งที่ควรทำต่อ**
+
+- รอ `task-1780573989282-33c1e989` จบ แล้วตรวจว่า Bridge สร้าง Agent 08, 09, 10, 11 ต่อครบหรือไม่
+- ถ้า Agent 07 failed ให้ตรวจ log: `agents/pip_development_guild/codex_bridge/logs/task-1780573989282-33c1e989.log`
+- ปรับชื่อ preset ภายหลังให้ตรงงาน inspection เช่น Agent 05 จาก `ตรวจ Build Error` เป็น maintainability audit
+- เคลียร์ความขัดกันเรื่อง base reward 100 vs daily soft reward decay 100/75/50 ใน Product Bible
+- เพิ่ม guardrail ภายหลังว่าเมื่อ Agent 11 จบ ต้องมี Agent 01 summary step ที่ตรวจผลรวมจริง ไม่ใช่แค่ UI parent status
+
+ยืนยัน: ไม่มีการแก้ไฟล์ ไม่มีการสร้างไฟล์ใหม่ ไม่มีการลบไฟล์ และไม่ได้ใช้ `archive/`.
+
+Task completed at 2026-06-04T11:55:06.763Z with exit code 0

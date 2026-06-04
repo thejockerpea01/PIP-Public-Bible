@@ -1037,6 +1037,7 @@
         <button class="queue-button" type="button" id="stopQueueButton">หยุดติดตามคิว</button>
         <button class="queue-button" type="button" id="clearCompletedButton">ล้างงานที่เสร็จแล้ว</button>
       </div>
+      <p class="command-empty" id="dispatchNotice">ยังไม่มีงานกระจายอัตโนมัติ</p>
       <section class="command-section">
         <h2>งานที่กำลังทำ</h2>
         <div id="activeTaskView"></div>
@@ -1604,6 +1605,7 @@ const activeTaskView = document.getElementById("activeTaskView");
 const queuedTaskView = document.getElementById("queuedTaskView");
 const completedTaskView = document.getElementById("completedTaskView");
 const agentStatusTable = document.getElementById("agentStatusTable");
+const dispatchNotice = document.getElementById("dispatchNotice");
 let selectedNode = null;
 let selectedAgent = null;
 let dialogueExpanded = false;
@@ -1617,6 +1619,7 @@ let activeTaskTimer = null;
 let bridgeAvailable = false;
 let bridgePollTimer = null;
 let isCommandPanelCollapsed = false;
+let activeDispatch = null;
 const DEBUG_AGENT_DASHBOARD = false;
 
 const BRIDGE_URL = "http://127.0.0.1:8787";
@@ -1804,7 +1807,7 @@ function createCommandPayload(agent, workflow, taskPreset, taskPresetEnglish, ta
   };
 }
 
-function createTask(agent, taskPreset, taskPresetEnglish, taskDetails) {
+function createTask(agent, taskPreset, taskPresetEnglish, taskDetails, extra = {}) {
   const workflow = workflowTemplates[agent.id];
   const generatedPrompt = buildGeneratedPrompt(agent, workflow, taskPreset, taskPresetEnglish, taskDetails);
   return {
@@ -1820,7 +1823,10 @@ function createTask(agent, taskPreset, taskPresetEnglish, taskDetails) {
     completedAt:null,
     generatedPrompt,
     resultSummary:"",
-    commandPayload:createCommandPayload(agent, workflow, taskPreset, taskPresetEnglish, taskDetails)
+    commandPayload:createCommandPayload(agent, workflow, taskPreset, taskPresetEnglish, taskDetails),
+    parentTaskId:extra.parentTaskId || null,
+    bridgeTaskId:extra.bridgeTaskId || null,
+    dispatchRole:extra.dispatchRole || null
   };
 }
 
@@ -1838,14 +1844,18 @@ function normalizeBridgeTask(task) {
     completedAt:task.completedAt,
     generatedPrompt:"",
     resultSummary:task.result || "",
-    commandPayload:null
+    commandPayload:null,
+    parentTaskId:task.parentTaskId || null,
+    bridgeTaskId:task.bridgeTaskId || task.id,
+    dispatchRole:task.dispatchRole || null
   };
 }
 
 function updateBridgeControls() {
   if (!bridgeStatusText) return;
-  sendAgentTaskButton.disabled = !bridgeAvailable;
-  fullAutomateButton.disabled = !bridgeAvailable;
+  const dispatchRunning = Boolean(activeDispatch && activeDispatch.status === "running");
+  sendAgentTaskButton.disabled = !bridgeAvailable && !(selectedAgent && selectedAgent.id === "01");
+  fullAutomateButton.disabled = dispatchRunning;
   bridgeStatusText.textContent = bridgeAvailable ? "Codex Bridge พร้อมใช้งาน" : "ยังไม่ได้เปิด Codex Bridge";
   bridgeStatusText.classList.toggle("offline", !bridgeAvailable);
   bridgeStatusText.classList.toggle("ready", bridgeAvailable);
@@ -1874,9 +1884,31 @@ function startBridgePolling() {
 
 function stopBridgePollingIfIdle() {
   if (!bridgePollTimer) return;
+  if (activeDispatch && activeDispatch.status === "running") return;
   if (tasks.some((task) => task.status === "queued" || task.status === "running")) return;
   clearInterval(bridgePollTimer);
   bridgePollTimer = null;
+}
+
+function mergeBridgeTasks(bridgeTasks) {
+  bridgeTasks.map(normalizeBridgeTask).forEach((bridgeTask) => {
+    const existing = tasks.find((task) => task.id === bridgeTask.id || task.bridgeTaskId === bridgeTask.id);
+    if (existing) {
+      const generatedPrompt = existing.generatedPrompt;
+      const commandPayload = existing.commandPayload;
+      const parentTaskId = existing.parentTaskId || bridgeTask.parentTaskId;
+      const dispatchRole = existing.dispatchRole || bridgeTask.dispatchRole;
+      Object.assign(existing, bridgeTask, {
+        generatedPrompt,
+        commandPayload,
+        parentTaskId,
+        dispatchRole,
+        bridgeTaskId:bridgeTask.id
+      });
+    } else {
+      tasks.push(bridgeTask);
+    }
+  });
 }
 
 async function loadBridgeTasks() {
@@ -1884,7 +1916,8 @@ async function loadBridgeTasks() {
     const response = await fetch(`${BRIDGE_URL}/tasks`, { cache:"no-store" });
     if (!response.ok) throw new Error("ไม่สามารถอ่านคิวจาก Codex Bridge");
     const data = await response.json();
-    tasks = data.map(normalizeBridgeTask);
+    mergeBridgeTasks(data);
+    await advanceActiveDispatch();
     renderCommandPanel();
     stopBridgePollingIfIdle();
   } catch (error) {
@@ -1902,7 +1935,8 @@ async function sendTaskToBridge(task) {
       agentName:task.agentName,
       taskType:task.taskType,
       taskDetails:task.taskDetails,
-      prompt:task.generatedPrompt
+      prompt:task.generatedPrompt,
+      parentTaskId:task.parentTaskId || null
     })
   });
   const data = await response.json();
@@ -1943,6 +1977,10 @@ function queueTask(task, shouldStart) {
 }
 
 async function submitSelectedTask(shouldSendToBridge) {
+  if (shouldSendToBridge && selectedAgent && selectedAgent.id === "01") {
+    await createFullAutomatePlan();
+    return;
+  }
   const task = prepareSelectedTaskPrompt();
   if (!task) return;
   if (!shouldSendToBridge) {
@@ -1974,6 +2012,11 @@ async function submitSelectedTask(shouldSendToBridge) {
 
 async function createFullAutomatePlan() {
   if (!selectedAgent || selectedAgent.id !== "01") return;
+  if (activeDispatch && activeDispatch.status === "running") {
+    taskWarning.textContent = "กำลังกระจายงานอัตโนมัติอยู่ รอคิวนี้จบก่อน";
+    taskWarning.classList.add("warning");
+    return;
+  }
   const goal = taskDetailInput.value.trim();
   copyState.textContent = "";
   if (!goal) {
@@ -1982,41 +2025,42 @@ async function createFullAutomatePlan() {
     return;
   }
 
-  const plan = [
-    { agentId:"01", preset:"วางแผนงาน", presetEnglish:"Planning control", detail:`Create a sequential plan for this goal: ${goal}` },
-    { agentId:"02", preset:"ตรวจ Source of Truth", presetEnglish:"Audit source of truth", detail:`Audit the goal against source-of-truth files before implementation: ${goal}` },
-    { agentId:"04", preset:"ตรวจ Design System", presetEnglish:"Audit design system", detail:`Check UI/design constraints and approved visual canon related to this goal: ${goal}` },
-    { agentId:"05", preset:"ทำ Flutter Implementation", presetEnglish:"Flutter implementation", detail:`Plan or implement the build step for this goal after canon checks pass: ${goal}` },
-    { agentId:"08", preset:"ทำ QA Checklist", presetEnglish:"Create QA checklist", detail:`Create and run a focused QA checklist for the completed work: ${goal}` },
-    { agentId:"10", preset:"Review Code", presetEnglish:"Review code", detail:`Review the final code, architecture, maintainability, and risks for this goal: ${goal}` },
-    { agentId:"03", preset:"ทำ Handoff", presetEnglish:"Create handoff", detail:`Summarize the finished workflow, changed files, verification, risks, and next steps for this goal: ${goal}` }
-  ];
-
-  const plannedTasks = plan.map((step) => {
-    const agent = agents.find((item) => item.id === step.agentId);
-    return createTask(agent, step.preset, step.presetEnglish, step.detail);
-  });
-  workflowPrompt.value = plannedTasks.map((task, index) => `${index + 1}. ${task.agentName} - ${task.taskTitle}\n${task.generatedPrompt}`).join("\n\n---\n\n");
-  copyPromptButton.disabled = false;
   if (!bridgeAvailable) {
-    taskWarning.textContent = "ยังไม่ได้เปิด Codex Bridge";
+    taskWarning.textContent = "ยังไม่ได้เปิด Codex Bridge จึงยังไม่สามารถกระจายงานอัตโนมัติได้";
     taskWarning.classList.add("warning");
-    tasks.push(...plannedTasks);
-    renderCommandPanel();
-    latestTaskSummary.textContent = `วางแผนอัตโนมัติ · ${plannedTasks.length} ขั้นตอน`;
     return;
   }
+
+  const parentTask = createTask(
+    selectedAgent,
+    "วางแผนอัตโนมัติ",
+    "Sequential multi-agent dispatch",
+    `Break this goal into a safe sequential dispatch plan for agents 02-11: ${goal}`,
+    { dispatchRole:"parent" }
+  );
+  parentTask.status = "running";
+  parentTask.startedAt = new Date().toISOString();
+  parentTask.resultSummary = "กำลังกระจายงานให้เอเจนต์ทีละตัวผ่าน Codex Bridge";
+
+  const plannedTasks = createDispatchChildTasks(goal, parentTask.id);
+  workflowPrompt.value = plannedTasks.map((task, index) => `${index + 1}. ${task.agentName} - ${task.taskTitle}\n${task.generatedPrompt}`).join("\n\n---\n\n");
+  copyPromptButton.disabled = false;
+  activeDispatch = {
+    id:parentTask.id,
+    parentTaskId:parentTask.id,
+    status:"running",
+    childTaskIds:plannedTasks.map((task) => task.id),
+    activeChildId:null,
+    finalNoteShown:false
+  };
+  tasks.push(parentTask, ...plannedTasks);
+  taskWarning.textContent = "กำลังรันทีละงานผ่าน Codex Bridge ไม่รันพร้อมกันเพื่อความปลอดภัย";
+  taskWarning.classList.remove("warning");
+  latestTaskSummary.textContent = `วางแผนอัตโนมัติ · ${plannedTasks.length} งานรอคิว`;
+  renderCommandPanel();
   try {
     fullAutomateButton.disabled = true;
-    const bridgeTasks = [];
-    for (const task of plannedTasks) {
-      bridgeTasks.push(await sendTaskToBridge(task));
-    }
-    tasks.push(...bridgeTasks);
-    taskWarning.textContent = "งานเข้าคิวแล้ว";
-    taskWarning.classList.remove("warning");
-    renderCommandPanel();
-    latestTaskSummary.textContent = `วางแผนอัตโนมัติ · ${bridgeTasks.length} ขั้นตอน`;
+    await advanceActiveDispatch();
     startBridgePolling();
   } catch (error) {
     taskWarning.textContent = "งานติดปัญหา";
@@ -2024,6 +2068,91 @@ async function createFullAutomatePlan() {
   } finally {
     updateBridgeControls();
   }
+}
+
+function createDispatchChildTasks(goal, parentTaskId) {
+  const plan = [
+    { agentId:"02", preset:"ตรวจ Source of Truth", presetEnglish:"Audit source of truth", detail:`Inspect source-of-truth, canon, rule conflicts, and unsafe assumptions for this goal. Inspection only. Goal: ${goal}` },
+    { agentId:"03", preset:"ทำ Handoff", presetEnglish:"Create handoff", detail:`Prepare a handoff summary structure for this dispatched workflow, including decisions, open issues, and next-step reporting. Inspection only. Goal: ${goal}` },
+    { agentId:"04", preset:"ตรวจ Design System", presetEnglish:"Audit design system", detail:`Audit UX clarity, design-system consistency, visual canon, spacing, typography, and interaction wording for this goal. Inspection only. Goal: ${goal}` },
+    { agentId:"05", preset:"ตรวจ Build Error", presetEnglish:"Inspect implementation maintainability", detail:`Inspect HTML/CSS/JS maintainability, structure, brittle code paths, and implementation risks related to this goal. Inspection only. Goal: ${goal}` },
+    { agentId:"06", preset:"ตรวจ Security", presetEnglish:"Security audit", detail:`Audit Codex Bridge safety, client trust boundaries, unsafe browser execution risk, and system integrity for this goal. Inspection only. Goal: ${goal}` },
+    { agentId:"07", preset:"ตรวจ Mini Game Flow", presetEnglish:"Review product mode logic", detail:`Check Product Modes and Mini Game role logic for conflicts or missing guardrails related to this goal. Inspection only. Goal: ${goal}` },
+    { agentId:"08", preset:"ทำ QA Checklist", presetEnglish:"Create QA checklist", detail:`Create a focused QA and regression checklist for this dispatched workflow. Inspection only. Goal: ${goal}` },
+    { agentId:"09", preset:"ตรวจ Practice Mode", presetEnglish:"Review Practice and Mock Exam readiness", detail:`Check Practice Mode, Mock Exam, accuracy review, and 100-question session readiness where relevant to this goal. Inspection only. Goal: ${goal}` },
+    { agentId:"10", preset:"Review Architecture", presetEnglish:"Review architecture and technical debt", detail:`Review architecture, technical debt, maintainability, coupling, and long-term structure risks for this goal. Inspection only. Goal: ${goal}` },
+    { agentId:"11", preset:"ตรวจ Reward Logic", presetEnglish:"Review reward and monetization guardrails", detail:`Check Reward, VIP, monetization, x2 ticket, and rewarded ad guardrails for conflicts or duplicate-reward risk related to this goal. Inspection only. Goal: ${goal}` }
+  ];
+
+  return plan.map((step) => {
+    const agent = agents.find((item) => item.id === step.agentId);
+    return createTask(agent, step.preset, step.presetEnglish, step.detail, {
+      parentTaskId,
+      dispatchRole:"child"
+    });
+  });
+}
+
+function getActiveDispatchChildren() {
+  if (!activeDispatch) return [];
+  return activeDispatch.childTaskIds
+    .map((taskId) => tasks.find((task) => task.id === taskId || task.bridgeTaskId === taskId))
+    .filter(Boolean);
+}
+
+function isTerminalStatus(status) {
+  return status === "completed" || status === "failed";
+}
+
+async function advanceActiveDispatch() {
+  if (!activeDispatch || activeDispatch.status !== "running") return;
+  const children = getActiveDispatchChildren();
+  const activeChild = children.find((task) => task.status === "running");
+  if (activeChild) return;
+
+  const waitingForBridge = children.find((task) => task.bridgeTaskId && task.status === "queued");
+  if (waitingForBridge) return;
+
+  const nextChild = children.find((task) => !task.bridgeTaskId && task.status === "queued");
+  if (nextChild) {
+    const originalId = nextChild.id;
+    const originalPrompt = nextChild.generatedPrompt;
+    const originalPayload = nextChild.commandPayload;
+    const bridgeTask = await sendTaskToBridge(nextChild);
+    Object.assign(nextChild, bridgeTask, {
+      id:bridgeTask.id,
+      bridgeTaskId:bridgeTask.id,
+      parentTaskId:activeDispatch.parentTaskId,
+      dispatchRole:"child",
+      generatedPrompt:originalPrompt,
+      commandPayload:originalPayload
+    });
+    activeDispatch.childTaskIds = activeDispatch.childTaskIds.map((taskId) => taskId === originalId ? nextChild.id : taskId);
+    activeDispatch.activeChildId = nextChild.id;
+    latestTaskSummary.textContent = `${nextChild.agentName} · ${nextChild.taskTitle} · ${statusThai[nextChild.status]}`;
+    renderCommandPanel();
+    return;
+  }
+
+  if (children.length > 0 && children.every((task) => isTerminalStatus(task.status))) {
+    finishActiveDispatch();
+  }
+}
+
+function finishActiveDispatch() {
+  const parentTask = tasks.find((task) => task.id === activeDispatch.parentTaskId);
+  if (parentTask) {
+    parentTask.status = "completed";
+    parentTask.completedAt = new Date().toISOString();
+    parentTask.resultSummary = "สรุปรวมเสร็จแล้ว";
+    parentTask.taskTitle = "สรุปรวมเสร็จแล้ว";
+  }
+  activeDispatch.status = "completed";
+  activeDispatch.finalNoteShown = true;
+  latestTaskSummary.textContent = "งานกระจายครบทุกเอเจนต์แล้ว ตรวจ log ของแต่ละงานได้ใน Codex Bridge";
+  taskWarning.textContent = "สรุปรวมเสร็จแล้ว";
+  taskWarning.classList.remove("warning");
+  renderCommandPanel();
 }
 
 function getTaskAgent(task) {
@@ -2074,6 +2203,13 @@ function renderCommandPanel() {
   const activeTasks = tasks.filter((task) => task.status === "running");
   const queuedTasks = tasks.filter((task) => task.status === "queued");
   const completedTasks = tasks.filter((task) => task.status === "completed" || task.status === "failed").slice(-3).reverse();
+  if (activeDispatch && activeDispatch.status === "running") {
+    dispatchNotice.textContent = "กำลังรันทีละงานผ่าน Codex Bridge ไม่รันพร้อมกันเพื่อความปลอดภัย";
+  } else if (activeDispatch && activeDispatch.status === "completed") {
+    dispatchNotice.textContent = "งานกระจายครบทุกเอเจนต์แล้ว ตรวจ log ของแต่ละงานได้ใน Codex Bridge";
+  } else {
+    dispatchNotice.textContent = "ยังไม่มีงานกระจายอัตโนมัติ";
+  }
   renderTaskList(activeTaskView, activeTasks, "ยังไม่มีงานที่กำลังทำ", 1);
   renderTaskList(queuedTaskView, queuedTasks, "ยังไม่มีงานรอคิว", 5);
   renderTaskList(completedTaskView, completedTasks, "ยังไม่มีงานที่เสร็จแล้ว", 3);
