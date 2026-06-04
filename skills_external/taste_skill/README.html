@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taste Skill - External Skill Reference</title>
+<style>
+  :root {
+    --paper:#f7efe4;
+    --paper-2:#fffaf2;
+    --ink:#2f241d;
+    --muted:#675649;
+    --line:#d8c6b1;
+    --shadow:0 18px 42px rgba(57,40,23,.12);
+    --blue:#305a8e;
+    --gold:#b8832e;
+    --green:#4f7444;
+  }
+  * { box-sizing:border-box; }
+  html, body { margin:0; min-height:100%; }
+  body {
+    font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 12% 0%, rgba(48,90,142,.10), transparent 28%),
+      radial-gradient(circle at 88% 14%, rgba(184,131,46,.10), transparent 22%),
+      linear-gradient(180deg, #fbf5ee 0%, #f2e4d3 100%);
+  }
+  .wrap { width:min(1120px, calc(100vw - 32px)); margin:0 auto; padding:28px 0 40px; }
+  .hero, .section, .card {
+    background:rgba(255,250,244,.95);
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+  }
+  .hero {
+    border-radius:28px;
+    padding:28px;
+    margin-bottom:18px;
+    background:
+      linear-gradient(135deg, rgba(255,251,246,.98), rgba(255,247,239,.94)),
+      radial-gradient(circle at top right, rgba(48,90,142,.08), transparent 30%);
+  }
+  .eyebrow {
+    display:inline-flex;
+    padding:8px 12px;
+    border-radius:999px;
+    border:1px solid #dfcfbc;
+    background:#f8f0e5;
+    color:#7b5c2d;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  h1 {
+    margin:14px 0 8px;
+    font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif;
+    font-size:44px;
+    line-height:1;
+    letter-spacing:-.05em;
+  }
+  .subtitle {
+    margin:0 0 12px;
+    color:var(--blue);
+    font-size:18px;
+    font-weight:900;
+  }
+  p, li { color:var(--muted); line-height:1.6; }
+  .hero p { max-width:860px; margin:0; }
+  .hero-actions {
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:18px;
+  }
+  .button {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:42px;
+    padding:10px 14px;
+    border-radius:999px;
+    border:1px solid #c9d7ec;
+    background:#eef4ff;
+    color:#2d568f;
+    text-decoration:none;
+    font-size:13px;
+    font-weight:900;
+  }
+  .button.secondary {
+    border-color:#dcc9b5;
+    background:#fffaf4;
+    color:var(--ink);
+  }
+  .section {
+    border-radius:24px;
+    padding:18px;
+    margin-bottom:18px;
+  }
+  .section-head {
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:14px;
+    margin-bottom:14px;
+  }
+  h2 {
+    margin:0;
+    font-size:24px;
+    line-height:1.08;
+    letter-spacing:-.03em;
+  }
+  .section-head p {
+    margin:5px 0 0;
+    font-size:13px;
+  }
+  .pill {
+    align-self:flex-start;
+    padding:8px 11px;
+    border-radius:999px;
+    color:#fff;
+    background:var(--blue);
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    white-space:nowrap;
+  }
+  .grid {
+    display:grid;
+    grid-template-columns:repeat(3, minmax(0, 1fr));
+    gap:14px;
+  }
+  .card {
+    border-radius:20px;
+    padding:16px;
+    background:linear-gradient(180deg, rgba(255,255,255,.98), rgba(251,245,239,.98));
+    box-shadow:0 10px 20px rgba(56,40,24,.06);
+  }
+  .card h3 {
+    margin:0 0 8px;
+    font-size:17px;
+    line-height:1.1;
+  }
+  .path {
+    display:inline-block;
+    margin-top:12px;
+    padding:7px 9px;
+    border-radius:10px;
+    border:1px solid #e2d1bf;
+    background:#f4e8dc;
+    color:#5c3f32;
+    font-size:12px;
+    font-weight:800;
+    word-break:break-word;
+  }
+  ul { margin:0; padding-left:18px; }
+  li + li { margin-top:8px; }
+  .notes {
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:14px;
+  }
+  .note {
+    padding:16px;
+    border-radius:18px;
+    border:1px solid #e7d6c4;
+    background:rgba(255,250,243,.92);
+  }
+  .note h3 {
+    margin:0 0 8px;
+    font-size:16px;
+  }
+  .footer {
+    padding:8px 2px 0;
+    color:#846a58;
+    font-size:13px;
+  }
+  @media (max-width: 920px) {
+    .grid, .notes { grid-template-columns:1fr; }
+    .section-head { flex-direction:column; }
+    h1 { font-size:38px; }
+  }
+  @media (max-width: 640px) {
+    .wrap { width:min(100vw - 20px, 1120px); padding:18px 0 28px; }
+    .hero, .section { border-radius:22px; padding:16px; }
+    h1 { font-size:32px; }
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <section class="hero">
+    <div class="eyebrow">External Skill</div>
+    <h1>Taste Skill</h1>
+    <p class="subtitle">HTML-first reference for UI polish and anti-generic frontend direction</p>
+    <p>
+      Taste Skill is an external frontend/UI design reasoning resource from the public
+      <a href="https://github.com/Leonxlnx/taste-skill">Leonxlnx/taste-skill</a> repository.
+      In this repo, it is documented as readable HTML companion files rather than relying on raw markdown skill files alone.
+    </p>
+    <div class="hero-actions">
+      <a class="button" href="taste_skill.html">Open Practical Usage</a>
+      <a class="button secondary" href="source_reference.html">Open Source Reference</a>
+      <a class="button secondary" href="https://github.com/Leonxlnx/taste-skill">Original GitHub Repo</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>What It Is</h2>
+        <p>External design reasoning support for frontend polish, visual hierarchy, and premium UI decisions.</p>
+      </div>
+      <div class="pill">UI Reasoning</div>
+    </div>
+    <div class="grid">
+      <article class="card">
+        <h3>When to Use It</h3>
+        <ul>
+          <li>Frontend/UI polish after the product and layout rules are already clear.</li>
+          <li>Typography, spacing, visual hierarchy, motion restraint, and premium surface quality.</li>
+          <li>Redesign audits when a page feels generic, noisy, or visually weak.</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h3>When Not to Use It</h3>
+        <ul>
+          <li>Do not use it as a replacement for product rules or source-of-truth logic.</li>
+          <li>Do not apply it blindly to every screen without checking the current system constraints.</li>
+          <li>Do not let taste-driven changes override approved canon or locked UI behavior.</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h3>PIP Relevance</h3>
+        <ul>
+          <li>Useful for Guild Dashboard, Agent Dashboard, and other interface-heavy HTML work.</li>
+          <li>Helpful when refining documentation hubs, control rooms, or polished app-facing UI.</li>
+          <li>Always subordinate to Product Bible rules and approved design system decisions.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>How It Relates to PIP</h2>
+        <p>Use Taste Skill as support, not authority.</p>
+      </div>
+      <div class="pill" style="background:var(--green)">Guardrail</div>
+    </div>
+    <div class="notes">
+      <article class="note">
+        <h3>For Agent Dashboard and UI Work</h3>
+        <p>
+          Taste Skill can help reduce generic web-layout choices and push the interface toward clearer hierarchy,
+          stronger composition, tighter spacing, and more intentional visual rhythm.
+        </p>
+      </article>
+      <article class="note">
+        <h3>Authority Order</h3>
+        <p>
+          For PIP, follow the current Product Bible, approved role mapping, and active design system first.
+          Use Taste Skill only after those constraints are respected.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <div class="footer">
+    External skill companion for <strong>skills_external/taste_skill/</strong>.
+  </div>
+</main>
+</body>
+</html>

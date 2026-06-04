@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taste Skill - Practical Usage</title>
+<style>
+  :root {
+    --paper:#f7efe4;
+    --paper-2:#fffaf2;
+    --ink:#2f241d;
+    --muted:#675649;
+    --line:#d8c6b1;
+    --shadow:0 18px 42px rgba(57,40,23,.12);
+    --blue:#305a8e;
+    --green:#4f7444;
+    --purple:#6d4f96;
+  }
+  * { box-sizing:border-box; }
+  html, body { margin:0; min-height:100%; }
+  body {
+    font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 8% 0%, rgba(109,79,150,.10), transparent 26%),
+      radial-gradient(circle at 90% 18%, rgba(48,90,142,.10), transparent 24%),
+      linear-gradient(180deg, #fbf5ee 0%, #f2e4d3 100%);
+  }
+  .wrap { width:min(1120px, calc(100vw - 32px)); margin:0 auto; padding:28px 0 40px; }
+  .hero, .section, .card {
+    background:rgba(255,250,244,.95);
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+  }
+  .hero {
+    border-radius:28px;
+    padding:28px;
+    margin-bottom:18px;
+  }
+  .eyebrow {
+    display:inline-flex;
+    padding:8px 12px;
+    border-radius:999px;
+    border:1px solid #dfcfbc;
+    background:#f8f0e5;
+    color:#7b5c2d;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  h1 {
+    margin:14px 0 8px;
+    font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif;
+    font-size:42px;
+    line-height:1;
+    letter-spacing:-.05em;
+  }
+  .subtitle {
+    margin:0 0 12px;
+    color:var(--blue);
+    font-size:18px;
+    font-weight:900;
+  }
+  p, li { color:var(--muted); line-height:1.6; }
+  .hero p { margin:0; max-width:900px; }
+  .section {
+    border-radius:24px;
+    padding:18px;
+    margin-bottom:18px;
+  }
+  .section-head {
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:14px;
+    margin-bottom:14px;
+  }
+  h2 {
+    margin:0;
+    font-size:24px;
+    line-height:1.08;
+    letter-spacing:-.03em;
+  }
+  .section-head p {
+    margin:5px 0 0;
+    font-size:13px;
+  }
+  .pill {
+    align-self:flex-start;
+    padding:8px 11px;
+    border-radius:999px;
+    color:#fff;
+    background:var(--purple);
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    white-space:nowrap;
+  }
+  .grid {
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:14px;
+  }
+  .card {
+    border-radius:20px;
+    padding:16px;
+    background:linear-gradient(180deg, rgba(255,255,255,.98), rgba(251,245,239,.98));
+    box-shadow:0 10px 20px rgba(56,40,24,.06);
+  }
+  .card h3 {
+    margin:0 0 8px;
+    font-size:17px;
+    line-height:1.1;
+  }
+  ul {
+    margin:0;
+    padding-left:18px;
+  }
+  li + li { margin-top:8px; }
+  .rule {
+    padding:16px;
+    border-radius:18px;
+    border:1px solid #e7d6c4;
+    background:rgba(255,250,243,.92);
+  }
+  .rule strong { color:var(--ink); }
+  .footer {
+    padding:8px 2px 0;
+    color:#846a58;
+    font-size:13px;
+  }
+  @media (max-width: 920px) {
+    .grid { grid-template-columns:1fr; }
+    .section-head { flex-direction:column; }
+    h1 { font-size:36px; }
+  }
+  @media (max-width: 640px) {
+    .wrap { width:min(100vw - 20px, 1120px); padding:18px 0 28px; }
+    .hero, .section { border-radius:22px; padding:16px; }
+    h1 { font-size:30px; }
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <section class="hero">
+    <div class="eyebrow">Practical Usage</div>
+    <h1>Taste Skill</h1>
+    <p class="subtitle">How to use it without letting taste override product truth</p>
+    <p>
+      Taste Skill is best used as a practical frontend/UI refinement layer. It is appropriate for polish,
+      visual cleanup, and premium interface direction once the product logic, role mapping, and system constraints are already stable.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Best Use Cases</h2>
+        <p>Use it where interface quality matters and the product rules are already known.</p>
+      </div>
+      <div class="pill">Frontend Polish</div>
+    </div>
+    <div class="grid">
+      <article class="card">
+        <h3>Use for Frontend/UI Polish</h3>
+        <ul>
+          <li>Layout cleanup and stronger page composition.</li>
+          <li>Typography hierarchy and spacing discipline.</li>
+          <li>Visual hierarchy, interaction rhythm, and premium UI direction.</li>
+          <li>Subtle motion decisions that support the product rather than distract.</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h3>Use for Review and Audit Work</h3>
+        <ul>
+          <li>Redesign audits when a page looks generic or over-carded.</li>
+          <li>Interface review when dense workflows need clearer scanning behavior.</li>
+          <li>Judging whether a UI feels intentional, domain-appropriate, and restrained.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Guardrails for PIP</h2>
+        <p>Use it selectively, not as a blanket rule.</p>
+      </div>
+      <div class="pill" style="background:var(--green)">PIP Guardrails</div>
+    </div>
+    <div class="grid">
+      <div class="rule">
+        <strong>Do not use it blindly for every product screen.</strong>
+        <p>
+          Some screens need operational clarity more than visual flourish. Taste Skill should support the actual job of the screen,
+          not force a single visual style everywhere.
+        </p>
+      </div>
+      <div class="rule">
+        <strong>For PIP, follow current Product Bible and approved design system first.</strong>
+        <p>
+          Product rules, approved UI canon, and any locked role or layout behavior take priority over taste-driven revisions.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">
+    Companion reference for practical use of <strong>Taste Skill</strong> in this repository.
+  </div>
+</main>
+</body>
+</html>

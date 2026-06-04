@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taste Skill - Source Reference</title>
+<style>
+  :root {
+    --paper:#f7efe4;
+    --ink:#2f241d;
+    --muted:#675649;
+    --line:#d8c6b1;
+    --shadow:0 18px 42px rgba(57,40,23,.12);
+    --blue:#305a8e;
+    --gold:#b8832e;
+  }
+  * { box-sizing:border-box; }
+  html, body { margin:0; min-height:100%; }
+  body {
+    font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 10% 0%, rgba(48,90,142,.10), transparent 28%),
+      radial-gradient(circle at 88% 12%, rgba(184,131,46,.10), transparent 24%),
+      linear-gradient(180deg, #fbf5ee 0%, #f2e4d3 100%);
+  }
+  .wrap { width:min(980px, calc(100vw - 32px)); margin:0 auto; padding:28px 0 40px; }
+  .hero, .section, .card {
+    background:rgba(255,250,244,.95);
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+  }
+  .hero {
+    border-radius:28px;
+    padding:28px;
+    margin-bottom:18px;
+  }
+  .eyebrow {
+    display:inline-flex;
+    padding:8px 12px;
+    border-radius:999px;
+    border:1px solid #dfcfbc;
+    background:#f8f0e5;
+    color:#7b5c2d;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  h1 {
+    margin:14px 0 8px;
+    font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif;
+    font-size:40px;
+    line-height:1;
+    letter-spacing:-.05em;
+  }
+  .subtitle {
+    margin:0 0 12px;
+    color:var(--blue);
+    font-size:18px;
+    font-weight:900;
+  }
+  p, li { color:var(--muted); line-height:1.6; }
+  .section {
+    border-radius:24px;
+    padding:18px;
+    margin-bottom:18px;
+  }
+  .section-head {
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:14px;
+    margin-bottom:14px;
+  }
+  h2 {
+    margin:0;
+    font-size:24px;
+    line-height:1.08;
+    letter-spacing:-.03em;
+  }
+  .pill {
+    align-self:flex-start;
+    padding:8px 11px;
+    border-radius:999px;
+    color:#fff;
+    background:var(--gold);
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    white-space:nowrap;
+  }
+  .card {
+    border-radius:20px;
+    padding:16px;
+    background:linear-gradient(180deg, rgba(255,255,255,.98), rgba(251,245,239,.98));
+    box-shadow:0 10px 20px rgba(56,40,24,.06);
+  }
+  .repo-link {
+    display:inline-block;
+    margin-top:12px;
+    padding:8px 10px;
+    border-radius:10px;
+    border:1px solid #e2d1bf;
+    background:#f4e8dc;
+    color:#5c3f32;
+    font-size:13px;
+    font-weight:800;
+    text-decoration:none;
+    word-break:break-word;
+  }
+  ul {
+    margin:0;
+    padding-left:18px;
+  }
+  li + li { margin-top:8px; }
+  .footer {
+    padding:8px 2px 0;
+    color:#846a58;
+    font-size:13px;
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <section class="hero">
+    <div class="eyebrow">Source Reference</div>
+    <h1>Taste Skill Source</h1>
+    <p class="subtitle">External repo pointer and skill-name inventory</p>
+    <p>
+      This page records the external source repo and the relevant skill names referenced from that ecosystem.
+      It is a readable HTML companion page for local use inside this repository.
+    </p>
+    <a class="repo-link" href="https://github.com/Leonxlnx/taste-skill">https://github.com/Leonxlnx/taste-skill</a>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Important Skill Names</h2>
+      </div>
+      <div class="pill">Inventory</div>
+    </div>
+    <div class="card">
+      <ul>
+        <li><strong>taste-skill</strong></li>
+        <li><strong>gpt-taste</strong></li>
+        <li><strong>image-to-code-skill</strong></li>
+        <li><strong>brandkit</strong></li>
+        <li><strong>redesign-skill</strong></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Local Documentation Note</h2>
+      </div>
+      <div class="pill" style="background:var(--blue)">HTML-first</div>
+    </div>
+    <div class="card">
+      <p>
+        The original repo may contain <code>SKILL.md</code> files and other markdown-oriented skill assets.
+        This project keeps readable HTML companion files for external skill references so local browsing stays consistent
+        with the rest of the PIP documentation hub.
+      </p>
+    </div>
+  </section>
+
+  <div class="footer">
+    Source reference page for <strong>skills_external/taste_skill/</strong>.
+  </div>
+</main>
+</body>
+</html>
