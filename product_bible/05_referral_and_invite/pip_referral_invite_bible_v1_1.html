@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PIP Referral & Invite Bible v1.1</title>
+  <style>
+    :root {
+      --bg: #f7faf8;
+      --paper: #ffffff;
+      --ink: #1f2933;
+      --muted: #667085;
+      --line: #d9e4dd;
+      --primary: #2563eb;
+      --green: #16a34a;
+      --amber: #d97706;
+      --red: #dc2626;
+      --soft-blue: #eff6ff;
+      --soft-green: #ecfdf3;
+      --soft-amber: #fffbeb;
+      --soft-red: #fef2f2;
+      --code: #0f172a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Noto Sans Thai", "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(22, 163, 74, 0.12), transparent 34rem),
+        radial-gradient(circle at bottom left, rgba(37, 99, 235, 0.12), transparent 34rem),
+        var(--bg);
+      color: var(--ink);
+      line-height: 1.7;
+    }
+
+    .page {
+      width: min(1120px, calc(100% - 32px));
+      margin: 40px auto;
+    }
+
+    .hero {
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 36px;
+      box-shadow: 0 24px 70px rgba(31, 41, 51, 0.08);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: var(--soft-green);
+      color: #047857;
+      font-size: 13px;
+      font-weight: 700;
+      border: 1px solid #bbf7d0;
+    }
+
+    h1 {
+      font-size: clamp(32px, 5vw, 54px);
+      line-height: 1.12;
+      margin: 18px 0 12px;
+      letter-spacing: -0.04em;
+    }
+
+    h2 {
+      font-size: 26px;
+      margin: 44px 0 14px;
+      letter-spacing: -0.02em;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 10px;
+    }
+
+    h3 {
+      font-size: 20px;
+      margin: 26px 0 10px;
+    }
+
+    p { margin: 0 0 14px; }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 18px;
+      max-width: 860px;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      color: #334155;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .card {
+      grid-column: span 6;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: 0 12px 36px rgba(31, 41, 51, 0.05);
+    }
+
+    .card.full { grid-column: 1 / -1; }
+    .card.third { grid-column: span 4; }
+
+    .callout {
+      border-radius: 20px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      margin: 18px 0;
+    }
+
+    .callout.blue { background: var(--soft-blue); border-color: #bfdbfe; }
+    .callout.green { background: var(--soft-green); border-color: #bbf7d0; }
+    .callout.amber { background: var(--soft-amber); border-color: #fde68a; }
+    .callout.red { background: var(--soft-red); border-color: #fecaca; }
+
+    ul, ol {
+      padding-left: 22px;
+      margin: 10px 0 0;
+    }
+
+    li { margin: 8px 0; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 18px;
+      background: var(--paper);
+      margin: 16px 0;
+      border: 1px solid var(--line);
+    }
+
+    th, td {
+      text-align: left;
+      padding: 14px 16px;
+      vertical-align: top;
+      border-bottom: 1px solid var(--line);
+    }
+
+    th {
+      background: #f8fafc;
+      color: #334155;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    code, pre {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    }
+
+    pre {
+      background: var(--code);
+      color: #e5e7eb;
+      padding: 18px;
+      border-radius: 18px;
+      overflow-x: auto;
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .tag.done { background: var(--soft-green); color: #047857; border-color: #bbf7d0; }
+    .tag.pending { background: var(--soft-amber); color: #92400e; border-color: #fde68a; }
+    .tag.must { background: var(--soft-red); color: #991b1b; border-color: #fecaca; }
+    .tag.info { background: var(--soft-blue); color: #1d4ed8; border-color: #bfdbfe; }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .step {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+      min-height: 136px;
+      position: relative;
+    }
+
+    .step strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .step .num {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      background: var(--primary);
+      color: white;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .decision {
+      border-left: 5px solid var(--primary);
+      padding-left: 16px;
+      margin: 18px 0;
+    }
+
+    .footer {
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+      margin: 36px 0 0;
+    }
+
+    @media (max-width: 900px) {
+      .card, .card.third { grid-column: 1 / -1; }
+      .flow { grid-template-columns: 1fr; }
+      .hero { padding: 24px; }
+    }
+
+    @media print {
+      body { background: white; }
+      .page { width: 100%; margin: 0; }
+      .hero, .card, .callout, .step {
+        box-shadow: none;
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <span class="eyebrow">PIP Product Bible Add-on</span>
+      <h1>Referral & Invite Bible</h1>
+      <p class="subtitle">
+        เอกสารกำหนด Logic / Reward / Anti-fraud / Server Rule สำหรับระบบชวนเพื่อนของแอป PIP
+        โดยยึดแนวทางเดิมของโปรเจกต์: ระบบต้องบาลานซ์, ไม่แจกฟรีจนพัง, และต้องคุมจาก Server เป็นหลัก
+      </p>
+
+      <div class="meta">
+        <span class="chip">Status: Draft v1.1</span>
+        <span class="chip">Language: Thai UI / English implementation notes</span>
+        <span class="chip">Owner: PIP Exam Prep Application</span>
+        <span class="chip">Last updated: 2026-06-11</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>1. สรุปสถานะปัจจุบัน</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>ทำไว้แล้ว</h3>
+          <ul>
+            <li>ผู้ถูกชวนได้รับ <strong>VIP 3 วัน</strong> เมื่อเข้าระบบครั้งแรกผ่าน invite</li>
+            <li>ผู้ชวนได้รับ <strong>VIP 3 วัน + บัตรค่าประสบการณ์ x2 1 ใบ</strong> เมื่อเพื่อนเข้ามาใช้งาน Application สำเร็จ</li>
+            <li>เพิ่มช่องทางการได้รับ VIP จาก <strong>Redeem Code</strong></li>
+            <li>VIP ยังซื้อได้ผ่าน Subscription ราคา <strong>199 บาท / เดือน</strong></li>
+            <li>VIP ยังได้รับจาก Level Reward ตามกฎหลักของระบบ</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>ยังต้องคุมให้ชัด</h3>
+          <ul>
+            <li>ต้องนิยามคำว่า “เข้ามาใช้งาน Application สำเร็จ” ให้ Server ตรวจได้</li>
+            <li>ต้องมี Anti-fraud rule แบบละเอียด</li>
+            <li>ต้องมี event lifecycle ของ invite</li>
+            <li>ต้องมี data model / server validation สำหรับ referral</li>
+          </ul>
+        </div>
+
+        <div class="card full">
+          <div class="callout amber">
+            <strong>Decision updated:</strong>
+            คนชวนจะได้รางวัลเป็น <strong>VIP 3 วัน + บัตรค่าประสบการณ์ x2 1 ใบ</strong>
+            เมื่อเพื่อนถูกชวนและเข้ามาใช้งาน Application สำเร็จ ไม่ใช่แค่กด link หรือสมัครทิ้งไว้
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>2. Product Goal</h2>
+      <div class="card full">
+        <p>
+          ระบบชวนเพื่อนมีเป้าหมายเพื่อเพิ่มผู้ใช้ใหม่ให้ PIP ผ่านการแนะนำจากผู้ใช้เดิม
+          โดยให้รางวัลพอรู้สึกคุ้ม แต่ไม่แรงจนเกิดการฟาร์มบัญชีปลอม
+        </p>
+
+        <div class="callout blue">
+          <strong>Core Principle:</strong>
+          Invite reward ต้องช่วยให้ผู้ใช้ใหม่ทดลองระบบได้ง่ายขึ้น
+          และให้ผู้ชวนรู้สึกมีแรงจูงใจ แต่ทุกอย่างต้องตรวจสอบได้จาก Server
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>3. Final Reward Logic</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Role</th>
+            <th>Reward</th>
+            <th>Condition</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ผู้ถูกชวน</td>
+            <td>VIP 3 วัน</td>
+            <td>สมัครใหม่ + Login ครั้งแรกผ่าน Invite Code สำเร็จ</td>
+            <td><span class="tag done">Approved</span></td>
+          </tr>
+          <tr>
+            <td>ผู้ชวน</td>
+            <td>VIP 3 วัน + บัตรค่าประสบการณ์ x2 1 ใบ</td>
+            <td>เพื่อนสมัครใหม่ + Login ครั้งแรก + เริ่มใช้งาน Application สำเร็จ</td>
+            <td><span class="tag done">Approved</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout green">
+        <strong>Final rule:</strong>
+        ผู้ชวนได้รับ <strong>VIP 3 วัน + บัตรค่าประสบการณ์ x2 1 ใบ</strong>
+        เมื่อเพื่อนสมัครใหม่ผ่าน invite และเริ่มใช้งาน Application จริง
+        โดยการให้รางวัลทั้งหมดต้องทำจาก Server เท่านั้น
+      </div>
+    </section>
+
+    <section>
+      <h2>4. Invite Flow</h2>
+
+      <div class="flow">
+        <div class="step">
+          <span class="num">1</span>
+          <strong>Generate Code</strong>
+          <span class="small">ผู้ใช้เดิมได้รับ invite code หรือ invite link ของตัวเอง</span>
+        </div>
+
+        <div class="step">
+          <span class="num">2</span>
+          <strong>Share Invite</strong>
+          <span class="small">แชร์ให้เพื่อนผ่านช่องทางใดก็ได้ เช่น LINE, Messenger, Copy Link</span>
+        </div>
+
+        <div class="step">
+          <span class="num">3</span>
+          <strong>New User Signup</strong>
+          <span class="small">ผู้ถูกชวนต้องเป็นบัญชีใหม่เท่านั้น</span>
+        </div>
+
+        <div class="step">
+          <span class="num">4</span>
+          <strong>Invitee Reward</strong>
+          <span class="small">ผู้ถูกชวนได้รับ VIP 3 วันหลัง Login ครั้งแรกสำเร็จ</span>
+        </div>
+
+        <div class="step">
+          <span class="num">5</span>
+          <strong>Referrer Reward</strong>
+          <span class="small">ผู้ชวนได้รับ VIP 3 วัน + x2 EXP Ticket 1 ใบหลังเพื่อนเริ่มใช้งาน Application สำเร็จ</span>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>5. Definition: เริ่มใช้งาน Application สำเร็จ</h2>
+
+      <div class="card full">
+        <p>
+          เพื่อกันการสมัครทิ้งไว้เพื่อฟาร์มรางวัล คำว่า “เริ่มใช้งาน Application สำเร็จ”
+          ต้องหมายถึงผู้ถูกชวนผ่านเงื่อนไขขั้นต่ำที่ Server ตรวจสอบได้
+        </p>
+
+        <div class="callout blue">
+          <strong>Recommended trigger:</strong>
+          ให้ถือว่าเริ่มใช้งานสำเร็จเมื่อผู้ถูกชวน <strong>Login ครั้งแรก + เข้าใช้งานหน้า Practice หรือ Mini Game อย่างน้อย 1 ครั้ง</strong>
+          หรือทำ Onboarding สำเร็จตาม flow หลักของแอป
+        </div>
+
+        <ul>
+          <li>ไม่ควรแจก reward ผู้ชวนจากการสมัครบัญชีอย่างเดียว</li>
+          <li>ไม่ควรแจก reward ผู้ชวนจากการเปิด invite link อย่างเดียว</li>
+          <li>Server ต้องเป็นคนยืนยัน usage event เท่านั้น</li>
+          <li>ถ้าต้องการเข้มขึ้นในอนาคต สามารถเปลี่ยน trigger เป็น “ผ่าน Mini Game ด่านแรก” ได้</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>6. Eligibility Rules</h2>
+
+      <div class="grid">
+        <div class="card">
+          <h3>ผู้ถูกชวน</h3>
+          <ul>
+            <li>ต้องเป็นบัญชีใหม่</li>
+            <li>ต้องไม่เคยรับ invite reward มาก่อน</li>
+            <li>ต้อง Login ครั้งแรกผ่าน invite code/link</li>
+            <li>ถ้า redeem code หรือ invite code ซ้อนกัน ให้ใช้ source ที่เกิดก่อนและ valid ก่อน</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>ผู้ชวน</h3>
+          <ul>
+            <li>ต้องเป็นบัญชีปกติที่ยังไม่ถูกแบน</li>
+            <li>ต้องไม่สามารถชวนบัญชีตัวเองได้</li>
+            <li>ได้รับ reward หลังผู้ถูกชวนสมัครใหม่, Login ครั้งแรก, และเริ่มใช้งาน Application สำเร็จเท่านั้น</li>
+            <li>ช่วงแรกจำกัด reward สูงสุด 10 ครั้ง / เดือน</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout red">
+        <strong>Must not:</strong>
+        ห้ามแจก reward ผู้ชวนทันทีหลังกรอก invite code เฉย ๆ เพราะจะโดนสร้าง account ปลอมเพื่อฟาร์มรางวัลง่ายมาก
+        ต้องรอให้เพื่อนเริ่มใช้งาน Application จริงก่อน
+      </div>
+    </section>
+
+    <section>
+      <h2>7. Anti-fraud Rules</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Rule</th>
+            <th>Description</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>One account rule</td>
+            <td>บัญชีหนึ่งรับ invite reward ได้ครั้งเดียว</td>
+            <td>Block duplicate reward</td>
+          </tr>
+          <tr>
+            <td>Self invite prevention</td>
+            <td>ผู้ชวนและผู้ถูกชวนต้องไม่ใช่บัญชีเดียวกัน</td>
+            <td>Reject invite</td>
+          </tr>
+          <tr>
+            <td>Device / identity signal</td>
+            <td>ตรวจซ้ำจาก device id, email, phone, auth provider หรือ signal อื่นที่ระบบมี</td>
+            <td>Flag for review or reject</td>
+          </tr>
+          <tr>
+            <td>Monthly cap</td>
+            <td>ผู้ชวนรับ reward ได้สูงสุด 10 ครั้ง / เดือนในช่วงแรก</td>
+            <td>Hold reward after cap</td>
+          </tr>
+          <tr>
+            <td>Reward delay</td>
+            <td>รางวัลผู้ชวนออกหลังเพื่อนเริ่มใช้งาน Application สำเร็จ</td>
+            <td>Prevent signup farming</td>
+          </tr>
+          <tr>
+            <td>Server authoritative</td>
+            <td>การให้ VIP, Ticket, invite status ต้องคำนวณและบันทึกจาก server เท่านั้น</td>
+            <td>Client cannot grant reward</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>8. Referral Status Lifecycle</h2>
+
+      <div class="card full">
+        <pre><code>created
+  ↓
+clicked
+  ↓
+signup_started
+  ↓
+signup_completed
+  ↓
+first_login_completed
+  ↓
+invitee_reward_granted
+  ↓
+app_usage_started
+  ↓
+referrer_reward_granted</code></pre>
+
+        <p class="small">
+          หมายเหตุ: ถ้า invite ผิดเงื่อนไข ให้เปลี่ยน status เป็น rejected หรือ flagged แทนการลบทิ้ง
+          เพื่อเก็บ audit trail ไว้ตรวจสอบย้อนหลัง
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <h2>9. Data Model Draft</h2>
+
+      <div class="grid">
+        <div class="card">
+          <h3>ReferralInvite</h3>
+          <pre><code>{
+  "id": "referral_invite_id",
+  "referrerUserId": "user_id",
+  "inviteCode": "PIP-ABC123",
+  "createdAt": "timestamp",
+  "expiresAt": null,
+  "status": "active"
+}</code></pre>
+        </div>
+
+        <div class="card">
+          <h3>ReferralClaim</h3>
+          <pre><code>{
+  "id": "referral_claim_id",
+  "inviteCode": "PIP-ABC123",
+  "referrerUserId": "user_id",
+  "inviteeUserId": "new_user_id",
+  "status": "app_usage_started",
+  "inviteeRewardGrantedAt": "timestamp",
+  "referrerRewardGrantedAt": null,
+  "createdAt": "timestamp"
+}</code></pre>
+        </div>
+
+        <div class="card full">
+          <h3>RewardLedger</h3>
+          <pre><code>{
+  "id": "reward_ledger_id",
+  "userId": "user_id",
+  "source": "referral",
+  "rewardType": "vip_days | x2_exp_ticket",
+  "amount": 3,
+  "sourceRefId": "referral_claim_id",
+  "createdAt": "timestamp",
+  "serverValidated": true
+}</code></pre>
+
+          <div class="callout amber">
+            <strong>Important:</strong>
+            ผู้ชวนจะมี reward ledger อย่างน้อย 2 รายการจาก invite เดียวกัน:
+            1) VIP 3 วัน และ 2) x2 EXP Ticket 1 ใบ
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>10. Server Rules</h2>
+
+      <div class="card full">
+        <ul>
+          <li>Client สามารถส่ง invite code ได้ แต่ไม่มีสิทธิ์ grant reward เอง</li>
+          <li>Server ต้องตรวจว่า invite code valid, active, และผูกกับ referrer จริง</li>
+          <li>Server ต้องตรวจว่า invitee เป็นบัญชีใหม่ และไม่เคยรับ invite reward มาก่อน</li>
+          <li>Server ต้องตรวจว่า invitee เริ่มใช้งาน Application สำเร็จก่อนให้ reward ผู้ชวน</li>
+          <li>Server ต้องบันทึก reward ลง RewardLedger ทุกครั้ง</li>
+          <li>Server ต้องกัน duplicate transaction ด้วย idempotency key หรือ unique constraint</li>
+          <li>Server ต้องไม่ให้ผู้ใช้แก้ referral status เองจาก client</li>
+        </ul>
+
+        <div class="callout blue">
+          <strong>Implementation note:</strong>
+          RewardLedger ควรเป็น source of truth ของรางวัลทั้งหมด
+          ทั้ง VIP, x2 Ticket, Level Reward, Redeem Code และ Invite Reward
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>11. VIP Interaction Rules</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Case</th>
+            <th>Expected Behavior</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ผู้ถูกชวนไม่มี VIP</td>
+            <td>เพิ่ม VIP 3 วันนับจากเวลาที่ reward granted</td>
+          </tr>
+          <tr>
+            <td>ผู้ชวนไม่มี VIP</td>
+            <td>เพิ่ม VIP 3 วันนับจากเวลาที่ reward granted</td>
+          </tr>
+          <tr>
+            <td>ผู้ใช้มี VIP อยู่แล้ว</td>
+            <td>เพิ่มวัน VIP ต่อจากวันหมดอายุเดิม</td>
+          </tr>
+          <tr>
+            <td>ผู้ใช้มี Subscription VIP</td>
+            <td>บันทึก reward ได้ และให้ bonus VIP days ต่อท้ายวันหมดอายุเดิมเพื่อเข้าใจง่าย</td>
+          </tr>
+          <tr>
+            <td>ผู้ใช้รับ VIP จากหลาย source ในวันเดียวกัน</td>
+            <td>รวมวัน VIP ได้ แต่ต้องมี ledger แยก source ให้ชัด</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>12. UI / UX Requirements</h2>
+
+      <div class="grid">
+        <div class="card third">
+          <h3>Invite Entry</h3>
+          <ul>
+            <li>หน้า Profile หรือ Reward Center มีปุ่มชวนเพื่อน</li>
+            <li>แสดง invite code และปุ่ม copy link</li>
+            <li>ข้อความต้องสั้นและเข้าใจง่าย</li>
+          </ul>
+        </div>
+
+        <div class="card third">
+          <h3>Invitee Message</h3>
+          <ul>
+            <li>บอกชัดว่าได้รับ VIP 3 วัน</li>
+            <li>ห้ามสื่อว่าฟรีตลอดชีพ</li>
+            <li>ต้องบอกว่า reward เกิดหลัง login ครั้งแรก</li>
+          </ul>
+        </div>
+
+        <div class="card third">
+          <h3>Referrer Message</h3>
+          <ul>
+            <li>บอกเงื่อนไขว่าเพื่อนต้องเริ่มใช้งาน Application สำเร็จก่อน</li>
+            <li>แสดง progress เช่น รอเพื่อนเริ่มใช้งาน</li>
+            <li>แสดง reward cap ถ้ามี</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout green">
+        <strong>Suggested Thai UI wording:</strong>
+        “ชวนเพื่อนรับ VIP 3 วัน เพื่อนเริ่มใช้งานครั้งแรกสำเร็จ คุณรับ VIP 3 วัน + x2 EXP Ticket 1 ใบ”
+      </div>
+    </section>
+
+    <section>
+      <h2>13. Edge Cases</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Scenario</th>
+            <th>Rule</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Invite code หมดอายุ</td>
+            <td>ไม่ให้ reward และแจ้งให้ผู้ใช้ขอ link ใหม่</td>
+          </tr>
+          <tr>
+            <td>ผู้ถูกชวนสมัครแล้ว แต่ยังไม่เริ่มใช้งาน Application จริง</td>
+            <td>ผู้ถูกชวนได้ VIP 3 วันแล้ว แต่ผู้ชวนยังไม่ได้ VIP 3 วัน + x2 EXP Ticket</td>
+          </tr>
+          <tr>
+            <td>ผู้ถูกชวนลบบัญชีแล้วสมัครใหม่</td>
+            <td>Server ต้องตรวจ duplicate identity signal และไม่ควรให้ reward ซ้ำ</td>
+          </tr>
+          <tr>
+            <td>Invite code หลายอันในเครื่องเดียว</td>
+            <td>ใช้ code ที่ถูก claim สำเร็จครั้งแรกเท่านั้น</td>
+          </tr>
+          <tr>
+            <td>ผู้ชวนถึง cap รายเดือนแล้ว</td>
+            <td>ไม่แจก reward เพิ่ม หรือ hold ไว้ตาม policy ที่เลือก</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>14. Analytics Events</h2>
+
+      <div class="card full">
+        <pre><code>referral_invite_viewed
+referral_link_copied
+referral_link_shared
+referral_link_clicked
+referral_signup_started
+referral_signup_completed
+referral_first_login_completed
+referral_invitee_reward_granted
+referral_app_usage_started
+referral_referrer_vip_reward_granted
+referral_referrer_x2_ticket_reward_granted
+referral_rejected
+referral_flagged_fraud</code></pre>
+
+        <p class="small">
+          Events เหล่านี้ใช้วัดว่า invite flow หลุดตรงไหน และช่วยตรวจ fraud pattern ได้ในอนาคต
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <h2>15. Implementation Checklist</h2>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Backend</h3>
+          <ul>
+            <li><span class="tag must">Must</span> ReferralInvite table / collection</li>
+            <li><span class="tag must">Must</span> ReferralClaim table / collection</li>
+            <li><span class="tag must">Must</span> RewardLedger integration</li>
+            <li><span class="tag must">Must</span> Server-side reward grant</li>
+            <li><span class="tag must">Must</span> Anti-duplicate validation</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Frontend</h3>
+          <ul>
+            <li><span class="tag info">UI</span> Invite page / card</li>
+            <li><span class="tag info">UI</span> Copy invite link</li>
+            <li><span class="tag info">UI</span> Reward progress state</li>
+            <li><span class="tag info">UI</span> Success / rejected message</li>
+            <li><span class="tag info">UI</span> Thai wording only</li>
+          </ul>
+        </div>
+
+        <div class="card full">
+          <h3>QA</h3>
+          <ul>
+            <li>บัญชีใหม่รับ VIP 3 วันได้ถูกต้อง</li>
+            <li>บัญชีเก่าไม่สามารถรับ invite reward ได้</li>
+            <li>ผู้ชวนไม่ได้ reward จนกว่าเพื่อนเริ่มใช้งาน Application สำเร็จ</li>
+            <li>ผู้ชวนได้รับ VIP 3 วันถูกต้อง</li>
+            <li>ผู้ชวนได้รับ x2 EXP Ticket 1 ใบถูกต้อง</li>
+            <li>ระบบไม่ให้ผู้ชวนชวนตัวเอง</li>
+            <li>RewardLedger ไม่สร้างรายการซ้ำเมื่อกดซ้ำหรือ network retry</li>
+            <li>Monthly cap ทำงานถูกต้อง</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>16. Final Decision Summary</h2>
+
+      <div class="card full">
+        <div class="decision">
+          <h3>Approved Rule</h3>
+          <p>
+            ผู้ถูกชวนได้รับ <strong>VIP 3 วัน</strong> เมื่อสมัครใหม่และ Login ครั้งแรกผ่าน invite สำเร็จ
+            ส่วนผู้ชวนได้รับ <strong>VIP 3 วัน + บัตรค่าประสบการณ์ x2 1 ใบ</strong>
+            เมื่อผู้ถูกชวนสมัครใหม่และเริ่มใช้งาน Application สำเร็จ
+          </p>
+        </div>
+
+        <div class="decision">
+          <h3>Why this is balanced</h3>
+          <p>
+            กฎนี้ให้แรงจูงใจทั้งสองฝั่งแบบชัดเจน ผู้ถูกชวนได้ VIP เพื่อทดลองใช้
+            ส่วนผู้ชวนได้ทั้ง VIP และ x2 Ticket แต่ต้องมีเงื่อนไขการใช้งานจริงและ Anti-fraud เพื่อกันการฟาร์มบัญชีปลอม
+          </p>
+        </div>
+
+        <div class="decision">
+          <h3>Do not change without approval</h3>
+          <p>
+            ห้ามเพิ่ม reward ผู้ชวนให้สูงกว่า VIP 3 วัน + x2 EXP Ticket 1 ใบ
+            จนกว่าจะมีข้อมูลจริงจาก analytics หลังเปิดใช้งาน
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <p class="footer">
+      PIP Referral & Invite Bible v1.1 — HTML source of truth add-on for product/design/development alignment.
+    </p>
+  </main>
+</body>
+</html>
